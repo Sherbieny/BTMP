@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="AudioRecordTrial1" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yM1-Vs-rR4">
+                                <rect key="frame" x="22" y="318" width="34" height="31"/>
+                                <state key="normal" title="Start"/>
+                                <connections>
+                                    <action selector="startDidTouch:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Bwy-BG-e61"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VIm-nX-9Ep">
+                                <rect key="frame" x="320" y="318" width="32" height="31"/>
+                                <state key="normal" title="Stop"/>
+                                <connections>
+                                    <action selector="stopDidTouch:" destination="BYZ-38-t0r" eventType="touchUpInside" id="TZW-qe-RAF"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="yM1-Vs-rR4" firstAttribute="baseline" secondItem="VIm-nX-9Ep" secondAttribute="firstBaseline" id="1Jd-5i-0Nu"/>
+                            <constraint firstItem="yM1-Vs-rR4" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="4S3-TY-Y5W"/>
+                            <constraint firstItem="yM1-Vs-rR4" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="22" id="5F2-A0-1rT"/>
+                            <constraint firstItem="yM1-Vs-rR4" firstAttribute="top" secondItem="VIm-nX-9Ep" secondAttribute="top" id="Bkd-of-f9Z"/>
+                            <constraint firstItem="VIm-nX-9Ep" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="yM1-Vs-rR4" secondAttribute="trailing" constant="8" symbolic="YES" id="ScQ-U1-bso"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="VIm-nX-9Ep" secondAttribute="trailing" constant="23" id="bbC-Yd-hHS"/>
+                            <constraint firstItem="yM1-Vs-rR4" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="298" id="wsT-UW-wEf"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                    </view>
+                    <connections>
+                        <outlet property="startButton" destination="yM1-Vs-rR4" id="Yz1-cZ-T3n"/>
+                        <outlet property="stopButton" destination="VIm-nX-9Ep" id="bHL-UX-kUs"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
+    </scenes>
+</document>
