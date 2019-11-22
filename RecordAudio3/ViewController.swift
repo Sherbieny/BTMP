@@ -67,35 +67,39 @@ class ViewController: UIViewController {
 
     // MARK: Session functions
 
+    @objc func doRecord() {
+        scheduler?.frequencyEventHandler = {
+            // Detect sound
+            print("audio level  == \(self.recorder.audioLevel)")
+            if self.recorder.audioLevel > self.recorder.DETECTION_LEVEL {
+                print("sound baby")
+                self.recorder.audioLevel = self.recorder.SILENCE_LEVEL
+                self.stopRecorder()
+                self.scheduler?.suspend()
+            } else {
+                print("silence")
+            }
+        }
+    }
+
     @objc func startSession() {
         print("starting session")
 
         print("starting repeater")
         scheduler?.repeaterEventHandler = {
             print("starting period")
-            self.scheduler?.periodEventHandler = {
+            
                 print("starting frequency")
-                self.scheduler?.frequencyEventHandler = {
-                    // Detect sound
-                    print("audio level  == \(self.recorder.audioLevel)")
-                    if self.recorder.audioLevel > self.recorder.DETECTION_LEVEL {
-                        print("sound baby")
-                        self.recorder.audioLevel = self.recorder.SILENCE_LEVEL
-                        self.stopRecorder()
-                        self.scheduler?.suspend()
-                    } else {
-                        print("silence")
-                    }
-                }
+                self.scheduler?.start()
                 print("resuming scheduler after frequency")
-                self.scheduler?.resume()
+                
                 // after period finish
-            }
-            print("resuming scheduler after period")
-            self.scheduler?.resume()
+            
+//            print("resuming scheduler after period")
+//            self.scheduler?.start()
         }
         print("resuming scheduler after repeater")
-        scheduler?.resume()
+        scheduler?.start()
 
 //        scheduler?.eventHandler = {
 //            // print("time left is \(self.timeLeft)")
@@ -134,7 +138,7 @@ class ViewController: UIViewController {
     }
 
     @IBAction func stopDidTouch(_ sender: AnyObject) {
-        stopRecorder()        
+        stopRecorder()
         scheduler?.finish()
         print("recording finished...")
     }
