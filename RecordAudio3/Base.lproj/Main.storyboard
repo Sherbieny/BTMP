@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina4_7" orientation="portrait" appearance="dark"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -13,45 +11,67 @@
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="AudioRecordTrial1" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="RecordAudio3" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yM1-Vs-rR4">
-                                <rect key="frame" x="22" y="318" width="34" height="31"/>
+                            <button opaque="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yM1-Vs-rR4" customClass="StartToggleButton" customModule="RecordAudio3" customModuleProvider="target">
+                                <rect key="frame" x="137.5" y="283.5" width="100" height="100"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="YZN-5S-KK4"/>
+                                    <constraint firstAttribute="height" constant="100" id="muF-xW-Pdz"/>
+                                </constraints>
+                                <viewLayoutGuide key="safeArea" id="fon-dI-W2e"/>
                                 <state key="normal" title="Start"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                        <real key="value" value="2"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                        <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="startDidTouch:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Bwy-BG-e61"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VIm-nX-9Ep">
-                                <rect key="frame" x="320" y="318" width="32" height="31"/>
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" insetsLayoutMarginsFromSafeArea="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x9F-oC-I5c" userLabel="Stop Button" customClass="StartToggleButton" customModule="RecordAudio3" customModuleProvider="target">
+                                <rect key="frame" x="137" y="422" width="100" height="100"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="100" id="5T9-Ve-Qgm"/>
+                                    <constraint firstAttribute="width" constant="100" id="Rre-wF-d0m"/>
+                                </constraints>
+                                <viewLayoutGuide key="safeArea" id="v5X-y7-TPT"/>
                                 <state key="normal" title="Stop"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                        <real key="value" value="2"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                        <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <action selector="stopDidTouch:" destination="BYZ-38-t0r" eventType="touchUpInside" id="TZW-qe-RAF"/>
+                                    <action selector="stopDidTouch:" destination="BYZ-38-t0r" eventType="touchUpInside" id="4Ks-bZ-oYk"/>
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <color key="tintColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                         <constraints>
-                            <constraint firstItem="yM1-Vs-rR4" firstAttribute="baseline" secondItem="VIm-nX-9Ep" secondAttribute="firstBaseline" id="1Jd-5i-0Nu"/>
-                            <constraint firstItem="yM1-Vs-rR4" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="4S3-TY-Y5W"/>
-                            <constraint firstItem="yM1-Vs-rR4" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="22" id="5F2-A0-1rT"/>
-                            <constraint firstItem="yM1-Vs-rR4" firstAttribute="top" secondItem="VIm-nX-9Ep" secondAttribute="top" id="Bkd-of-f9Z"/>
-                            <constraint firstItem="VIm-nX-9Ep" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="yM1-Vs-rR4" secondAttribute="trailing" constant="8" symbolic="YES" id="ScQ-U1-bso"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="VIm-nX-9Ep" secondAttribute="trailing" constant="23" id="bbC-Yd-hHS"/>
-                            <constraint firstItem="yM1-Vs-rR4" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="298" id="wsT-UW-wEf"/>
+                            <constraint firstItem="yM1-Vs-rR4" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="YBp-Sz-e2X"/>
+                            <constraint firstItem="yM1-Vs-rR4" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="tT7-qx-SEo"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
                         <outlet property="startButton" destination="yM1-Vs-rR4" id="Yz1-cZ-T3n"/>
-                        <outlet property="stopButton" destination="VIm-nX-9Ep" id="bHL-UX-kUs"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="132" y="82.3088455772114"/>
         </scene>
     </scenes>
 </document>

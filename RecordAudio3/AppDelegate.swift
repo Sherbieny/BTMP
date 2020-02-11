@@ -52,9 +52,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Set fetch interval
-        UIApplication.shared.setMinimumBackgroundFetchInterval(60)
+        //UIApplication.shared.setMinimumBackgroundFetchInterval(60)
 
-        scheduler = Scheduler(timeInterval: 0.5)
+        //scheduler = Scheduler(timeInterval: 0.5)
 
         return true
     }

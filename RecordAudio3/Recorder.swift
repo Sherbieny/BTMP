@@ -11,6 +11,7 @@
 import AudioUnit
 import AVFoundation
 import Foundation
+import MediaPlayer
 
 final class Recorder: NSObject {
     // MARK: Properties
@@ -23,6 +24,8 @@ final class Recorder: NSObject {
     var isRecording: Bool = false
     var sampleRate: Double = 44100.0
     var preferredIOBufferDuration: Double = 0.0058
+    let musicPlayer = MPMusicPlayerApplicationController.applicationQueuePlayer
+
     public let DETECTION_LEVEL: Float = 50.0
     public let SILENCE_LEVEL: Float = 0.0
 
@@ -63,6 +66,20 @@ final class Recorder: NSObject {
             if isAudioUnitInitialized { print("Error: stop recording failed at stopAudioUnit AudioUnitUninitialize") }
         }
         isRecording = false
+    }
+
+    func stopMedia() {
+        MPMediaLibrary.requestAuthorization({ (_: MPMediaLibraryAuthorizationStatus) in
+            self.musicPlayer.setQueue(with: .songs())
+            self.musicPlayer.play()
+            print("Stopping music player")
+            self.musicPlayer.pause()
+            print("Stopped music player")
+            DispatchQueue.main.async { // Correct
+                UIApplication.shared.isIdleTimerDisabled = false
+            }
+
+        })
     }
 
     func startAudioUnit() {
@@ -124,9 +141,9 @@ final class Recorder: NSObject {
             // Set and activate audio session
             do {
                 let audioSession = AVAudioSession.sharedInstance()
-                
+
                 let test = audioSession.secondaryAudioShouldBeSilencedHint
-                
+
                 print("other audio  = \(test)")
 
                 if micPermission == false {
@@ -176,7 +193,7 @@ final class Recorder: NSObject {
             } catch let error as NSError {
                 print("Error: Failed to set audio session active \(error)")
             }
-        }else{
+        } else {
             print("still active ya sh2eee2")
         }
     }
@@ -184,16 +201,15 @@ final class Recorder: NSObject {
     func stopAudioSession() {
         let audioSession = AVAudioSession.sharedInstance()
         do {
-            if audioSession.isOtherAudioPlaying{
+            if audioSession.isOtherAudioPlaying {
                 print("someone is playing....")
             }
             try audioSession.setActive(false, options: .notifyOthersOnDeactivation)
             isSessionActive = false
         } catch let error as NSError {
             print("Unable to deactivate audio session: \(error.localizedDescription)")
-            print("retying.......")            
+            print("retying.......")
         }
-        
     }
 
     private func setupAudioUnit() {

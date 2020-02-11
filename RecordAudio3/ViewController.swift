@@ -9,6 +9,7 @@
 import AVFoundation
 import UIKit
 
+
 class ViewController: UIViewController {
     // MARK: Outlets
 
@@ -23,24 +24,33 @@ class ViewController: UIViewController {
     var flag: Bool = false
     //var timer: Timer!
     let SOUND_FLAG: Float = 50.0
-    // var otherAudioPlaying = AVAudioSession.sharedInstance().isOtherAudioPlaying
+    let REPEAT_EVERY: Double = 60 // in seconds
+    let LISTENING_FREQUENCY: Double = 0.5 // in seconds
+    let LISTENING_INTERVAL: Double = 20 // listening interval
+    let START_AFTER: Double = 60000 // start after in milliseconds
+    
     var intervalManager: Timer!
-    var timeLeft: Int = 30
-    let timeInterval: TimeInterval = 20
+    var timeLeft: Double = 0 // listening loop counter
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        schedulerFrequency = Scheduler(timeInterval: 0.5)
-        schedulerRepeater = Scheduler(timeInterval: 30)
+        
+       
+        schedulerFrequency = Scheduler(timeInterval: LISTENING_FREQUENCY)
+        schedulerRepeater = Scheduler(timeInterval: REPEAT_EVERY)
+     
     }
 
     // MARK: Timer functions
 
     @objc func startTimer(startAfter: Double) {
         print("startTimer")
-        timeLeft = 30
-        intervalManager = Timer.scheduledTimer(timeInterval: startAfter, target: self, selector: #selector(startSession), userInfo: nil, repeats: false)
-        intervalManager.fire()
+        timeLeft = LISTENING_INTERVAL
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(60000)) {
+            self.intervalManager = Timer.scheduledTimer(timeInterval: startAfter, target: self, selector: #selector(self.startSession), userInfo: nil, repeats: false)
+            self.intervalManager.fire()
+        }
+        
     }
 
     @objc func stopTimer() {
@@ -61,6 +71,13 @@ class ViewController: UIViewController {
             recorder.stopRecording()
         }
     }
+    
+    @objc func endRecording(){
+        if recorder.isRecording {
+            recorder.stopRecording()
+        }
+        recorder.stopMedia()
+    }
 
     // MARK: Session functions
 
@@ -77,7 +94,7 @@ class ViewController: UIViewController {
                 print("audio level  == \(self.recorder.audioLevel)")
                 // if silence for the amount of time, user slept, exit
                 if self.timeLeft <= 0 {
-                    self.stopRecorder()
+                    self.endRecording()
                     self.stopTimer()
                     self.schedulerFrequency?.finish()
                     self.schedulerRepeater?.finish()
@@ -87,12 +104,11 @@ class ViewController: UIViewController {
                 if self.recorder.audioLevel > self.recorder.DETECTION_LEVEL {
                     print("SOUND DETECTED!!")
                     self.recorder.audioLevel = self.recorder.SILENCE_LEVEL
-                    self.timeLeft = 30
+                    self.timeLeft = self.LISTENING_INTERVAL
                     self.stopRecorder()
                     self.stopTimer()
                     self.schedulerFrequency?.suspend()
                     print("recording stopped...")
-                    
                     return
                 }else{
                     print("silence");
@@ -109,7 +125,7 @@ class ViewController: UIViewController {
 
     @IBAction func startDidTouch(_ sender: AnyObject) {
         print("start button pressed")
-        
+        UIApplication.shared.isIdleTimerDisabled = true
         startTimer(startAfter: 0.1)
     }
 
@@ -119,5 +135,6 @@ class ViewController: UIViewController {
         self.schedulerFrequency?.finish()
         self.schedulerRepeater?.finish()
         print("recording finished...")
+        UIApplication.shared.isIdleTimerDisabled = false
     }
 }
