@@ -57,25 +57,41 @@ class StartToggleButton: UIButton {
         layer.backgroundColor = UIColor.black.cgColor
         layer.borderColor = UIColor.white.cgColor
         setTitleColor(UIColor.white, for: .normal)
-        addTarget(self, action: #selector(StartToggleButton.buttonPressed),for: . touchUpInside)
-        
+        addTarget(self, action: #selector(StartToggleButton.buttonPressed), for: .touchUpInside)
     }
 
-    @objc func buttonPressed() {
-        activateButton(state: !isOn)
-    }
+    func deactivateButton() {
+        let color = UIColor.black
+        let title = "Start"
+        let titleColor = UIColor.white
+        let borderColor = UIColor.white
 
-    func activateButton(state: Bool) {
-        isOn = state
-        
-        let color = state ? UIColor.white : UIColor.black
-        let title = state ? "Stop" : "Start"
-        let titleColor = state ? UIColor.black : UIColor.white
-        let borderColor = state ? UIColor.black : UIColor.white
-        
         setTitle(title, for: .normal)
         setTitleColor(titleColor, for: .normal)
         backgroundColor = color
         layer.borderColor = borderColor.cgColor
+        isOn = false
+    }
+
+    func activateButton() {
+        let color = UIColor.white
+        let title = "Stop"
+        let titleColor = UIColor.black
+        let borderColor = UIColor.black
+
+        setTitle(title, for: .normal)
+        setTitleColor(titleColor, for: .normal)
+        backgroundColor = color
+        layer.borderColor = borderColor.cgColor
+        isOn = true
+    }
+
+    @objc func buttonPressed() {
+        switch isOn {
+        case true:
+            deactivateButton()
+        default:
+            activateButton()
+        }
     }
 }

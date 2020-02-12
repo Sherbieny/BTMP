@@ -60,7 +60,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        print("fetch started")
+//        print("fetch started")
         // Check if the scheduler status is suspended, resumed or finished
 
 //        switch listener.worker?.state {

@@ -9,12 +9,10 @@
 import AVFoundation
 import UIKit
 
-
 class ViewController: UIViewController {
     // MARK: Outlets
 
-    @IBOutlet var startButton: UIButton!
-    @IBOutlet var stopButton: UIButton!
+    @IBOutlet var startButton: StartToggleButton!
 
     // MARK: Properties
 
@@ -22,57 +20,105 @@ class ViewController: UIViewController {
     var schedulerFrequency: Scheduler?
     var schedulerRepeater: Scheduler?
     var flag: Bool = false
-    //var timer: Timer!
+    // var timer: Timer!
     let SOUND_FLAG: Float = 50.0
     let REPEAT_EVERY: Double = 60 // in seconds
     let LISTENING_FREQUENCY: Double = 0.5 // in seconds
     let LISTENING_INTERVAL: Double = 20 // listening interval
     let START_AFTER: Double = 60000 // start after in milliseconds
-    
+
     var intervalManager: Timer!
     var timeLeft: Double = 0 // listening loop counter
+    var startButtonIsActive = false
+    var timerWorkItem: DispatchWorkItem?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-       
+
         schedulerFrequency = Scheduler(timeInterval: LISTENING_FREQUENCY)
         schedulerRepeater = Scheduler(timeInterval: REPEAT_EVERY)
-     
+    }
+
+    // MARK: Main functions
+
+    @objc func start() {
+        startButtonIsActive = true
+        keepScreenOpen()
+        createWorker()
+        startTimer()
+    }
+
+    @objc func pause() {
+        recorder.audioLevel = recorder.SILENCE_LEVEL
+        timeLeft = LISTENING_INTERVAL
+        stopRecorder()
+        stopTimer()
+        schedulerFrequency?.suspend()
+        print("recording paused... rerunning soon")
+    }
+
+    @objc func end() {
+        startButtonIsActive = false
+        endRecording()
+        stopTimer()
+        schedulerFrequency?.finish()
+        schedulerRepeater?.finish()
+        DispatchQueue.main.async {
+            self.startButton.deactivateButton()
+        }
+        releaseScreen()
+        print("user went to sleeeeep")
+    }
+
+    // MARK: Screen functions
+
+    func keepScreenOpen() {
+        DispatchQueue.main.async {
+            UIApplication.shared.isIdleTimerDisabled = true
+        }
+    }
+
+    func releaseScreen() {
+        DispatchQueue.main.async {
+            UIApplication.shared.isIdleTimerDisabled = false
+        }
+    }
+
+    // MARK: Worker functions
+
+    func createWorker() {
+        timerWorkItem = DispatchWorkItem { [weak self] in
+            self?.startSession()
+        }
     }
 
     // MARK: Timer functions
 
-    @objc func startTimer(startAfter: Double) {
+    func startTimer() {
         print("startTimer")
         timeLeft = LISTENING_INTERVAL
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(60000)) {
-            self.intervalManager = Timer.scheduledTimer(timeInterval: startAfter, target: self, selector: #selector(self.startSession), userInfo: nil, repeats: false)
-            self.intervalManager.fire()
-        }
-        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(10000), execute: timerWorkItem!)
     }
 
-    @objc func stopTimer() {
-        intervalManager.invalidate()
-        //timer.invalidate()
+    func stopTimer() {
+        timerWorkItem?.cancel()
     }
 
     // MARK: Recorder functions
 
-    @objc func startRecorder() {
+    func startRecorder() {
         if !recorder.isRecording {
             recorder.startRecording()
         }
     }
 
-    @objc func stopRecorder() {
+    func stopRecorder() {
         if recorder.isRecording {
             recorder.stopRecording()
         }
     }
-    
-    @objc func endRecording(){
+
+    func endRecording() {
         if recorder.isRecording {
             recorder.stopRecording()
         }
@@ -83,58 +129,50 @@ class ViewController: UIViewController {
 
     @objc func startSession() {
         print("starting session")
-        
+
         schedulerRepeater?.eventHandler = {
             print("repeater event started")
             self.startRecorder()
-            
+
             self.schedulerFrequency?.eventHandler = {
-                //print("time left is \(self.timeLeft)")
+                // print("time left is \(self.timeLeft)")
                 self.timeLeft -= 1
                 print("audio level  == \(self.recorder.audioLevel)")
                 // if silence for the amount of time, user slept, exit
                 if self.timeLeft <= 0 {
-                    self.endRecording()
-                    self.stopTimer()
-                    self.schedulerFrequency?.finish()
-                    self.schedulerRepeater?.finish()
-                    print("user went to sleeeeep")
+                    print("silence......")
+                    self.end()
                     return
                 }
                 if self.recorder.audioLevel > self.recorder.DETECTION_LEVEL {
                     print("SOUND DETECTED!!")
-                    self.recorder.audioLevel = self.recorder.SILENCE_LEVEL
-                    self.timeLeft = self.LISTENING_INTERVAL
-                    self.stopRecorder()
-                    self.stopTimer()
-                    self.schedulerFrequency?.suspend()
-                    print("recording stopped...")
+                    self.pause()
                     return
-                }else{
-                    print("silence");
+                } else {
+                    print("silence")
                 }
             }
             self.schedulerFrequency?.resume()
         }
         schedulerRepeater?.resume()
-
-        
     }
 
     // MARK: Actions
 
     @IBAction func startDidTouch(_ sender: AnyObject) {
-        print("start button pressed")
-        UIApplication.shared.isIdleTimerDisabled = true
-        startTimer(startAfter: 0.1)
+        if startButtonIsActive == false {
+            start()
+        } else {
+            end()
+        }
     }
 
-    @IBAction func stopDidTouch(_ sender: AnyObject) {
-        stopRecorder()
-        stopTimer()
-        self.schedulerFrequency?.finish()
-        self.schedulerRepeater?.finish()
-        print("recording finished...")
-        UIApplication.shared.isIdleTimerDisabled = false
-    }
+//    @IBAction func stopDidTouch(_ sender: AnyObject) {
+//        stopRecorder()
+//        stopTimer()
+//        self.schedulerFrequency?.finish()
+//        self.schedulerRepeater?.finish()
+//        print("recording finished...")
+//        UIApplication.shared.isIdleTimerDisabled = false
+//    }
 }

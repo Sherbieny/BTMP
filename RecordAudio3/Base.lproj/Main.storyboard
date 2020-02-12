@@ -36,26 +36,6 @@
                                     <action selector="startDidTouch:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Bwy-BG-e61"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" insetsLayoutMarginsFromSafeArea="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x9F-oC-I5c" userLabel="Stop Button" customClass="StartToggleButton" customModule="RecordAudio3" customModuleProvider="target">
-                                <rect key="frame" x="137" y="422" width="100" height="100"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="100" id="5T9-Ve-Qgm"/>
-                                    <constraint firstAttribute="width" constant="100" id="Rre-wF-d0m"/>
-                                </constraints>
-                                <viewLayoutGuide key="safeArea" id="v5X-y7-TPT"/>
-                                <state key="normal" title="Stop"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
-                                        <real key="value" value="2"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                        <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="stopDidTouch:" destination="BYZ-38-t0r" eventType="touchUpInside" id="4Ks-bZ-oYk"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <color key="tintColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
