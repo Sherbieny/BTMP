@@ -54,7 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Set fetch interval
         UIApplication.shared.setMinimumBackgroundFetchInterval(60)
 
-        scheduler = Scheduler(timeInterval: 0.5)
+        scheduler = Scheduler(frequency: 0.5, period: 60, repeatEvery: 120)
 
         return true
     }
