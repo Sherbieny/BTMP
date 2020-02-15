@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1B0A98B322478B4400620189 /* Scheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0A98B222478B4400620189 /* Scheduler.swift */; };
-		1B75F6BD2249F1AA00824B8C /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B75F6BC2249F1AA00824B8C /* Main.swift */; };
+		1B789EB823F83919005A2BBB /* Worker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B789EB723F83919005A2BBB /* Worker.swift */; };
 		1B99790E223E65CD00322398 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B99790D223E65CD00322398 /* AppDelegate.swift */; };
 		1B997910223E65CD00322398 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B99790F223E65CD00322398 /* ViewController.swift */; };
 		1B997913223E65CD00322398 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1B997911223E65CD00322398 /* Main.storyboard */; };
@@ -21,7 +21,7 @@
 
 /* Begin PBXFileReference section */
 		1B0A98B222478B4400620189 /* Scheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scheduler.swift; sourceTree = "<group>"; };
-		1B75F6BC2249F1AA00824B8C /* Main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
+		1B789EB723F83919005A2BBB /* Worker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Worker.swift; sourceTree = "<group>"; };
 		1B99790A223E65CD00322398 /* RecordAudio3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RecordAudio3.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B99790D223E65CD00322398 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1B99790F223E65CD00322398 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -68,9 +68,9 @@
 				1BFBA56023F08085007F81F3 /* 10-seconds-of-silence.mp3 */,
 				1B99790D223E65CD00322398 /* AppDelegate.swift */,
 				1B99790F223E65CD00322398 /* ViewController.swift */,
+				1B789EB723F83919005A2BBB /* Worker.swift */,
 				1B99791F223E676100322398 /* Recorder.swift */,
 				1B0A98B222478B4400620189 /* Scheduler.swift */,
-				1B75F6BC2249F1AA00824B8C /* Main.swift */,
 				1B997911223E65CD00322398 /* Main.storyboard */,
 				1B997914223E65CE00322398 /* Assets.xcassets */,
 				1B997916223E65CE00322398 /* LaunchScreen.storyboard */,
@@ -165,8 +165,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1B75F6BD2249F1AA00824B8C /* Main.swift in Sources */,
 				1B997920223E676100322398 /* Recorder.swift in Sources */,
+				1B789EB823F83919005A2BBB /* Worker.swift in Sources */,
 				1B0A98B322478B4400620189 /* Scheduler.swift in Sources */,
 				1B997910223E65CD00322398 /* ViewController.swift in Sources */,
 				1BFBA56323F3509A007F81F3 /* StartToggleButton.swift in Sources */,

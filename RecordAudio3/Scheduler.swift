@@ -11,7 +11,7 @@ import Foundation
 public class Scheduler {
     
     
-    //MARK: Properties
+    //MARK: Properties  
     
     let timeInterval: TimeInterval
     var eventHandler: (() -> Void)?
