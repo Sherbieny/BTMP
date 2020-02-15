@@ -22,16 +22,15 @@ class ViewController: UIViewController {
     var flag: Bool = false
     // var timer: Timer!
     let SOUND_FLAG: Float = 50.0
-    let REPEAT_EVERY: Double = 60 // in seconds
-    let LISTENING_FREQUENCY: Double = 0.5 // in seconds
-    let LISTENING_INTERVAL: Double = 20 // listening interval
-    let START_AFTER: Double = 60000 // start after in milliseconds
-
-    var intervalManager: Timer!
-    var timeLeft: Double = 0 // listening loop counter
+    let REPEAT_EVERY: Double = 60 // repeat listening if sound detected in seconds
+    let LISTENING_FREQUENCY: Double = 0.1 // in seconds
+    let LISTENING_INTERVAL: Int = 20 // listening interval in seconds
+    let START_AFTER: Int = 10000 // start after in milliseconds (10000 = 10 sec)
+    
+    
     var startButtonIsActive = false
     var timerWorkItem: DispatchWorkItem?
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -50,7 +49,6 @@ class ViewController: UIViewController {
 
     @objc func pause() {
         recorder.audioLevel = recorder.SILENCE_LEVEL
-        timeLeft = LISTENING_INTERVAL
         stopRecorder()
         stopTimer()
         schedulerFrequency?.suspend()
@@ -96,8 +94,8 @@ class ViewController: UIViewController {
 
     func startTimer() {
         print("startTimer")
-        timeLeft = LISTENING_INTERVAL
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(10000), execute: timerWorkItem!)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(START_AFTER), execute: timerWorkItem!)
     }
 
     func stopTimer() {
@@ -133,13 +131,15 @@ class ViewController: UIViewController {
         schedulerRepeater?.eventHandler = {
             print("repeater event started")
             self.startRecorder()
-
+            let startTime = DispatchTime.now()
+            let endTime = startTime + DispatchTimeInterval.seconds(self.LISTENING_INTERVAL)
+            
             self.schedulerFrequency?.eventHandler = {
-                // print("time left is \(self.timeLeft)")
-                self.timeLeft -= 1
+                 print("startTime = \(DispatchTime.now()) end time = \(endTime)")
+                
                 print("audio level  == \(self.recorder.audioLevel)")
                 // if silence for the amount of time, user slept, exit
-                if self.timeLeft <= 0 {
+                if DispatchTime.now() >= endTime {
                     print("silence......")
                     self.end()
                     return
