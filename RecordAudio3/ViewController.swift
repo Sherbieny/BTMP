@@ -3,7 +3,7 @@
 //  RecordAudio3
 //
 //  Created by Eslam El Sherbieny on 17/03/2019.
-//  Copyright © 2019 Sherboapps. All rights reserved.
+//  Copyright Â© 2019 Sherboapps. All rights reserved.
 //
 
 import AVFoundation

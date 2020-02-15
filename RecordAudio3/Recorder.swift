@@ -4,7 +4,7 @@
 //
 //
 //  Created by Ronald Nicholson on 10/21/16.  Updated 2017Feb07
-//  Copyright © 2017 HotPaw Productions. All rights reserved.
+//  Copyright Â© 2017 HotPaw Productions. All rights reserved.
 // Distribution: BSD 2-clause license
 //
 
