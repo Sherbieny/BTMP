@@ -12,134 +12,167 @@ import UIKit
 class ViewController: UIViewController {
     // MARK: Outlets
 
-    @IBOutlet var startButton: UIButton!
-    @IBOutlet var stopButton: UIButton!
+    @IBOutlet var startButton: StartToggleButton!
 
     // MARK: Properties
 
     let recorder: Recorder = Recorder()
-    var scheduler: Scheduler?
+    var schedulerFrequency: Scheduler?
+    var schedulerRepeater: Scheduler?
     var flag: Bool = false
     // var timer: Timer!
     let SOUND_FLAG: Float = 50.0
-    // var otherAudioPlaying = AVAudioSession.sharedInstance().isOtherAudioPlaying
-    var intervalManager: Timer!
-    var timeLeft: Int = 30
-    let timeInterval: TimeInterval = 20
-
+    let REPEAT_EVERY: Double = 60 // repeat listening if sound detected in seconds
+    let LISTENING_FREQUENCY: Double = 0.1 // in seconds
+    let LISTENING_INTERVAL: Int = 20 // listening interval in seconds
+    let START_AFTER: Int = 10000 // start after in milliseconds (10000 = 10 sec)
+    
+    
+    var startButtonIsActive = false
+    var timerWorkItem: DispatchWorkItem?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
 
-        //        while true {
-        //            print(recorder.ringBuffer)
-        //        }
-        scheduler = Scheduler(frequency: 0.5, period: 60, repeatEvery: 120)
+        schedulerFrequency = Scheduler(timeInterval: LISTENING_FREQUENCY)
+        schedulerRepeater = Scheduler(timeInterval: REPEAT_EVERY)
+    }
+
+    // MARK: Main functions
+
+    @objc func start() {
+        startButtonIsActive = true
+        keepScreenOpen()
+        createWorker()
+        startTimer()
+    }
+
+    @objc func pause() {
+        recorder.audioLevel = recorder.SILENCE_LEVEL
+        stopRecorder()
+        stopTimer()
+        schedulerFrequency?.suspend()
+        print("recording paused... rerunning soon")
+    }
+
+    @objc func end() {
+        startButtonIsActive = false
+        endRecording()
+        stopTimer()
+        schedulerFrequency?.finish()
+        schedulerRepeater?.finish()
+        DispatchQueue.main.async {
+            self.startButton.deactivateButton()
+        }
+        releaseScreen()
+        print("user went to sleeeeep")
+    }
+
+    // MARK: Screen functions
+
+    func keepScreenOpen() {
+        DispatchQueue.main.async {
+            UIApplication.shared.isIdleTimerDisabled = true
+        }
+    }
+
+    func releaseScreen() {
+        DispatchQueue.main.async {
+            UIApplication.shared.isIdleTimerDisabled = false
+        }
+    }
+
+    // MARK: Worker functions
+
+    func createWorker() {
+        timerWorkItem = DispatchWorkItem { [weak self] in
+            self?.startSession()
+        }
     }
 
     // MARK: Timer functions
 
-//    @objc func startTimer(startEvery: Double) {
-//        print("startTimer")
-//        timeLeft = 30
-//        intervalManager = Timer.scheduledTimer(timeInterval: startEvery, target: self, selector: #selector(startSession), userInfo: nil, repeats: false)
-//        intervalManager.fire()
-//    }
+    func startTimer() {
+        print("startTimer")
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(START_AFTER), execute: timerWorkItem!)
+    }
 
-//    @objc func stopTimer() {
-//        intervalManager.invalidate()
-//        //timer.invalidate()
-//    }
+    func stopTimer() {
+        timerWorkItem?.cancel()
+    }
 
     // MARK: Recorder functions
 
-    @objc func startRecorder() {
+    func startRecorder() {
         if !recorder.isRecording {
             recorder.startRecording()
         }
     }
 
-    @objc func stopRecorder() {
+    func stopRecorder() {
         if recorder.isRecording {
             recorder.stopRecording()
         }
     }
 
-    // MARK: Session functions
-
-    @objc func doRecord() {
-        scheduler?.frequencyEventHandler = {
-            // Detect sound
-            print("audio level  == \(self.recorder.audioLevel)")
-            if self.recorder.audioLevel > self.recorder.DETECTION_LEVEL {
-                print("sound baby")
-                self.recorder.audioLevel = self.recorder.SILENCE_LEVEL
-                self.stopRecorder()
-                self.scheduler?.suspend()
-            } else {
-                print("silence")
-            }
+    func endRecording() {
+        if recorder.isRecording {
+            recorder.stopRecording()
         }
+        recorder.stopMedia()
     }
+
+    // MARK: Session functions
 
     @objc func startSession() {
         print("starting session")
 
-        print("starting repeater")
-        scheduler?.repeaterEventHandler = {
-            print("starting period")
+        schedulerRepeater?.eventHandler = {
+            print("repeater event started")
+            self.startRecorder()
+            let startTime = DispatchTime.now()
+            let endTime = startTime + DispatchTimeInterval.seconds(self.LISTENING_INTERVAL)
             
-                print("starting frequency")
-                self.scheduler?.start()
-                print("resuming scheduler after frequency")
+            self.schedulerFrequency?.eventHandler = {
+                 print("startTime = \(DispatchTime.now()) end time = \(endTime)")
                 
-                // after period finish
-            
-//            print("resuming scheduler after period")
-//            self.scheduler?.start()
+                print("audio level  == \(self.recorder.audioLevel)")
+                // if silence for the amount of time, user slept, exit
+                if DispatchTime.now() >= endTime {
+                    print("silence......")
+                    self.end()
+                    return
+                }
+                if self.recorder.audioLevel > self.recorder.DETECTION_LEVEL {
+                    print("SOUND DETECTED!!")
+                    self.pause()
+                    return
+                } else {
+                    print("silence")
+                }
+            }
+            self.schedulerFrequency?.resume()
         }
-        print("resuming scheduler after repeater")
-        scheduler?.start()
-
-//        scheduler?.eventHandler = {
-//            // print("time left is \(self.timeLeft)")
-//            self.timeLeft -= 1
-//            print("audio level  == \(self.recorder.audioLevel)")
-//            // if silence for the amount of time, user slept, exit
-//            if self.timeLeft <= 0 {
-//                self.stopRecorder()
-//                self.stopTimer()
-//                self.scheduler?.finish()
-//                print("user went to sleeeeep")
-//                return
-//            }
-//            if self.recorder.audioLevel > self.recorder.DETECTION_LEVEL {
-//                print("SOUND DETECTED!!")
-//                self.recorder.audioLevel = self.recorder.SILENCE_LEVEL
-//                self.stopRecorder()
-//                self.stopTimer()
-//                self.scheduler?.suspend()
-//                print("recording stopped...")
-//
-//                return
-//            } else {
-//                print("silence")
-//            }
-//        }
-//        scheduler?.resume()
+        schedulerRepeater?.resume()
     }
 
     // MARK: Actions
 
     @IBAction func startDidTouch(_ sender: AnyObject) {
-        print("start button pressed")
-        startRecorder()
-        startSession()
+        if startButtonIsActive == false {
+            start()
+        } else {
+            end()
+        }
     }
 
-    @IBAction func stopDidTouch(_ sender: AnyObject) {
-        stopRecorder()
-        scheduler?.finish()
-        print("recording finished...")
-    }
+//    @IBAction func stopDidTouch(_ sender: AnyObject) {
+//        stopRecorder()
+//        stopTimer()
+//        self.schedulerFrequency?.finish()
+//        self.schedulerRepeater?.finish()
+//        print("recording finished...")
+//        UIApplication.shared.isIdleTimerDisabled = false
+//    }
 }

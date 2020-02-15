@@ -52,15 +52,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Set fetch interval
-        UIApplication.shared.setMinimumBackgroundFetchInterval(60)
+        //UIApplication.shared.setMinimumBackgroundFetchInterval(60)
 
-        scheduler = Scheduler(frequency: 0.5, period: 60, repeatEvery: 120)
+        //scheduler = Scheduler(timeInterval: 0.5)
 
         return true
     }
 
     func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        print("fetch started")
+//        print("fetch started")
         // Check if the scheduler status is suspended, resumed or finished
 
 //        switch listener.worker?.state {
