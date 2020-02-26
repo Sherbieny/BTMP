@@ -15,7 +15,6 @@
 		1B997915223E65CE00322398 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1B997914223E65CE00322398 /* Assets.xcassets */; };
 		1B997918223E65CE00322398 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1B997916223E65CE00322398 /* LaunchScreen.storyboard */; };
 		1B997920223E676100322398 /* Recorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B99791F223E676100322398 /* Recorder.swift */; };
-		1BFBA56123F08085007F81F3 /* 10-seconds-of-silence.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 1BFBA56023F08085007F81F3 /* 10-seconds-of-silence.mp3 */; };
 		1BFBA56323F3509A007F81F3 /* StartToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFBA56223F3509A007F81F3 /* StartToggleButton.swift */; };
 /* End PBXBuildFile section */
 
@@ -30,7 +29,6 @@
 		1B997917223E65CE00322398 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1B997919223E65CE00322398 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1B99791F223E676100322398 /* Recorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recorder.swift; sourceTree = "<group>"; };
-		1BFBA56023F08085007F81F3 /* 10-seconds-of-silence.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "10-seconds-of-silence.mp3"; sourceTree = "<group>"; };
 		1BFBA56223F3509A007F81F3 /* StartToggleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartToggleButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -65,7 +63,6 @@
 			isa = PBXGroup;
 			children = (
 				1BFBA56423F350B2007F81F3 /* Buttons */,
-				1BFBA56023F08085007F81F3 /* 10-seconds-of-silence.mp3 */,
 				1B99790D223E65CD00322398 /* AppDelegate.swift */,
 				1B99790F223E65CD00322398 /* ViewController.swift */,
 				1B789EB723F83919005A2BBB /* Worker.swift */,
@@ -153,7 +150,6 @@
 			files = (
 				1B997918223E65CE00322398 /* LaunchScreen.storyboard in Resources */,
 				1B997915223E65CE00322398 /* Assets.xcassets in Resources */,
-				1BFBA56123F08085007F81F3 /* 10-seconds-of-silence.mp3 in Resources */,
 				1B997913223E65CD00322398 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

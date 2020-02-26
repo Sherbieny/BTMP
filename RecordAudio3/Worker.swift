@@ -9,27 +9,33 @@
 import Foundation
 import UIKit
 
-class Worker {
+class Worker: NSObject {
     // MARK: Properties
 
-    public let REPEAT_EVERY: Double = 60 // repeat listening if sound detected in seconds
-      public let LISTENING_FREQUENCY: Double = 0.1 // in seconds
-      public let LISTENING_INTERVAL: Int = 20 // listening interval in seconds
-      public let START_AFTER: Int = 10000 // start after in milliseconds (10000 = 10 sec)
+    public let REPEAT_EVERY: Double = 60 // in seconds - repeat listening if sound detected
+    public let LISTENING_FREQUENCY: Double = 0.1 // in seconds - listening percision
+    public let LISTENING_INTERVAL: Int = 20 // in seconds -  listening interval
+    public let START_AFTER: Int = 10000 // in milliseconds -  start after (10000 = 10 sec)
 
     let recorder: Recorder = Recorder()
     var listeningFrequency: Scheduler?
     var repeatingFrequency: Scheduler?
     var timerWorkItem: DispatchWorkItem?
 
+    override init() {
+        print("Worker: init")
+        listeningFrequency = Scheduler(timeInterval: LISTENING_FREQUENCY)
+        repeatingFrequency = Scheduler(timeInterval: REPEAT_EVERY)
+    }
+
     // MARK: Main functions
 
     public func start() {
-        listeningFrequency = Scheduler(timeInterval: LISTENING_FREQUENCY)
-        repeatingFrequency = Scheduler(timeInterval: REPEAT_EVERY)
+        recorder.audioLevel = recorder.SILENCE_LEVEL
         keepScreenOpen()
         createWorker()
         startTimer()
+        NotificationCenter.default.post(name: .didEnterStart, object: self)
     }
 
     public func pause() {
@@ -37,15 +43,18 @@ class Worker {
         stopRecorder()
         stopTimer()
         listeningFrequency?.suspend()
+        NotificationCenter.default.post(name: .didEnterWaiting, object: self)
         print("recording paused... rerunning soon")
     }
 
     public func end() {
+        recorder.audioLevel = recorder.SILENCE_LEVEL
         endRecording()
         stopTimer()
         listeningFrequency?.finish()
         repeatingFrequency?.finish()
         releaseScreen()
+        NotificationCenter.default.post(name: .didEnterStop, object: self)
         print("user went to sleeeeep")
     }
 
@@ -76,7 +85,7 @@ class Worker {
     func startTimer() {
         print("startTimer")
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(START_AFTER), execute: timerWorkItem!)
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(Int(REPEAT_EVERY)), execute: timerWorkItem!)
     }
 
     func stopTimer() {
@@ -108,12 +117,14 @@ class Worker {
 
     @objc func startSession() {
         print("starting session")
-
         repeatingFrequency?.eventHandler = {
             print("repeater event started")
+
             self.startRecorder()
             let startTime = DispatchTime.now()
             let endTime = startTime + DispatchTimeInterval.seconds(self.LISTENING_INTERVAL)
+
+            NotificationCenter.default.post(name: .didEnterStart, object: self, userInfo: ["resuming": true])
 
             self.listeningFrequency?.eventHandler = {
                 print("startTime = \(DispatchTime.now()) end time = \(endTime)")

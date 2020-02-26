@@ -15,27 +15,19 @@ class ViewController: UIViewController {
     @IBOutlet var startButton: StartToggleButton!
 
     // MARK: Properties
+
     let worker: Worker = Worker()
-    let recorder: Recorder = Recorder()
-    var schedulerFrequency: Scheduler?
-    var schedulerRepeater: Scheduler?
-    var flag: Bool = false
-    // var timer: Timer!
-    let SOUND_FLAG: Float = 50.0
-    let REPEAT_EVERY: Double = 60 // repeat listening if sound detected in seconds
-    let LISTENING_FREQUENCY: Double = 0.1 // in seconds
-    let LISTENING_INTERVAL: Int = 20 // listening interval in seconds
-    let START_AFTER: Int = 10000 // start after in milliseconds (10000 = 10 sec)
-    
-    
     var startButtonIsActive = false
-    var timerWorkItem: DispatchWorkItem?
-    
+
+    private var timer: Timer?
+    var timeLeft: Int = 0
+
+    let delegate = UIApplication.shared.delegate
+
     override func viewDidLoad() {
         super.viewDidLoad()
-
-//        schedulerFrequency = Scheduler(timeInterval: LISTENING_FREQUENCY)
-//        schedulerRepeater = Scheduler(timeInterval: REPEAT_EVERY)
+        initEvents()
+        timeLeft = Int(worker.REPEAT_EVERY)
     }
 
     // MARK: Main functions
@@ -43,115 +35,153 @@ class ViewController: UIViewController {
     @objc func start() {
         startButtonIsActive = true
         worker.start()
-        
+    }
+
+    @objc func pause() {
+        DispatchQueue.main.async {
+            self.startButton.listeningButton()
+        }
     }
 
     @objc func end() {
         startButtonIsActive = false
+        worker.end()
         DispatchQueue.main.async {
-            self.startButton.deactivateButton()
+            self.startButton.startButton()
+            self.deinitTimer()
         }
         print("user went to sleeeeep")
-        worker.end()
     }
 
-//    // MARK: Screen functions
-//
-//    func keepScreenOpen() {
-//        DispatchQueue.main.async {
-//            UIApplication.shared.isIdleTimerDisabled = true
-//        }
-//    }
-//
-//    func releaseScreen() {
-//        DispatchQueue.main.async {
-//            UIApplication.shared.isIdleTimerDisabled = false
-//        }
-//    }
-//
-//    // MARK: Worker functions
-//
-//    func createWorker() {
-//        timerWorkItem = DispatchWorkItem { [weak self] in
-//            self?.startSession()
-//        }
-//    }
-//
-//    // MARK: Timer functions
-//
-//    func startTimer() {
-//        print("startTimer")
-//
-//        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(START_AFTER), execute: timerWorkItem!)
-//    }
-//
-//    func stopTimer() {
-//        timerWorkItem?.cancel()
-//    }
-//
-//    // MARK: Recorder functions
-//
-//    func startRecorder() {
-//        if !recorder.isRecording {
-//            recorder.startRecording()
-//        }
-//    }
-//
-//    func stopRecorder() {
-//        if recorder.isRecording {
-//            recorder.stopRecording()
-//        }
-//    }
-//
-//    func endRecording() {
-//        if recorder.isRecording {
-//            recorder.stopRecording()
-//        }
-//        recorder.stopMedia()
-//    }
-//
-//    // MARK: Session functions
-//
-//    @objc func startSession() {
-//        print("starting session")
-//
-//        schedulerRepeater?.eventHandler = {
-//            print("repeater event started")
-//            self.startRecorder()
-//            let startTime = DispatchTime.now()
-//            let endTime = startTime + DispatchTimeInterval.seconds(self.LISTENING_INTERVAL)
-//
-//            self.schedulerFrequency?.eventHandler = {
-//                 print("startTime = \(DispatchTime.now()) end time = \(endTime)")
-//
-//                print("audio level  == \(self.recorder.audioLevel)")
-//                // if silence for the amount of time, user slept, exit
-//                if DispatchTime.now() >= endTime {
-//                    print("silence......")
-//                    self.end()
-//                    return
-//                }
-//                if self.recorder.audioLevel > self.recorder.DETECTION_LEVEL {
-//                    print("SOUND DETECTED!!")
-//                    self.pause()
-//                    return
-//                } else {
-//                    print("silence")
-//                }
-//            }
-//            self.schedulerFrequency?.resume()
-//        }
-//        schedulerRepeater?.resume()
-//    }
+    func initEvents() {
+        NotificationCenter.default.addObserver(self, selector: #selector(onDidEnterStart(_:)), name: .didEnterStart, object: nil)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(onDidEnterWaiting(_:)), name: .didEnterWaiting, object: nil)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(onDidEnterStop(_:)), name: .didEnterStop, object: nil)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(onDidEnterBackground(_:)), name: UIApplication.didEnterBackgroundNotification, object: nil)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(onWillEnterForeground(_:)), name: UIApplication.willEnterForegroundNotification, object: nil)
+        
+    }
+
+    // MARK: Event listeners
+
+    @objc func onDidEnterStart(_ notification: Notification) {
+        print("onDidEnterStart event!!!")
+        DispatchQueue.main.async {
+            print("onDidEnterStart running!!!")
+
+            if notification.userInfo == nil {
+                print("onDidEnterStart initiating timer")
+                self.startButton.stopButton()
+                self.resetTimer()
+                self.initTimer()
+            } else {
+                self.startButton.listeningButton()
+                self.deinitTimer()
+            }
+        }
+    }
+
+    @objc func onDidEnterWaiting(_ notification: Notification) {
+        print("onDidEnterWaiting event!!!")
+
+        DispatchQueue.main.async {
+            print("onDidEnterWaiting running!!!")
+            // self.startButton.waitingButton()
+            self.resetTimer()
+            self.initTimer()
+        }
+    }
+
+    @objc func onDidEnterStop(_ notification: Notification) {
+        print("onDidEnterStop event!!!")
+        startButtonIsActive = false
+        DispatchQueue.main.async {
+            print("onDidEnterStop running!!!")
+            self.startButton.startButton()
+            self.deinitTimer()
+        }
+    }
+
+    @objc func onDidEnterBackground(_ notification: Notification) {
+        print("onDidEnterBackground called")
+        deinitTimer()
+        let shared = UserDefaults.standard
+        shared.set(Date(), forKey: "savedTime")
+        shared.set(timeLeft, forKey: "timeLeft")
+    }
+
+    @objc func onWillEnterForeground(_ notification: Notification) {
+        print("onWillEnterForeground called")
+        if let savedDate = UserDefaults.standard.object(forKey: "savedTime") as? Date, let oldTimeLeft = UserDefaults.standard.object(forKey: "timeLeft") as? Int {
+            print("old time = \(oldTimeLeft)")
+            timeLeft = oldTimeLeft > 0 ? oldTimeLeft - ViewController.getTimeDifference(startDate: savedDate): Int(worker.REPEAT_EVERY)
+            initTimer()
+        }
+    }
+
+    // MARK: Timer lifecycle
+
+    private func initTimer() {
+        //timeLeft = Int(worker.REPEAT_EVERY)
+        timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
+    }
+
+    private func resetTimer() {
+        timeLeft = Int(worker.REPEAT_EVERY)
+    }
+
+    @objc func updateTimer() {
+        print("timeLeft = \(timeLeft)")
+        startButton.addTimerText(text: timeFormatted(timeLeft)) // will show timer
+        if timeLeft != 0 {
+            timeLeft -= 1 // decrease counter timer
+        } else {
+            if let timer = self.timer {
+                timer.invalidate()
+                self.timer = nil
+            }
+        }
+    }
+
+    func timeFormatted(_ totalSeconds: Int) -> String {
+        let seconds: Int = totalSeconds % 60
+        let minutes: Int = (totalSeconds / 60) % 60
+        return String(format: "%02d:%02d", minutes, seconds)
+    }
+
+    static func getTimeDifference(startDate: Date) -> (Int) {
+        print("getTimeDifference called")
+        // let calendar = Calendar.current
+        // let components = calendar.dateComponents([.hour, .minute, .second], from: startDate, to: Date())
+        let diffInSeconds = Date().timeIntervalSince(startDate)
+        print("time diff = \(diffInSeconds) seconds")
+        // return(components.hour!, components.minute!, components.second!)
+        return Int(diffInSeconds)
+    }
+
+    private func deinitTimer() {
+        timer?.invalidate()
+        timer = nil
+    }
 
     // MARK: Actions
 
     @IBAction func startDidTouch(_ sender: AnyObject) {
         if startButtonIsActive == false {
+            print("start pressed")
             start()
         } else {
+            print("stop pressed")
             end()
         }
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 
 //    @IBAction func stopDidTouch(_ sender: AnyObject) {
@@ -162,4 +192,10 @@ class ViewController: UIViewController {
 //        print("recording finished...")
 //        UIApplication.shared.isIdleTimerDisabled = false
 //    }
+}
+
+extension Notification.Name {
+    static let didEnterWaiting = Notification.Name("didEnterWaiting")
+    static let didEnterStop = Notification.Name("didEnterStop")
+    static let didEnterStart = Notification.Name("didEnterStart")
 }
