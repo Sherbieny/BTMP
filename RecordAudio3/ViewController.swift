@@ -46,13 +46,14 @@ class ViewController: UIViewController {
     @objc func end() {
         startButtonIsActive = false
         worker.end()
-//        DispatchQueue.main.async {
-//            self.startButton.startButton()
-//
-//        }
-//         self.deinitTimer()
         print("user pressed stop")
     }
+    
+    @objc func stop() {
+            startButtonIsActive = false
+            worker.stop()
+        }
+        
 
     func initEvents() {
         NotificationCenter.default.addObserver(self, selector: #selector(onDidEnterStart(_:)), name: .didEnterStart, object: nil)
@@ -108,21 +109,10 @@ class ViewController: UIViewController {
     }
 
     @objc func onDidEnterBackground(_ notification: Notification) {
-//        print("onDidEnterBackground called")
-//        deinitTimer()
-//        let shared = UserDefaults.standard
-//        shared.set(Date(), forKey: "savedTime")
-//        shared.set(timeLeft, forKey: "timeLeft")
-        self.end()
+            stop()
     }
 
     @objc func onWillEnterForeground(_ notification: Notification) {
-//        print("onWillEnterForeground called")
-//        if let savedDate = UserDefaults.standard.object(forKey: "savedTime") as? Date, let oldTimeLeft = UserDefaults.standard.object(forKey: "timeLeft") as? Int {
-//            print("old time = \(oldTimeLeft)")
-//            timeLeft = oldTimeLeft > 0 ? oldTimeLeft - ViewController.getTimeDifference(startDate: savedDate) : Int(worker.REPEAT_EVERY)
-//            initTimer()
-//        }
     }
 
     // MARK: Timer lifecycle
@@ -180,7 +170,7 @@ class ViewController: UIViewController {
             start()
         } else {
             print("stop pressed")
-            end()
+            stop()
         }
     }
 

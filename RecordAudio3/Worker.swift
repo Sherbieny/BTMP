@@ -54,6 +54,15 @@ class Worker: NSObject {
         NotificationCenter.default.post(name: .didEnterStop, object: self)
     }
     
+    public func stop(){
+        recorder.audioLevel = recorder.SILENCE_LEVEL
+        stopRecorder()
+        listeningFrequency?.suspend()
+        repeatingFrequency?.finish()
+        releaseScreen()
+        NotificationCenter.default.post(name: .didEnterStop, object: self)
+    }
+    
 
     // MARK: Screen functions
 
