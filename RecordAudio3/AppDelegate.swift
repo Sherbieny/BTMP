@@ -7,6 +7,7 @@
 //
 
 import AVFoundation
+import BackgroundTasks
 import UIKit
 
 @UIApplicationMain
@@ -19,6 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var scheduler: Scheduler?
     var recorder: Recorder?
+    var worker: Worker?
 
     func setupNotifications() {
         let notificationCenter = NotificationCenter.default
@@ -41,7 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if let optionsValue = userInfo[AVAudioSessionInterruptionOptionKey] as? UInt {
                 let options = AVAudioSession.InterruptionOptions(rawValue: optionsValue)
                 if options.contains(.shouldResume) {
-            print("interruption flagged should resume ....")
+                    print("interruption flagged should resume ....")
                 } else {
                     // Interruption Ended - playback should NOT resume
                     print("interruption flagged should end - no playback ....")
@@ -51,41 +53,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Set fetch interval
-        //UIApplication.shared.setMinimumBackgroundFetchInterval(60)
-
-        //scheduler = Scheduler(timeInterval: 0.5)
 
         return true
     }
 
     func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-//        print("fetch started")
-        // Check if the scheduler status is suspended, resumed or finished
-
-//        switch listener.worker?.state {
-//        case .suspended:
-//            listener.startRecorder()
-//            listener.startTimer(startEvery: 10)
-//            completionHandler(.newData)
-//        case .resumed:
-//            return
-//        case .finished:
-//            UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalNever)
-//            completionHandler(.noData)
-//        case .none:
-//            print("worker is dead")
-//        }
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
-        // Start the recorder
-        //print("starting recorder first time")
-        //recorder?.startRecording()
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
-        // scheduler.
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {

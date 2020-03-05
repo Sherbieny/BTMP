@@ -42,6 +42,16 @@ import UIKit
 class StartToggleButton: UIButton {
     var isOn = false
 
+    // MARK: Properties
+
+    public enum BtnState {
+        case start
+        case waiting
+        case stop
+    }
+
+    public var btnState: BtnState = .start
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         initButton()
@@ -53,45 +63,104 @@ class StartToggleButton: UIButton {
     }
 
     func initButton() {
+        btnState = .start
         layer.cornerRadius = frame.size.width / 2.0
         layer.backgroundColor = UIColor.black.cgColor
         layer.borderColor = UIColor.white.cgColor
         setTitleColor(UIColor.white, for: .normal)
+        backgroundColor = .black
+        titleLabel?.lineBreakMode = .byWordWrapping
+        titleLabel?.numberOfLines = 2
         addTarget(self, action: #selector(StartToggleButton.buttonPressed), for: .touchUpInside)
     }
 
-    func deactivateButton() {
-        let color = UIColor.black
-        let title = "Start"
-        let titleColor = UIColor.white
-        let borderColor = UIColor.white
+    func listeningButton() {
+        print("Button: waiting called")
+    
+        btnState = .waiting
+
+        //let color = UIColor.systemGray
+        let title = "Listening"
+        //let titleColor = UIColor.white
+        //let borderColor = UIColor.black
 
         setTitle(title, for: .normal)
-        setTitleColor(titleColor, for: .normal)
-        backgroundColor = color
-        layer.borderColor = borderColor.cgColor
-        isOn = false
+        //setTitleColor(titleColor, for: .normal)
+//        backgroundColor = color
+//        layer.borderColor = borderColor.cgColor
     }
 
-    func activateButton() {
-        let color = UIColor.white
-        let title = "Stop"
-        let titleColor = UIColor.black
-        let borderColor = UIColor.black
+    func startButton() {
+        print("Button: start called")
+        if btnState == .start {
+            return
+        }
+        btnState = .start
+
+        //let color = UIColor.black
+        let title = "Start"
+//        let titleColor = UIColor.white
+//        let borderColor = UIColor.white
 
         setTitle(title, for: .normal)
-        setTitleColor(titleColor, for: .normal)
-        backgroundColor = color
-        layer.borderColor = borderColor.cgColor
-        isOn = true
+//        setTitleColor(titleColor, for: .normal)
+//        backgroundColor = color
+//        layer.borderColor = borderColor.cgColor
+    }
+
+    func stopButton() {
+        print("Button: stop called")
+        if btnState == .stop {
+            print("returned early")
+            return
+        }
+
+        btnState = .stop
+
+        //let color = UIColor.white
+        let title = "Stop"
+//        let titleColor = UIColor.black
+//        let borderColor = UIColor.black
+
+        setTitle(title, for: .normal)
+//        setTitleColor(titleColor, for: .normal)
+//        backgroundColor = color
+//        layer.borderColor = borderColor.cgColor
+    }
+
+    func addTimerText(text: String) {
+        print("Button: addTimer called")
+          btnState = .waiting
+                
+        let newText = "\u{2248} \(text)" //currentText ?? "" + "\n" + text
+        
+        print("time text = \(text)")
+        titleLabel?.fadeTransition(1.0)
+        setTitle(newText, for: .normal)
+        titleLabel?.textAlignment = .justified
     }
 
     @objc func buttonPressed() {
-        switch isOn {
-        case true:
-            deactivateButton()
+        switch btnState {
+        case .start:
+            stopButton()
+        case .waiting:
+            startButton()
         default:
-            activateButton()
+            startButton()
         }
+    }
+}
+
+
+
+extension UIView {
+    func fadeTransition(_ duration:CFTimeInterval) {
+        let animation = CATransition()
+        animation.timingFunction = CAMediaTimingFunction(name:
+            CAMediaTimingFunctionName.easeInEaseOut)
+        animation.type = CATransitionType.fade
+        animation.duration = duration
+        layer.add(animation, forKey: CATransitionType.fade.rawValue)
     }
 }

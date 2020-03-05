@@ -64,7 +64,7 @@ final class Recorder: NSObject {
             if isSessionActive { print("Error: stop recording failed at stopAudioSession") }
             if isAudioUnitActive { print("Error: stop recording failed at stopAudioUnit AudioOutputUnitStop") }
             if isAudioUnitInitialized { print("Error: stop recording failed at stopAudioUnit AudioUnitUninitialize") }
-        }
+        }        
         isRecording = false
     }
 

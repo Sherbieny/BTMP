@@ -51,5 +51,10 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>com.sherboapps.RecordAudio3.backgroundWorker</string>
+		<string>com.sherboapps.RecordAudio3.backgroundRefresher</string>
+	</array>
 </dict>
 </plist>
