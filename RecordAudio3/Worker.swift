@@ -12,7 +12,7 @@ import UIKit
 class Worker: NSObject {
     // MARK: Properties
 
-    public let REPEAT_EVERY: Double = 60 // in seconds - repeat listening if sound detected
+    public let REPEAT_EVERY: Double = 30 // in seconds - repeat listening if sound detected
     public let LISTENING_FREQUENCY: Double = 0.1 // in seconds - listening percision
     public let LISTENING_INTERVAL: Int = 20 // in seconds -  listening interval
     public let START_AFTER: Int = 10000 // in milliseconds -  start after (10000 = 10 sec)
@@ -20,11 +20,11 @@ class Worker: NSObject {
     let recorder: Recorder = Recorder()
     var listeningFrequency: Scheduler?
     var repeatingFrequency: Scheduler?
-    var timerWorkItem: DispatchWorkItem?
+    // var timerWorkItem: DispatchWorkItem?
 
     override init() {
         print("Worker: init")
-        listeningFrequency = Scheduler(timeInterval: LISTENING_FREQUENCY)
+        listeningFrequency = Scheduler()
         repeatingFrequency = Scheduler(timeInterval: REPEAT_EVERY)
     }
 
@@ -33,15 +33,13 @@ class Worker: NSObject {
     public func start() {
         recorder.audioLevel = recorder.SILENCE_LEVEL
         keepScreenOpen()
-        createWorker()
-        startTimer()
+        startSession()
         NotificationCenter.default.post(name: .didEnterStart, object: self)
     }
 
     public func pause() {
         recorder.audioLevel = recorder.SILENCE_LEVEL
         stopRecorder()
-        stopTimer()
         listeningFrequency?.suspend()
         NotificationCenter.default.post(name: .didEnterWaiting, object: self)
         print("recording paused... rerunning soon")
@@ -50,13 +48,12 @@ class Worker: NSObject {
     public func end() {
         recorder.audioLevel = recorder.SILENCE_LEVEL
         endRecording()
-        stopTimer()
-        listeningFrequency?.finish()
+        listeningFrequency?.suspend()
         repeatingFrequency?.finish()
         releaseScreen()
         NotificationCenter.default.post(name: .didEnterStop, object: self)
-        print("user went to sleeeeep")
     }
+    
 
     // MARK: Screen functions
 
@@ -70,26 +67,6 @@ class Worker: NSObject {
         DispatchQueue.main.async {
             UIApplication.shared.isIdleTimerDisabled = false
         }
-    }
-
-    // MARK: Worker functions
-
-    func createWorker() {
-        timerWorkItem = DispatchWorkItem { [weak self] in
-            self?.startSession()
-        }
-    }
-
-    // MARK: Timer functions
-
-    func startTimer() {
-        print("startTimer")
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(Int(REPEAT_EVERY)), execute: timerWorkItem!)
-    }
-
-    func stopTimer() {
-        timerWorkItem?.cancel()
     }
 
     // MARK: Recorder functions
@@ -134,6 +111,7 @@ class Worker: NSObject {
                 if DispatchTime.now() >= endTime {
                     print("silence......")
                     self.end()
+                    print("user went to sleeeeep")
                     return
                 }
                 if self.recorder.audioLevel > self.recorder.DETECTION_LEVEL {

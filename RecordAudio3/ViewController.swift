@@ -46,11 +46,12 @@ class ViewController: UIViewController {
     @objc func end() {
         startButtonIsActive = false
         worker.end()
-        DispatchQueue.main.async {
-            self.startButton.startButton()
-            self.deinitTimer()
-        }
-        print("user went to sleeeeep")
+//        DispatchQueue.main.async {
+//            self.startButton.startButton()
+//
+//        }
+//         self.deinitTimer()
+        print("user pressed stop")
     }
 
     func initEvents() {
@@ -63,74 +64,77 @@ class ViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(onDidEnterBackground(_:)), name: UIApplication.didEnterBackgroundNotification, object: nil)
 
         NotificationCenter.default.addObserver(self, selector: #selector(onWillEnterForeground(_:)), name: UIApplication.willEnterForegroundNotification, object: nil)
-        
     }
 
     // MARK: Event listeners
 
     @objc func onDidEnterStart(_ notification: Notification) {
         print("onDidEnterStart event!!!")
-        DispatchQueue.main.async {
-            print("onDidEnterStart running!!!")
+        // DispatchQueue.main.async {
+        print("onDidEnterStart running!!!")
 
-            if notification.userInfo == nil {
-                print("onDidEnterStart initiating timer")
-                self.startButton.stopButton()
-                self.resetTimer()
-                self.initTimer()
-            } else {
-                self.startButton.listeningButton()
-                self.deinitTimer()
-            }
+        if notification.userInfo == nil {
+            print("onDidEnterStart initiating timer")
+            DispatchQueue.main.async { self.startButton.stopButton() }
+            resetTimer()
+            initTimer()
+        } else {
+            print("onDidEnterStart resuming")
+            DispatchQueue.main.async { self.startButton.listeningButton() }
+            deinitTimer()
         }
+        // }
     }
 
     @objc func onDidEnterWaiting(_ notification: Notification) {
         print("onDidEnterWaiting event!!!")
 
-        DispatchQueue.main.async {
-            print("onDidEnterWaiting running!!!")
-            // self.startButton.waitingButton()
+         DispatchQueue.main.async {
+        print("onDidEnterWaiting running!!!")
+        // self.startButton.waitingButton()
             self.resetTimer()
             self.initTimer()
-        }
+         }
     }
 
     @objc func onDidEnterStop(_ notification: Notification) {
         print("onDidEnterStop event!!!")
         startButtonIsActive = false
-        DispatchQueue.main.async {
-            print("onDidEnterStop running!!!")
-            self.startButton.startButton()
-            self.deinitTimer()
-        }
+        // DispatchQueue.main.async {
+        print("onDidEnterStop running!!!")
+        DispatchQueue.main.async { self.startButton.startButton() }
+        deinitTimer()
+        // }
     }
 
     @objc func onDidEnterBackground(_ notification: Notification) {
-        print("onDidEnterBackground called")
-        deinitTimer()
-        let shared = UserDefaults.standard
-        shared.set(Date(), forKey: "savedTime")
-        shared.set(timeLeft, forKey: "timeLeft")
+//        print("onDidEnterBackground called")
+//        deinitTimer()
+//        let shared = UserDefaults.standard
+//        shared.set(Date(), forKey: "savedTime")
+//        shared.set(timeLeft, forKey: "timeLeft")
+        self.end()
     }
 
     @objc func onWillEnterForeground(_ notification: Notification) {
-        print("onWillEnterForeground called")
-        if let savedDate = UserDefaults.standard.object(forKey: "savedTime") as? Date, let oldTimeLeft = UserDefaults.standard.object(forKey: "timeLeft") as? Int {
-            print("old time = \(oldTimeLeft)")
-            timeLeft = oldTimeLeft > 0 ? oldTimeLeft - ViewController.getTimeDifference(startDate: savedDate): Int(worker.REPEAT_EVERY)
-            initTimer()
-        }
+//        print("onWillEnterForeground called")
+//        if let savedDate = UserDefaults.standard.object(forKey: "savedTime") as? Date, let oldTimeLeft = UserDefaults.standard.object(forKey: "timeLeft") as? Int {
+//            print("old time = \(oldTimeLeft)")
+//            timeLeft = oldTimeLeft > 0 ? oldTimeLeft - ViewController.getTimeDifference(startDate: savedDate) : Int(worker.REPEAT_EVERY)
+//            initTimer()
+//        }
     }
 
     // MARK: Timer lifecycle
 
     private func initTimer() {
+        print("VC: init timer")
         //timeLeft = Int(worker.REPEAT_EVERY)
         timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
     }
 
     private func resetTimer() {
+        print("VC: reset timer")
         timeLeft = Int(worker.REPEAT_EVERY)
     }
 
