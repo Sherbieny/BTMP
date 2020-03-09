@@ -12,8 +12,9 @@ public class Scheduler {
     // MARK: Properties
 
     var timeInterval: TimeInterval
-    var eventHandler: (() -> Void)?
-    var firstTime: Bool = false
+    var eventHandler: (() -> Void)?    
+    let config: Config = Config()
+    let LISTENING_PERCISION: Double = 0.1
 
     public enum State {
         case suspended
@@ -36,10 +37,8 @@ public class Scheduler {
 
     // MARK: initializer
 
-    init(timeInterval: TimeInterval = 0.1) {
-        print("Scheduler \(timeInterval): init called")
-        self.timeInterval = timeInterval
-        firstTime = true
+    init(withTime: Bool = false) {
+        self.timeInterval = withTime ? config.getListeningFrequency() : LISTENING_PERCISION
     }
 
     // MARK: deintializer
@@ -60,20 +59,21 @@ public class Scheduler {
 
     // MARK: Functions
 
-    private func reset() {
+    func reset() {
         print("Scheduler \(timeInterval): reset")
+        timeInterval = config.getListeningFrequency()
         let deadline: DispatchTime = DispatchTime.now() + timeInterval
 
         print("Scheduler \(timeInterval): deadline = \(deadline)")
         print("Scheduler \(timeInterval): timeInterval = \(timeInterval)")
         print("Scheduler \(timeInterval): state = \(state)")
-
+        //timer.suspend()
         timer.schedule(deadline: deadline, repeating: timeInterval, leeway: .seconds(0))
         state = .suspended
     }
 
     func resume() {
-        if state == .resumed && timeInterval > 0.1 {
+        if state == .resumed {
             print("Scheduler \(timeInterval): return early from resumed")
             return
         }

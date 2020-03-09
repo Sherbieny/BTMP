@@ -13,10 +13,14 @@ class ViewController: UIViewController {
     // MARK: Outlets
 
     @IBOutlet var startButton: StartToggleButton!
+    // @UIPickerView listeningFrequency: UIPickerView!
+
+    @IBOutlet var settingsButton: UIButton!
 
     // MARK: Properties
 
     let worker: Worker = Worker()
+    let config: Config = Config()
     var startButtonIsActive = false
 
     private var timer: Timer?
@@ -27,7 +31,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initEvents()
-        timeLeft = Int(worker.REPEAT_EVERY)
+        timeLeft = Int(config.getListeningFrequency())
     }
 
     // MARK: Main functions
@@ -48,12 +52,11 @@ class ViewController: UIViewController {
         worker.end()
         print("user pressed stop")
     }
-    
+
     @objc func stop() {
-            startButtonIsActive = false
-            worker.stop()
-        }
-        
+        startButtonIsActive = false
+        worker.stop()
+    }
 
     func initEvents() {
         NotificationCenter.default.addObserver(self, selector: #selector(onDidEnterStart(_:)), name: .didEnterStart, object: nil)
@@ -61,6 +64,8 @@ class ViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(onDidEnterWaiting(_:)), name: .didEnterWaiting, object: nil)
 
         NotificationCenter.default.addObserver(self, selector: #selector(onDidEnterStop(_:)), name: .didEnterStop, object: nil)
+        
+         NotificationCenter.default.addObserver(self, selector: #selector(onDidUserDefaultsChange), name: .didUserDefaultsChange, object: nil)
 
         NotificationCenter.default.addObserver(self, selector: #selector(onDidEnterBackground(_:)), name: UIApplication.didEnterBackgroundNotification, object: nil)
 
@@ -90,26 +95,34 @@ class ViewController: UIViewController {
     @objc func onDidEnterWaiting(_ notification: Notification) {
         print("onDidEnterWaiting event!!!")
 
-         DispatchQueue.main.async {
-        print("onDidEnterWaiting running!!!")
-        // self.startButton.waitingButton()
+        DispatchQueue.main.async {
+            print("onDidEnterWaiting running!!!")
+            // self.startButton.waitingButton()
             self.resetTimer()
             self.initTimer()
-         }
+        }
     }
 
     @objc func onDidEnterStop(_ notification: Notification) {
         print("onDidEnterStop event!!!")
         startButtonIsActive = false
-        // DispatchQueue.main.async {
         print("onDidEnterStop running!!!")
         DispatchQueue.main.async { self.startButton.startButton() }
-        deinitTimer()
-        // }
+        deinitTimer()        
+    }
+
+    @objc func onDidUserDefaultsChange(_ notification: Notification) {
+        print("onDidUserDefaultsChange event!!!")
+        if !worker.isRunning {
+            start() // this is added because otherwise, repeater does not start after timer finish if the app was just initiated
+        }
+        stop()
     }
 
     @objc func onDidEnterBackground(_ notification: Notification) {
-            stop()
+        if worker.isRunning {
+        stop()
+        }        
     }
 
     @objc func onWillEnterForeground(_ notification: Notification) {
@@ -119,17 +132,18 @@ class ViewController: UIViewController {
 
     private func initTimer() {
         print("VC: init timer")
-        //timeLeft = Int(worker.REPEAT_EVERY)
         timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
     }
 
     private func resetTimer() {
         print("VC: reset timer")
-        timeLeft = Int(worker.REPEAT_EVERY)
+        timeLeft = Int(config.getListeningFrequency())
     }
 
     @objc func updateTimer() {
         print("timeLeft = \(timeLeft)")
+        print("listeting state = \(worker.listeningFrequency?.state as Any)")
+        print("repeating state = \(worker.repeatingFrequency?.state as Any)")
         startButton.addTimerText(text: timeFormatted(timeLeft)) // will show timer
         if timeLeft != 0 {
             timeLeft -= 1 // decrease counter timer
@@ -192,4 +206,5 @@ extension Notification.Name {
     static let didEnterWaiting = Notification.Name("didEnterWaiting")
     static let didEnterStop = Notification.Name("didEnterStop")
     static let didEnterStart = Notification.Name("didEnterStart")
+    static let didUserDefaultsChange = Notification.Name("didUserDefaultsChange")
 }
