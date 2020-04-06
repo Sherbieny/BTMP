@@ -25,8 +25,9 @@ final class Recorder: NSObject {
     var sampleRate: Double = 44100.0
     var preferredIOBufferDuration: Double = 0.0058
     let musicPlayer = MPMusicPlayerApplicationController.applicationQueuePlayer
+    let config: Config = Config()
 
-    public let DETECTION_LEVEL: Float = 50.0
+    public var DETECTION_LEVEL: Float = 50.0
     public let SILENCE_LEVEL: Float = 0.0
 
     let ringBufferSize: Int = 32768
@@ -47,8 +48,9 @@ final class Recorder: NSObject {
     // MARK: Functions
 
     func startRecording() {
+        DETECTION_LEVEL = config.getSoundLevel()
         if isRecording { return }
-
+        
         startAudioSession()
         if isSessionActive {
             startAudioUnit()
@@ -191,7 +193,8 @@ final class Recorder: NSObject {
                 isSessionActive = true
 
             } catch let error as NSError {
-                print("Error: Failed to set audio session active \(error)")
+                print("Error: Failed to set audio session active -- sending notificaition \(error)")
+                NotificationCenter.default.post(name: .failedToStartSession, object: self)
             }
         } else {
             print("still active ya sh2eee2")
