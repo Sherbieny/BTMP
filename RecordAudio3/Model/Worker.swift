@@ -17,7 +17,7 @@ class Worker: NSObject {
     let recorder: Recorder = Recorder()
     var listeningFrequency: Scheduler?
     var repeatingFrequency: Scheduler?
-    // var timerWorkItem: DispatchWorkItem?
+    let permission: Permissions = Permissions()
 
     override init() {
         print("Worker: init")
@@ -28,6 +28,10 @@ class Worker: NSObject {
     // MARK: Main functions
 
     public func start() {
+        // Check for permission before starting
+        permission.requestMicrophoneAccess()
+        permission.requestMusicLibraryAccess()
+        
         recorder.audioLevel = recorder.SILENCE_LEVEL
         keepScreenOpen()
         startSession()

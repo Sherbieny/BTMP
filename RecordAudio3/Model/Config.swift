@@ -22,21 +22,25 @@ public class Config {
         case frequencyKey
         case soundLevel
         case soundLevelKey
+        case onboarding
     }
 
     let defaults = UserDefaults.standard
     let minimumFrequency: Double = 60 // in seconds
-    let defaultFrequency: Double = 300 // in seconds
-    let defaultFrequencyKey: Int = 4 // in seconds
+    let defaultFrequency: Double = 60 // in seconds
+    let defaultFrequencyKey: Int = 1 // 
     
     let minimumDuration: Int = 10 // in seconds
     let defaultDuration: Int = 20 // in seconds
-    let defaultDurationKey: Int = 1 // in seconds
+    let defaultDurationKey: Int = 1 //
+    
+    let minimumSoundLevel: Float = 10.0
     let defaultSoundLevel: Float = 50.0
-    let defaultSoundLevelKey: Float = 1
+    let defaultSoundLevelKey: Int = 1
 
     // MARK: getters/setters functions
 
+    // MARK: Frequency
     func getListeningFrequency() -> Double {
         return defaults.exists(key: keys.frequency.rawValue) ? defaults.double(forKey: keys.frequency.rawValue) : defaultFrequency
     }
@@ -48,9 +52,12 @@ public class Config {
     func setListeningFrequency(value: Double, key: Int) {
         defaults.set((value > minimumFrequency) ? value : minimumFrequency, forKey: keys.frequency.rawValue)
         defaults.set(key, forKey: keys.frequencyKey.rawValue)
-        NotificationCenter.default.post(name: .didUserDefaultsChange, object: self)
+        //NotificationCenter.default.post(name: .didUserDefaultsChange, object: self)
     }
 
+    
+    // MARK: Duration
+    
     func getListeningDuration() -> Int {
         return defaults.exists(key: keys.duration.rawValue) ? defaults.integer(forKey: keys.duration.rawValue) : defaultDuration
     }
@@ -62,14 +69,33 @@ public class Config {
     func setListeningDuration(value: Int, key: Int) {
         defaults.set((value > minimumDuration) ? value : minimumDuration, forKey: keys.duration.rawValue)
         defaults.set(key, forKey: keys.durationKey.rawValue)
-        NotificationCenter.default.post(name: .didUserDefaultsChange, object: self)
+        //NotificationCenter.default.post(name: .didUserDefaultsChange, object: self)
     }
 
+    
+    // MARK: Sound Level
+    
     func getSoundLevel() -> Float {
+        print("get sound level")
         return defaults.exists(key: keys.soundLevel.rawValue) ? defaults.float(forKey: keys.soundLevel.rawValue) : defaultSoundLevel
+    }
+    
+    func getSoundLevelKey() -> Int {
+         return defaults.exists(key: keys.soundLevelKey.rawValue) ? defaults.integer(forKey: keys.soundLevelKey.rawValue) : defaultSoundLevelKey
     }
 
     func setSoundLevel(value: Float) {
-        defaults.set((value > defaultSoundLevel) ? value : defaultSoundLevel, forKey: keys.soundLevel.rawValue)
+        defaults.set((value > minimumSoundLevel) ? value : minimumSoundLevel, forKey: keys.soundLevel.rawValue)
+        //NotificationCenter.default.post(name: .didUserDefaultsChange, object: self)
+    }
+    
+    // MARK: Onboarding screen
+    
+    func didUserFinishOnboarding() -> Bool {
+        return defaults.exists(key: keys.onboarding.rawValue) ? defaults.bool(forKey: keys.onboarding.rawValue) : false
+    }
+    
+    func setUserFinisOnboarding() {
+        defaults.set(true, forKey: keys.onboarding.rawValue)
     }
 }

@@ -9,12 +9,19 @@
 import UIKit
 
 class SettingsViewController: UITableViewController, UIPickerViewDelegate, UIPickerViewDataSource {
-    @IBOutlet var ListeningFrequency: UIPickerView!
-    @IBOutlet var ListeningDuration: UIPickerView!
-
+    
+    // MARK: - Properties
+    
+    @IBOutlet weak var ListeningFrequency: UIPickerView!
+    @IBOutlet weak var ListeningDuration: UIPickerView!
+    @IBOutlet weak var ListeningSenstivity: UISlider!
+    @IBOutlet weak var BackButton: UIButton!
+    @IBOutlet weak var TutorialButton: UIButton!
+    
     let config: Config = Config()
     var frequencyData: [String] = [String]()
     let durationData: [String] = ["10", "20", "30", "40", "50"]
+    var didSettingsChange: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,19 +31,37 @@ class SettingsViewController: UITableViewController, UIPickerViewDelegate, UIPic
         ListeningFrequency.dataSource = self
         ListeningDuration.delegate = self
         ListeningDuration.dataSource = self
-        
+
         print("setting duration = \(config.getListeningDurationKey())")
 
         ListeningFrequency.selectRow(config.getListeningFrequencyKey(), inComponent: 0, animated: true)
         ListeningDuration.selectRow(config.getListeningDurationKey(), inComponent: 0, animated: true)
-        
-        
-        // Uncomment the following line to preserve selection between presentations
-        //self.clearsSelectionOnViewWillAppear = false
+        ListeningSenstivity.setValue(config.getSoundLevel(), animated: true)
 
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        ListeningSenstivity.addTarget(self, action: #selector(sliderTouchDownRepeat(_:)), for: .touchDownRepeat)
+        ListeningSenstivity.addTarget(self, action: #selector(sliderDidChange(_:)), for: .valueChanged)
+        
     }
+
+    // MARK: - Actions
+    
+    @IBAction func backClicked(sender: UIButton) {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    @IBAction func tutorialClicked(sender: UIButton){
+        print("show tutorial")
+        
+        let storyBoard = UIStoryboard(name: "Onboarding", bundle: nil)
+        if let walkthroughViewController = storyBoard.instantiateViewController(withIdentifier: "WalkthroughViewController") as? WalkthroughViewController {
+            present(walkthroughViewController,animated: true){
+                walkthroughViewController.startAtPage(pageIndex: 4)
+            }
+        }
+    }
+    
+    
+    // MARK: - Helper functions
 
     func initFrequencyArray() {
         var i = 1
@@ -50,8 +75,14 @@ class SettingsViewController: UITableViewController, UIPickerViewDelegate, UIPic
         if let value = Double(minutes) {
             return value * 60.0
         } else {
-            print("a7a")
-            return 300
+            return 300.0
+        }
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        print("closing view")
+        if didSettingsChange {
+            NotificationCenter.default.post(name: .didUserDefaultsChange, object: self)
         }
     }
 
@@ -59,12 +90,7 @@ class SettingsViewController: UITableViewController, UIPickerViewDelegate, UIPic
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 2
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 1
+        return 4
     }
 
     // MARK: - PickerView functions
@@ -87,15 +113,6 @@ class SettingsViewController: UITableViewController, UIPickerViewDelegate, UIPic
         }
     }
 
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        switch pickerView {
-        case ListeningFrequency:
-            return frequencyData[row]
-        default:
-            return durationData[row]
-        }
-    }
-
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         print("didSelectRow called")
         if pickerView == ListeningFrequency {
@@ -110,5 +127,35 @@ class SettingsViewController: UITableViewController, UIPickerViewDelegate, UIPic
                 print("a7eteen")
             }
         }
+        didSettingsChange = true
+    }
+
+    func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
+        if pickerView == ListeningFrequency {
+            return NSAttributedString(string: frequencyData[row], attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+        } else {
+            return NSAttributedString(string: durationData[row], attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+        }
+    }
+
+    // MARK: - slider functions
+
+//    @IBAction func sliderValueChanged(_ sender: Any) {
+//        print("slider value = \(ListeningSenstivity.value)")
+//    }
+
+    @objc func sliderTouchDownRepeat(_ slider: UISlider) {
+        ListeningSenstivity.cancelTracking(with: nil)
+
+        // Perform your own value change operation
+        ListeningSenstivity.value = config.defaultSoundLevel
+        print("slider value 1 = \(ListeningSenstivity.value)")
+        sliderDidChange(ListeningSenstivity)
+    }
+
+    @objc func sliderDidChange(_ slider: UISlider) {
+        print("slider value 2 = \(ListeningSenstivity.value)")
+        config.setSoundLevel(value: ListeningSenstivity.value)
+        didSettingsChange = true
     }
 }

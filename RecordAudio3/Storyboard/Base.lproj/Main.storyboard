@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="RecordAudio3" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yM1-Vs-rR4" customClass="StartToggleButton" customModule="RecordAudio3" customModuleProvider="target">
+                                <rect key="frame" x="157" y="398" width="100" height="100"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="YZN-5S-KK4"/>
+                                    <constraint firstAttribute="height" constant="100" id="muF-xW-Pdz"/>
+                                </constraints>
+                                <viewLayoutGuide key="safeArea" id="fon-dI-W2e"/>
+                                <state key="normal" title="Start">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                        <real key="value" value="2"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                        <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="startDidTouch:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Bwy-BG-e61"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="n01-Yy-HgL">
+                                <rect key="frame" x="228" y="491" width="0.0" height="0.0"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                        <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <segue destination="agc-Xe-FQS" kind="show" id="aXl-ID-UYe"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="tintColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <constraints>
+                            <constraint firstItem="n01-Yy-HgL" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="207" id="6FN-3y-bXf"/>
+                            <constraint firstItem="yM1-Vs-rR4" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="YBp-Sz-e2X"/>
+                            <constraint firstItem="n01-Yy-HgL" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="fR3-6d-Zgm"/>
+                            <constraint firstItem="yM1-Vs-rR4" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="tT7-qx-SEo"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                    </view>
+                    <connections>
+                        <outlet property="settingsButton" destination="n01-Yy-HgL" id="f2R-eZ-Vxt"/>
+                        <outlet property="startButton" destination="yM1-Vs-rR4" id="Yz1-cZ-T3n"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="129.375" y="79.225352112676063"/>
+        </scene>
+        <!--Settings View Controller-->
+        <scene sceneID="zN0-fY-gwH">
+            <objects>
+                <tableViewController id="agc-Xe-FQS" customClass="SettingsViewController" customModule="RecordAudio3" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" allowsSelectionDuringEditing="YES" rowHeight="44" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="0mW-Kr-iIo">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <sections>
+                            <tableViewSection headerTitle="Listening Frequency (in minutes)" footerTitle="determine how often to listen in" id="m4k-jQ-jjd">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="Yzk-hg-fTu">
+                                        <rect key="frame" x="0.0" y="55.5" width="414" height="43.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Yzk-hg-fTu" id="pfO-hP-hz0">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hPR-5D-vV5" userLabel="Listening Frequency">
+                                                    <rect key="frame" x="47" y="-86" width="320" height="216"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </pickerView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="hPR-5D-vV5" firstAttribute="centerX" secondItem="pfO-hP-hz0" secondAttribute="centerX" id="Avs-6o-aSu"/>
+                                                <constraint firstItem="hPR-5D-vV5" firstAttribute="centerY" secondItem="pfO-hP-hz0" secondAttribute="centerY" id="EGx-x6-Y2t"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                            <tableViewSection headerTitle="Listening Duration (in seconds)" footerTitle="determine how long to listen in each time" id="aPS-T3-aNc">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="sCr-Et-uOJ">
+                                        <rect key="frame" x="0.0" y="174.5" width="414" height="43.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="sCr-Et-uOJ" id="nA7-8K-Qps">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Cbp-hx-bld" userLabel="Listening Duration">
+                                                    <rect key="frame" x="47" y="-86" width="320" height="216"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </pickerView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="Cbp-hx-bld" firstAttribute="centerY" secondItem="nA7-8K-Qps" secondAttribute="centerY" id="Anv-gO-WJ6"/>
+                                                <constraint firstItem="Cbp-hx-bld" firstAttribute="centerX" secondItem="nA7-8K-Qps" secondAttribute="centerX" id="PiG-fZ-QEb"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                            <tableViewSection headerTitle="Listening Senstivity (in decibel)" footerTitle="determine how loud you should be to stop listening (double tap to reset)" id="LUk-mO-uJq">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="CWg-aQ-eja">
+                                        <rect key="frame" x="0.0" y="293.5" width="414" height="43.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="CWg-aQ-eja" id="BG1-nt-LaK">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" value="50" minValue="20" maxValue="80" translatesAutoresizingMaskIntoConstraints="NO" id="EVA-ny-K6Y" userLabel="Listening Senstivity">
+                                                    <rect key="frame" x="0.0" y="7" width="411" height="31"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </slider>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                            <tableViewSection id="SOt-1P-doL" userLabel="Buttons Section">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="E2n-Kg-w7M">
+                                        <rect key="frame" x="0.0" y="401" width="414" height="43.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="E2n-Kg-w7M" id="h3D-ov-R8a">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WDf-vE-BcA">
+                                                    <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                                                    <subviews>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hv4-Z2-dZ3">
+                                                            <rect key="frame" x="181.5" y="7" width="51" height="30"/>
+                                                            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <state key="normal" title="Tutorial">
+                                                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            </state>
+                                                            <connections>
+                                                                <action selector="tutorialClickedWithSender:" destination="agc-Xe-FQS" eventType="touchUpInside" id="Fkn-nE-PNy"/>
+                                                            </connections>
+                                                        </button>
+                                                    </subviews>
+                                                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <constraints>
+                                                        <constraint firstItem="hv4-Z2-dZ3" firstAttribute="centerY" secondItem="WDf-vE-BcA" secondAttribute="centerY" id="jRf-dT-zFR"/>
+                                                        <constraint firstItem="hv4-Z2-dZ3" firstAttribute="centerX" secondItem="WDf-vE-BcA" secondAttribute="centerX" id="uaP-dl-xBG"/>
+                                                    </constraints>
+                                                    <variation key="default">
+                                                        <mask key="constraints">
+                                                            <exclude reference="jRf-dT-zFR"/>
+                                                            <exclude reference="uaP-dl-xBG"/>
+                                                        </mask>
+                                                    </variation>
+                                                    <variation key="heightClass=regular-widthClass=compact">
+                                                        <mask key="constraints">
+                                                            <include reference="jRf-dT-zFR"/>
+                                                            <include reference="uaP-dl-xBG"/>
+                                                        </mask>
+                                                    </variation>
+                                                </view>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="WDf-vE-BcA" firstAttribute="leading" secondItem="h3D-ov-R8a" secondAttribute="leading" id="1mE-DS-hxC"/>
+                                                <constraint firstItem="WDf-vE-BcA" firstAttribute="centerY" secondItem="h3D-ov-R8a" secondAttribute="centerY" id="55h-5S-gtx"/>
+                                                <constraint firstItem="WDf-vE-BcA" firstAttribute="centerX" secondItem="h3D-ov-R8a" secondAttribute="centerX" id="6Kk-nQ-61n"/>
+                                                <constraint firstAttribute="trailing" secondItem="WDf-vE-BcA" secondAttribute="trailing" id="PXx-EM-jgL"/>
+                                                <constraint firstAttribute="bottom" secondItem="WDf-vE-BcA" secondAttribute="bottom" id="Zvb-RQ-KfF"/>
+                                                <constraint firstItem="WDf-vE-BcA" firstAttribute="top" secondItem="h3D-ov-R8a" secondAttribute="top" id="sXM-FD-cpR"/>
+                                            </constraints>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="1mE-DS-hxC"/>
+                                                    <exclude reference="55h-5S-gtx"/>
+                                                    <exclude reference="6Kk-nQ-61n"/>
+                                                    <exclude reference="PXx-EM-jgL"/>
+                                                    <exclude reference="Zvb-RQ-KfF"/>
+                                                    <exclude reference="sXM-FD-cpR"/>
+                                                </mask>
+                                            </variation>
+                                            <variation key="heightClass=regular-widthClass=compact">
+                                                <mask key="constraints">
+                                                    <include reference="1mE-DS-hxC"/>
+                                                    <include reference="55h-5S-gtx"/>
+                                                    <include reference="6Kk-nQ-61n"/>
+                                                    <include reference="PXx-EM-jgL"/>
+                                                    <include reference="Zvb-RQ-KfF"/>
+                                                    <include reference="sXM-FD-cpR"/>
+                                                </mask>
+                                            </variation>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="Civ-4H-Crl">
+                                        <rect key="frame" x="0.0" y="444.5" width="414" height="43.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Civ-4H-Crl" id="TJG-3Z-BBX">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JqJ-dq-71e">
+                                                    <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                                                    <subviews>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UwQ-mI-ibi">
+                                                            <rect key="frame" x="190" y="7" width="34" height="30"/>
+                                                            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <state key="normal" title="Back">
+                                                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            </state>
+                                                            <connections>
+                                                                <action selector="backClickedWithSender:" destination="agc-Xe-FQS" eventType="touchUpInside" id="s9w-ln-WDk"/>
+                                                            </connections>
+                                                        </button>
+                                                    </subviews>
+                                                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <constraints>
+                                                        <constraint firstItem="UwQ-mI-ibi" firstAttribute="centerY" secondItem="JqJ-dq-71e" secondAttribute="centerY" id="HUD-YO-m05"/>
+                                                        <constraint firstItem="UwQ-mI-ibi" firstAttribute="centerX" secondItem="JqJ-dq-71e" secondAttribute="centerX" id="IGr-Yk-isc"/>
+                                                    </constraints>
+                                                    <variation key="default">
+                                                        <mask key="constraints">
+                                                            <exclude reference="HUD-YO-m05"/>
+                                                            <exclude reference="IGr-Yk-isc"/>
+                                                        </mask>
+                                                    </variation>
+                                                    <variation key="heightClass=regular-widthClass=compact">
+                                                        <mask key="constraints">
+                                                            <include reference="HUD-YO-m05"/>
+                                                            <include reference="IGr-Yk-isc"/>
+                                                        </mask>
+                                                    </variation>
+                                                </view>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="bottom" secondItem="JqJ-dq-71e" secondAttribute="bottom" id="LX3-gN-Nfr"/>
+                                                <constraint firstItem="JqJ-dq-71e" firstAttribute="centerX" secondItem="TJG-3Z-BBX" secondAttribute="centerX" id="OHu-Zg-6kb"/>
+                                                <constraint firstItem="JqJ-dq-71e" firstAttribute="top" secondItem="TJG-3Z-BBX" secondAttribute="top" id="c31-el-5oH"/>
+                                                <constraint firstItem="JqJ-dq-71e" firstAttribute="centerY" secondItem="TJG-3Z-BBX" secondAttribute="centerY" id="dRz-fO-Sus"/>
+                                                <constraint firstItem="JqJ-dq-71e" firstAttribute="leading" secondItem="TJG-3Z-BBX" secondAttribute="leading" id="ooA-HO-lsZ"/>
+                                                <constraint firstAttribute="trailing" secondItem="JqJ-dq-71e" secondAttribute="trailing" id="wbO-ZU-ElD"/>
+                                            </constraints>
+                                            <variation key="default">
+                                                <mask key="subviews">
+                                                    <exclude reference="JqJ-dq-71e"/>
+                                                </mask>
+                                                <mask key="constraints">
+                                                    <exclude reference="LX3-gN-Nfr"/>
+                                                    <exclude reference="OHu-Zg-6kb"/>
+                                                    <exclude reference="c31-el-5oH"/>
+                                                    <exclude reference="dRz-fO-Sus"/>
+                                                    <exclude reference="ooA-HO-lsZ"/>
+                                                    <exclude reference="wbO-ZU-ElD"/>
+                                                </mask>
+                                            </variation>
+                                            <variation key="heightClass=regular-widthClass=compact">
+                                                <mask key="subviews">
+                                                    <include reference="JqJ-dq-71e"/>
+                                                </mask>
+                                                <mask key="constraints">
+                                                    <include reference="LX3-gN-Nfr"/>
+                                                    <include reference="OHu-Zg-6kb"/>
+                                                    <include reference="c31-el-5oH"/>
+                                                    <include reference="dRz-fO-Sus"/>
+                                                    <include reference="ooA-HO-lsZ"/>
+                                                    <include reference="wbO-ZU-ElD"/>
+                                                </mask>
+                                            </variation>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="agc-Xe-FQS" id="85X-jL-bUF"/>
+                            <outlet property="delegate" destination="agc-Xe-FQS" id="APo-a8-azn"/>
+                        </connections>
+                    </tableView>
+                    <connections>
+                        <outlet property="BackButton" destination="UwQ-mI-ibi" id="fFE-sf-Sqt"/>
+                        <outlet property="ListeningDuration" destination="Cbp-hx-bld" id="YbG-OM-I1f"/>
+                        <outlet property="ListeningFrequency" destination="hPR-5D-vV5" id="mxc-4a-XWb"/>
+                        <outlet property="ListeningSenstivity" destination="EVA-ny-K6Y" id="3Ie-zb-OAQ"/>
+                        <outlet property="TutorialButton" destination="hv4-Z2-dZ3" id="BON-7Y-Sfb"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Bgh-Z8-8fj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="934.78260869565224" y="79.6875"/>
+        </scene>
+    </scenes>
+</document>

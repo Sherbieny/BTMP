@@ -30,8 +30,39 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        // setting button
+        if #available(iOS 13, *) {
+            settingsButton.setBackgroundImage(UIImage(systemName: "gear"), for: .normal)
+            settingsButton.frame.size = CGSize(width: 30, height: 30)
+        } else {
+            print("drawing button for old")
+            settingsButton.backgroundColor = .black
+            settingsButton.setTitle("Settings", for: .normal)
+            settingsButton.setTitleColor(.white, for: .normal)
+            settingsButton.frame.size = CGSize(width: 80, height: 40)
+            settingsButton.layer.cornerRadius = 8
+            settingsButton.layer.borderWidth = 1
+
+            settingsButton.translatesAutoresizingMaskIntoConstraints = false
+            let horizontalConstraint = NSLayoutConstraint(item: settingsButton!, attribute: NSLayoutConstraint.Attribute.centerX, relatedBy: NSLayoutConstraint.Relation.equal, toItem: settingsButton, attribute: NSLayoutConstraint.Attribute.centerX, multiplier: 1, constant: 0)
+            let verticalConstraint = NSLayoutConstraint(item: settingsButton!, attribute: NSLayoutConstraint.Attribute.centerY, relatedBy: NSLayoutConstraint.Relation.equal, toItem: settingsButton, attribute: NSLayoutConstraint.Attribute.centerY, multiplier: 1, constant: 10)
+            let widthConstraint = NSLayoutConstraint(item: settingsButton!, attribute: NSLayoutConstraint.Attribute.width, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 80)
+            let heightConstraint = NSLayoutConstraint(item: settingsButton!, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 40)
+            view.addConstraints([horizontalConstraint, verticalConstraint, widthConstraint, heightConstraint])
+        }
+
         initEvents()
         timeLeft = Int(config.getListeningFrequency())
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        if config.didUserFinishOnboarding() == false {
+            let storyBoard = UIStoryboard(name: "Onboarding", bundle: nil)
+            if let walkthroughViewController = storyBoard.instantiateViewController(withIdentifier: "WalkthroughViewController") as? WalkthroughViewController {
+                present(walkthroughViewController,animated: true,completion: nil)
+            }
+        }
     }
 
     // MARK: Main functions
@@ -64,12 +95,20 @@ class ViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(onDidEnterWaiting(_:)), name: .didEnterWaiting, object: nil)
 
         NotificationCenter.default.addObserver(self, selector: #selector(onDidEnterStop(_:)), name: .didEnterStop, object: nil)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(onFailedToStartSession(_:)), name: .failedToStartSession, object: nil)
         
-         NotificationCenter.default.addObserver(self, selector: #selector(onDidUserDefaultsChange), name: .didUserDefaultsChange, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onIncomingCall(_:)), name: .incomingCall, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(onCallDisconncted(_:)), name: .callDisconnected, object: nil)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(onDidUserDefaultsChange), name: .didUserDefaultsChange, object: nil)
 
         NotificationCenter.default.addObserver(self, selector: #selector(onDidEnterBackground(_:)), name: UIApplication.didEnterBackgroundNotification, object: nil)
 
         NotificationCenter.default.addObserver(self, selector: #selector(onWillEnterForeground(_:)), name: UIApplication.willEnterForegroundNotification, object: nil)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(handleInterruption), name: AVAudioSession.interruptionNotification, object: nil)
     }
 
     // MARK: Event listeners
@@ -108,7 +147,7 @@ class ViewController: UIViewController {
         startButtonIsActive = false
         print("onDidEnterStop running!!!")
         DispatchQueue.main.async { self.startButton.startButton() }
-        deinitTimer()        
+        deinitTimer()
     }
 
     @objc func onDidUserDefaultsChange(_ notification: Notification) {
@@ -120,12 +159,65 @@ class ViewController: UIViewController {
     }
 
     @objc func onDidEnterBackground(_ notification: Notification) {
+        print("onDidEnterBackground called")
         if worker.isRunning {
-        stop()
-        }        
+            stop()
+        }
     }
 
     @objc func onWillEnterForeground(_ notification: Notification) {
+    }
+
+    @objc func handleInterruption(notification: Notification) {
+        guard let userInfo = notification.userInfo,
+            let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt,
+            let type = AVAudioSession.InterruptionType(rawValue: typeValue) else {
+            return
+        }
+        if type == .began {
+            // Interruption began, take appropriate actions
+            print("interruption began ....")
+            if worker.isRunning {
+                stop()
+            }
+        } else if type == .ended {
+            if let optionsValue = userInfo[AVAudioSessionInterruptionOptionKey] as? UInt {
+                let options = AVAudioSession.InterruptionOptions(rawValue: optionsValue)
+                if options.contains(.shouldResume) {
+                    print("interruption flagged should resume ....")
+                    if !worker.isRunning {
+                        start() // this is added because otherwise, repeater does not start after timer finish if the app was just initiated
+                    }
+                } else {
+                    // Interruption Ended - playback should NOT resume
+                    print("interruption flagged should end - no playback ....")
+                }
+            }
+        }
+    }
+    
+    @objc func onFailedToStartSession(_ notification: Notification){
+        print("onFailedToStartSession called")
+        if worker.isRunning {
+            print("is running - stopping")
+            stop()
+        }
+    }
+    
+    @objc func onIncomingCall(_ notification: Notification){
+        print("onIncomingCall called")
+        if worker.isRunning {
+            print("is running - stopping")
+            stop()
+        }
+    }
+    
+    @objc func onCallDisconncted(_ notification: Notification){
+        print("onCallDisconncted called")
+        if !worker.isRunning {
+            print("is stopped - starting")
+            start()
+        }
     }
 
     // MARK: Timer lifecycle
@@ -207,4 +299,7 @@ extension Notification.Name {
     static let didEnterStop = Notification.Name("didEnterStop")
     static let didEnterStart = Notification.Name("didEnterStart")
     static let didUserDefaultsChange = Notification.Name("didUserDefaultsChange")
+    static let failedToStartSession = Notification.Name("failedToStartSession")
+    static let incomingCall = Notification.Name("incomingCall")
+    static let callDisconnected = Notification.Name("callDisconnected")    
 }

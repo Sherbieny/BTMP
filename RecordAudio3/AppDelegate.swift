@@ -9,56 +9,18 @@
 import AVFoundation
 import BackgroundTasks
 import UIKit
+import CallKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
-//    var backgroundUpdateTask: UIBackgroundTaskIdentifier!
-//    var backgroundTaskTimer: Timer! = Timer()
-
-    // MARK: Properties
-
-    var scheduler: Scheduler?
-    var recorder: Recorder?
-    var worker: Worker?
-
-    func setupNotifications() {
-        let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self,
-                                       selector: #selector(handleInterruption),
-                                       name: AVAudioSession.interruptionNotification,
-                                       object: nil)
-    }
-
-    @objc func handleInterruption(notification: Notification) {
-        guard let userInfo = notification.userInfo,
-            let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt,
-            let type = AVAudioSession.InterruptionType(rawValue: typeValue) else {
-            return
-        }
-        if type == .began {
-            // Interruption began, take appropriate actions
-            print("interruption began ....")
-        } else if type == .ended {
-            if let optionsValue = userInfo[AVAudioSessionInterruptionOptionKey] as? UInt {
-                let options = AVAudioSession.InterruptionOptions(rawValue: optionsValue)
-                if options.contains(.shouldResume) {
-                    print("interruption flagged should resume ....")
-                } else {
-                    // Interruption Ended - playback should NOT resume
-                    print("interruption flagged should end - no playback ....")
-                }
-            }
-        }
-    }
-
+    var callObserver: CXCallObserver!
+  
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-
+        callObserver = CXCallObserver()
+        callObserver.setDelegate(self, queue: nil)
         return true
-    }
-
-    func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-    }
+    }   
 
     func applicationWillResignActive(_ application: UIApplication) {
     }
@@ -76,5 +38,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    }
+}
+extension AppDelegate: CXCallObserverDelegate {
+    func callObserver(_ callObserver: CXCallObserver, callChanged call: CXCall) {
+        if call.hasEnded == true {
+            print("Disconnected")
+            NotificationCenter.default.post(name: .callDisconnected, object: self)
+        }
+        if call.isOutgoing == true && call.hasConnected == false {
+            print("Dialing")
+        }
+        if call.isOutgoing == false && call.hasConnected == false && call.hasEnded == false {
+            print("Incoming")
+            NotificationCenter.default.post(name: .incomingCall, object: self)
+        }
+
+        if call.hasConnected == true && call.hasEnded == false {
+            print("Connected")
+        }
     }
 }
