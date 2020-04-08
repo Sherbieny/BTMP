@@ -17,6 +17,8 @@
 		1B997915223E65CE00322398 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1B997914223E65CE00322398 /* Assets.xcassets */; };
 		1B997918223E65CE00322398 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1B997916223E65CE00322398 /* LaunchScreen.storyboard */; };
 		1B997920223E676100322398 /* Recorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B99791F223E676100322398 /* Recorder.swift */; };
+		1BA6EA52243E4A3000A8457D /* 10-seconds-of-silence.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 1BA6EA51243E4A3000A8457D /* 10-seconds-of-silence.mp3 */; };
+		1BA6EA54243E4EE400A8457D /* Silencer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA6EA53243E4EE400A8457D /* Silencer.swift */; };
 		1BA9167C242AA64000656F47 /* OnBoardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA9167B242AA64000656F47 /* OnBoardingView.swift */; };
 		1BA91681242CB7AB00656F47 /* WalkthroughContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA91680242CB7AB00656F47 /* WalkthroughContentViewController.swift */; };
 		1BA91683242CBE5C00656F47 /* WalkthroughPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA91682242CBE5C00656F47 /* WalkthroughPageViewController.swift */; };
@@ -40,6 +42,8 @@
 		1B997917223E65CE00322398 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1B997919223E65CE00322398 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1B99791F223E676100322398 /* Recorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recorder.swift; sourceTree = "<group>"; };
+		1BA6EA51243E4A3000A8457D /* 10-seconds-of-silence.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "10-seconds-of-silence.mp3"; sourceTree = "<group>"; };
+		1BA6EA53243E4EE400A8457D /* Silencer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Silencer.swift; sourceTree = "<group>"; };
 		1BA9167B242AA64000656F47 /* OnBoardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnBoardingView.swift; sourceTree = "<group>"; };
 		1BA91680242CB7AB00656F47 /* WalkthroughContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalkthroughContentViewController.swift; sourceTree = "<group>"; };
 		1BA91682242CBE5C00656F47 /* WalkthroughPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalkthroughPageViewController.swift; sourceTree = "<group>"; };
@@ -80,6 +84,7 @@
 		1B99790C223E65CD00322398 /* RecordAudio3 */ = {
 			isa = PBXGroup;
 			children = (
+				1BA6EA50243E4A1900A8457D /* Audio */,
 				1BA9167D242CAA8400656F47 /* Storyboard */,
 				1BB809E5241439000046098C /* Model */,
 				1BB809E2241424480046098C /* Controller */,
@@ -89,6 +94,14 @@
 				1B997919223E65CE00322398 /* Info.plist */,
 			);
 			path = RecordAudio3;
+			sourceTree = "<group>";
+		};
+		1BA6EA50243E4A1900A8457D /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				1BA6EA51243E4A3000A8457D /* 10-seconds-of-silence.mp3 */,
+			);
+			path = Audio;
 			sourceTree = "<group>";
 		};
 		1BA9167D242CAA8400656F47 /* Storyboard */ = {
@@ -123,6 +136,7 @@
 				1BB809E6241439620046098C /* Config.swift */,
 				1B93D934242D433D002FB9A4 /* TextProvider.swift */,
 				1B1768E52433CFA0003EE62E /* Permissions.swift */,
+				1BA6EA53243E4EE400A8457D /* Silencer.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -202,6 +216,7 @@
 				1B997918223E65CE00322398 /* LaunchScreen.storyboard in Resources */,
 				1B997915223E65CE00322398 /* Assets.xcassets in Resources */,
 				1B997913223E65CD00322398 /* Main.storyboard in Resources */,
+				1BA6EA52243E4A3000A8457D /* 10-seconds-of-silence.mp3 in Resources */,
 				1BD64DFA242CE0E500AF893E /* Onboarding.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -227,6 +242,7 @@
 				1BA91685242CC8E800656F47 /* WalkthroughViewController.swift in Sources */,
 				1B99790E223E65CD00322398 /* AppDelegate.swift in Sources */,
 				1BA91681242CB7AB00656F47 /* WalkthroughContentViewController.swift in Sources */,
+				1BA6EA54243E4EE400A8457D /* Silencer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

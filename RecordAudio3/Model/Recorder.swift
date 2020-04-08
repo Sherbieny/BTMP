@@ -5,7 +5,7 @@
 //
 //  Created by Ronald Nicholson on 10/21/16.  Updated 2017Feb07
 //  Copyright Â© 2017 HotPaw Productions. All rights reserved.
-// Distribution: BSD 2-clause license
+//  Distribution: BSD 2-clause license
 //
 
 import AudioUnit
@@ -26,6 +26,7 @@ final class Recorder: NSObject {
     var preferredIOBufferDuration: Double = 0.0058
     let musicPlayer = MPMusicPlayerApplicationController.applicationQueuePlayer
     let config: Config = Config()
+    let silencer: Silencer = Silencer()
 
     public var DETECTION_LEVEL: Float = 50.0
     public let SILENCE_LEVEL: Float = 0.0
@@ -71,17 +72,7 @@ final class Recorder: NSObject {
     }
 
     func stopMedia() {
-        MPMediaLibrary.requestAuthorization({ (_: MPMediaLibraryAuthorizationStatus) in
-            self.musicPlayer.setQueue(with: .songs())
-            self.musicPlayer.play()
-            print("Stopping music player")
-            self.musicPlayer.pause()
-            print("Stopped music player")
-            DispatchQueue.main.async { // Correct
-                UIApplication.shared.isIdleTimerDisabled = false
-            }
-
-        })
+        silencer.playSilence()        
     }
 
     func startAudioUnit() {

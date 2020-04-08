@@ -11,18 +11,12 @@ import Foundation
 import MediaPlayer
 
 class Permissions {
+    
     // MARK: - Properties
-
-    let musicLibraryPermissionStatus = MPMediaLibrary.authorizationStatus()
+    
     let microphonePermissionStatus = AVCaptureDevice.authorizationStatus(for: .audio)
 
     // MARK: - Functions
-
-    func requestMusicLibraryAccess() {
-        if musicLibraryPermissionStatus != .authorized {
-            MPMediaLibrary.requestAuthorization {_ in }
-        }
-    }
 
     func requestMicrophoneAccess() {
         if microphonePermissionStatus != .authorized {

@@ -255,24 +255,8 @@
             filePath = "RecordAudio3/Controller/WalkthroughViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "126"
-            endingLineNumber = "126">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "D1E4B7FE-06D1-4BD2-BCDD-4A2C31B42803"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "RecordAudio3/Model/Permissions.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "21"
-            endingLineNumber = "21"
-            landmarkName = "requestMusicLibraryAccess()"
-            landmarkType = "7">
+            startingLineNumber = "115"
+            endingLineNumber = "115">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

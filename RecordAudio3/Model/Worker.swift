@@ -28,9 +28,8 @@ class Worker: NSObject {
     // MARK: Main functions
 
     public func start() {
-        // Check for permission before starting
+        // Check for microphone permission before starting
         permission.requestMicrophoneAccess()
-        permission.requestMusicLibraryAccess()
         
         recorder.audioLevel = recorder.SILENCE_LEVEL
         keepScreenOpen()

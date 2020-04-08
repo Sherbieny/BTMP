@@ -41,6 +41,7 @@ class SettingsViewController: UITableViewController, UIPickerViewDelegate, UIPic
         ListeningSenstivity.addTarget(self, action: #selector(sliderTouchDownRepeat(_:)), for: .touchDownRepeat)
         ListeningSenstivity.addTarget(self, action: #selector(sliderDidChange(_:)), for: .valueChanged)
         
+        
     }
 
     // MARK: - Actions
@@ -55,7 +56,7 @@ class SettingsViewController: UITableViewController, UIPickerViewDelegate, UIPic
         let storyBoard = UIStoryboard(name: "Onboarding", bundle: nil)
         if let walkthroughViewController = storyBoard.instantiateViewController(withIdentifier: "WalkthroughViewController") as? WalkthroughViewController {
             present(walkthroughViewController,animated: true){
-                walkthroughViewController.startAtPage(pageIndex: 4)
+                walkthroughViewController.startAtPage(pageIndex: 3)
             }
         }
     }
