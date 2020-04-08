@@ -18,7 +18,7 @@ class WalkthroughPageViewController: UIPageViewController, UIPageViewControllerD
     
     weak var walkthroughDelegate: walkthroughPageViewControllerDelegate?
         
-    let pageHeadings = ["Thank you for choosing BTMP", "The Music Library", "The Microphone", "The Screen", "The way it works"]
+    let pageHeadings = ["Thank you for choosing BTMP", "The Microphone", "The Screen", "The way it works"]
     var currentIndex = 0
     
     let textProvider: TextProvider = TextProvider()

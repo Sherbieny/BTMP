@@ -29,18 +29,6 @@ public class TextProvider {
         case 1:
             paragraphStyle.headIndent = (bullet as NSString).size(withAttributes: attributes).width
             strings.append("In order for the app to work:")
-            strings.append("it needs access to your music library.")
-            strings.append("you need to have at least one item present in your library.")
-            strings.append("if the Grant Access button is visible below, please press it.")
-            // strings = strings.compactMap { bullet + $0 }
-            for (index, line) in strings.enumerated() {
-                if index != 0 {
-                    strings[index] = bullet + line
-                }
-            }
-        case 2:
-            paragraphStyle.headIndent = (bullet as NSString).size(withAttributes: attributes).width
-            strings.append("In order for the app to work:")
             strings.append("it needs access to your microphone.")
             strings.append("the app does not save any recordings it makes, it just uses the microphone to detect sound.")
             strings.append("if the Grant Access button is visible below, please press it.")
@@ -50,14 +38,14 @@ public class TextProvider {
                     strings[index] = bullet + line
                 }
             }
-        case 3:
+        case 2:
             paragraphStyle.alignment = .justified
 
             strings.append("You need to keep the app opened while it is working, locking your phone, pressing the home button or switching to another app will stop the application.")
             strings.append("This is due to a limitation made by apple preventing apps from accessing the microphone while the phone is locked for security reasons.")
              strings.append("As long as this app is opened, the phone will not automatically lock after some time.")
             strings.append("But don't worry, once you go to sleep and no sound is detected, the app will stop and the phone will lock automatically.")
-        case 4:
+        case 3:
             //paragraphStyle.headIndent = (bullet as NSString).size(withAttributes: attributes).width
             strings.append("Simply put: it works as if someone is reading you a bedtime story and every now and then they stop and check if you went to sleep, you need to make a sound in order for them to continue.")
             strings.append("Note: the following can be viewed again from the settings page.")

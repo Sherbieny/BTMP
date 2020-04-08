@@ -14,7 +14,7 @@ class WalkthroughViewController: UIViewController, walkthroughPageViewController
     @IBOutlet var pageControl: UIPageControl!
     @IBOutlet var nextButton: UIButton! {
         didSet {
-            nextButton.layer.cornerRadius = 25.0
+            nextButton.layer.cornerRadius = nextButton.layer.frame.height / 2
             nextButton.layer.masksToBounds = true
         }
     }
@@ -36,9 +36,9 @@ class WalkthroughViewController: UIViewController, walkthroughPageViewController
     @IBAction func nextButtonTapped(sender: UIButton) {
         if let index = walkthroughPageViewController?.currentIndex {
             switch index {
-            case 0 ... 3:
+            case 0 ... 2:
                 walkthroughPageViewController?.forwardPage()
-            case 4:
+            case 3:
                 dismiss(animated: true, completion: nil)
                 config.setUserFinisOnboarding()
             default:
@@ -53,10 +53,6 @@ class WalkthroughViewController: UIViewController, walkthroughPageViewController
         if let index = walkthroughPageViewController?.currentIndex {
             // Request Music Library access
             if index == 1 {
-                permissions.requestMusicLibraryAccess()
-            }
-            // Request Microphone access
-            if index == 2 {
                 permissions.requestMicrophoneAccess()
             }
         }
@@ -69,27 +65,20 @@ class WalkthroughViewController: UIViewController, walkthroughPageViewController
             // Welcome page
             case 0:
                 actionButton.isHidden = true
-            // Music library page
-            case 1:
-                print("page 1")
-                nextButton.setTitle("Next", for: .normal)
-                nextButton.isEnabled = true
-                actionButton.setTitle("Grant Access", for: .normal)
-                actionButton.isHidden = permissions.musicLibraryPermissionStatus == .authorized
             // Microphone page
-            case 2:
+            case 1:
                 print("page 2")
                 nextButton.setTitle("Next", for: .normal)
                 nextButton.isEnabled = true
                 actionButton.setTitle("Grant Access", for: .normal)
                 actionButton.isHidden = permissions.microphonePermissionStatus == .authorized
             // Screen page
-            case 3:
+            case 2:
                 nextButton.setTitle("Next", for: .normal)
                 nextButton.isEnabled = true
                 actionButton.isHidden = true
             // the way it works page
-            case 4:
+            case 3:
                 nextButton.setTitle("Get Started", for: .normal)
                 actionButton.isHidden = true
             default:

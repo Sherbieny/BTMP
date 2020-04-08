@@ -20,6 +20,9 @@ class WalkthroughContentViewController: UIViewController {
     @IBOutlet var contentLabel: UILabel! {
         didSet {
             contentLabel.numberOfLines = 0
+            contentLabel.adjustsFontForContentSizeCategory = true
+            contentLabel.adjustsFontSizeToFitWidth = true
+            contentLabel.minimumScaleFactor = 0.5
         }
     }
     
