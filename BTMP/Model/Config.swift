@@ -28,15 +28,14 @@ public class Config {
     let defaults = UserDefaults.standard
     let minimumFrequency: Double = 60 // in seconds
     let defaultFrequency: Double = 60 // in seconds
-    let defaultFrequencyKey: Int = 1 // 
+    let defaultFrequencyKey: Int = 0 //
     
     let minimumDuration: Int = 10 // in seconds
     let defaultDuration: Int = 20 // in seconds
     let defaultDurationKey: Int = 1 //
     
     let minimumSoundLevel: Float = 10.0
-    let defaultSoundLevel: Float = 50.0
-    let defaultSoundLevelKey: Int = 1
+    let defaultSoundLevel: Float = 50.0 
 
     // MARK: getters/setters functions
 
@@ -78,10 +77,6 @@ public class Config {
     func getSoundLevel() -> Float {
         print("get sound level")
         return defaults.exists(key: keys.soundLevel.rawValue) ? defaults.float(forKey: keys.soundLevel.rawValue) : defaultSoundLevel
-    }
-    
-    func getSoundLevelKey() -> Int {
-         return defaults.exists(key: keys.soundLevelKey.rawValue) ? defaults.integer(forKey: keys.soundLevelKey.rawValue) : defaultSoundLevelKey
     }
 
     func setSoundLevel(value: Float) {

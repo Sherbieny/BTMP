@@ -21,9 +21,14 @@ class Silencer {
         if silenceFileUrl != nil {
             do {
                 audioPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: silenceFileUrl!))
-                audioPlayer?.play()
+                if audioPlayer?.prepareToPlay() == true {
+                    print("prepared")
+                    audioPlayer?.play()
+                    print("alllll g-oooood")
+                }
+
                 // audioPlayer?.stop()
-                print("alllll goooood")
+                
             } catch let error {
                 print("error opening audio player \(error)")
             }

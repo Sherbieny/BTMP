@@ -13,7 +13,9 @@ class WalkthroughContentViewController: UIViewController {
 
     @IBOutlet var headingLabel: UILabel! {
         didSet {
-            headingLabel.numberOfLines = 0
+            contentLabel.adjustsFontForContentSizeCategory = true
+            contentLabel.adjustsFontSizeToFitWidth = true
+            
         }
     }
 
@@ -22,7 +24,6 @@ class WalkthroughContentViewController: UIViewController {
             contentLabel.numberOfLines = 0
             contentLabel.adjustsFontForContentSizeCategory = true
             contentLabel.adjustsFontSizeToFitWidth = true
-            contentLabel.minimumScaleFactor = 0.5
         }
     }
     
