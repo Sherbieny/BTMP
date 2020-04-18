@@ -26,8 +26,8 @@ public class Config {
     }
 
     let defaults = UserDefaults.standard
-    let minimumFrequency: Double = 60 // in seconds
-    let defaultFrequency: Double = 60 // in seconds
+    let minimumFrequency: Double = 30 // in seconds
+    let defaultFrequency: Double = 30 // in seconds
     let defaultFrequencyKey: Int = 0 //
     
     let minimumDuration: Int = 10 // in seconds

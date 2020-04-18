@@ -9,15 +9,15 @@
 import UIKit
 
 class SettingsViewController: UITableViewController, UIPickerViewDelegate, UIPickerViewDataSource {
-    
     // MARK: - Properties
-    
-    @IBOutlet weak var ListeningFrequency: UIPickerView!
-    @IBOutlet weak var ListeningDuration: UIPickerView!
-    @IBOutlet weak var ListeningSenstivity: UISlider!
-    @IBOutlet weak var BackButton: UIButton!
-    @IBOutlet weak var TutorialButton: UIButton!
-    
+
+    @IBOutlet var ListeningFrequency: UIPickerView!
+    @IBOutlet var ListeningDuration: UIPickerView!
+    @IBOutlet var ListeningSenstivity: UISlider!
+    @IBOutlet var BackButton: UIButton!
+    @IBOutlet var TutorialButton: UIButton!
+    @IBOutlet var SubscritionsButton: UIButton!
+
     let config: Config = Config()
     var frequencyData: [String] = [String]()
     let durationData: [String] = ["10", "20", "30", "40", "50"]
@@ -40,31 +40,39 @@ class SettingsViewController: UITableViewController, UIPickerViewDelegate, UIPic
 
         ListeningSenstivity.addTarget(self, action: #selector(sliderTouchDownRepeat(_:)), for: .touchDownRepeat)
         ListeningSenstivity.addTarget(self, action: #selector(sliderDidChange(_:)), for: .valueChanged)
-        
-        
     }
 
     // MARK: - Actions
-    
+
     @IBAction func backClicked(sender: UIButton) {
         dismiss(animated: true, completion: nil)
     }
-    
-    @IBAction func tutorialClicked(sender: UIButton){
+
+    @IBAction func tutorialClicked(sender: UIButton) {
         print("show tutorial")
-        
+
         let storyBoard = UIStoryboard(name: "Onboarding", bundle: nil)
         if let walkthroughViewController = storyBoard.instantiateViewController(withIdentifier: "WalkthroughViewController") as? WalkthroughViewController {
-            present(walkthroughViewController,animated: true){
-                walkthroughViewController.startAtPage(pageIndex: 3)
+            present(walkthroughViewController, animated: true) {
+                walkthroughViewController.startAtPage(pageIndex: 4)
             }
         }
     }
-    
-    
+
+    @IBAction func SubscriptionsClicked(sender: UIButton) {
+        print("show tutorial")
+
+        let storyBoard = UIStoryboard(name: "Subscriptions", bundle: nil)
+        if let subscriptionsViewController = storyBoard.instantiateViewController(withIdentifier: "parent") as? SubscriptionViewController {
+            let navigationController = UINavigationController(rootViewController: subscriptionsViewController)
+            present(navigationController, animated: true)
+        }
+    }
+
     // MARK: - Helper functions
 
     func initFrequencyArray() {
+        frequencyData.append(String("0.5"))
         var i = 1
         while i < 31 {
             frequencyData.append(String(i))
@@ -78,6 +86,28 @@ class SettingsViewController: UITableViewController, UIPickerViewDelegate, UIPic
         } else {
             return 300.0
         }
+    }
+
+    // MARK: - Display Alert
+
+    /// Creates and displays an alert.
+    fileprivate func alert(with title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
+        let manageAction = UIAlertAction(title: NSLocalizedString(Messages.goToSubscriptions, comment: Messages.emptyString),
+                                         style: .default, handler: { _ in
+                                             let storyBoard = UIStoryboard(name: "Subscriptions", bundle: nil)
+                                             if let subscriptionsViewController = storyBoard.instantiateViewController(withIdentifier: "parent") as? SubscriptionViewController {
+                                                 let navigationController = UINavigationController(rootViewController: subscriptionsViewController)
+                                                 self.present(navigationController, animated: true)
+                                             }
+        })
+        let cancelAction = UIAlertAction(title: NSLocalizedString(Messages.cancelButton, comment: Messages.emptyString),
+                                         style: .default, handler: {_ in
+                                            self.ListeningFrequency.selectRow(self.config.getListeningFrequencyKey(), inComponent: 0, animated: true)
+        })
+        alertController.addAction(manageAction)
+        alertController.addAction(cancelAction)
+        present(alertController, animated: true, completion: nil)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -117,8 +147,15 @@ class SettingsViewController: UITableViewController, UIPickerViewDelegate, UIPic
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         print("didSelectRow called")
         if pickerView == ListeningFrequency {
-            print("user selected frequency = \(frequencyData[row])")
-            config.setListeningFrequency(value: convertToSeconds(minutes: frequencyData[row]), key: row)
+            /**
+
+             */
+            if StoreObserver.shared.isAuthorizedForUsage {
+                print("user selected frequency = \(frequencyData[row])")
+                config.setListeningFrequency(value: convertToSeconds(minutes: frequencyData[row]), key: row)
+            } else {
+                alert(with: "Not Subscribed", message: "Please purchase or restore a subscription from settings page in order to increase the frequency, first month is for free as a trial period")
+            }
         } else {
             if let seconds = Int(durationData[row]) {
                 print("user selected duration = \(seconds)")

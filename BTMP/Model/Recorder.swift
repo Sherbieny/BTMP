@@ -72,6 +72,7 @@ final class Recorder: NSObject {
     }
 
     func stopMedia() {
+        print("silencing")
         silencer.playSilence()        
     }
 
