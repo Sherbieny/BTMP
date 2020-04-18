@@ -42,22 +42,29 @@ public class TextProvider {
             paragraphStyle.alignment = .justified
 
             strings.append("You need to keep the app opened while it is working, locking your phone, pressing the home button or switching to another app will stop the application.")
-            strings.append("This is due to a limitation made by apple preventing apps from accessing the microphone while the phone is locked for security reasons.")
-             strings.append("As long as this app is opened, the phone will not automatically lock after some time.")
+            strings.append("This is due to a limitation made by apple preventing apps from accessing the microphone while in the background for security reasons.")
+            strings.append("As long as this app is opened, the phone will not automatically lock after some time.")
             strings.append("But don't worry, once you go to sleep and no sound is detected, the app will stop and the phone will lock automatically.")
         case 3:
-            //paragraphStyle.headIndent = (bullet as NSString).size(withAttributes: attributes).width
+            paragraphStyle.alignment = .justified
+
+            strings.append("The app has multiple subscription offers to be able to enjoy it fully.")
+            strings.append("With any kind of subscription you choose, you will get the first MONTH for FREE as a trial period.")
+            strings.append("if you like the app the subscription will autorenew normally after the trial period.")
+            strings.append("you can cancel the subscrition from your normal iTunes settings at anytime.")
+        case 4:
+            
             strings.append("Simply put: it works as if someone is reading you a bedtime story and every now and then they stop and check if you went to sleep, you need to make a sound in order for them to continue.")
             strings.append("Note: the following can be viewed again from the settings page.")
             strings.append("Put your phone at the usual place you use when you go to bed.")
             strings.append("play some media (music, audiobook, podcast, etc...) switch back to this app and press start.")
             strings.append("keep the app opened and go to bed.")
-            strings.append("after 1 minute the media will stop (the time can be changed later from settings)")
+            strings.append("after 30 seconds the media will stop (the time can be changed later from settings)")
             strings.append("now make a sound (a clap, a shout, a cough...)")
             strings.append("if the noise is loud enough the media will resume.")
             strings.append("if not, open the settings page and adjust the Listening Sensitivity setting and try again.")
             strings.append("note that the higher the \"Listening Sensitivity\" the louder you need to be when making a sound.")
-            // strings = strings.map { bullet + $0 }
+            
             for (index, line) in strings.enumerated() {
                 if index > 1 {
                     strings[index] = bullet + line

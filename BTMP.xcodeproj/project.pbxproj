@@ -9,6 +9,20 @@
 /* Begin PBXBuildFile section */
 		1B0A98B322478B4400620189 /* Scheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0A98B222478B4400620189 /* Scheduler.swift */; };
 		1B1768E62433CFA0003EE62E /* Permissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B1768E52433CFA0003EE62E /* Permissions.swift */; };
+		1B5BD618244A1DA80072595B /* ProductIds.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1B5BD617244A1DA80072595B /* ProductIds.plist */; };
+		1B5BD61A244A1FC50072595B /* Subscriptions.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1B5BD619244A1FC50072595B /* Subscriptions.storyboard */; };
+		1B5BD61C244A21940072595B /* SubscriptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5BD61B244A21940072595B /* SubscriptionViewController.swift */; };
+		1B5BD628244A22270072595B /* Purchases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5BD61E244A22260072595B /* Purchases.swift */; };
+		1B5BD629244A22270072595B /* Products.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5BD61F244A22260072595B /* Products.swift */; };
+		1B5BD62A244A22270072595B /* StoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5BD620244A22270072595B /* StoreManager.swift */; };
+		1B5BD62B244A22270072595B /* AppExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5BD621244A22270072595B /* AppExtensions.swift */; };
+		1B5BD62C244A22270072595B /* StoreObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5BD622244A22270072595B /* StoreObserver.swift */; };
+		1B5BD62D244A22270072595B /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5BD623244A22270072595B /* BaseViewController.swift */; };
+		1B5BD62E244A22270072595B /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5BD624244A22270072595B /* Utilities.swift */; };
+		1B5BD62F244A22270072595B /* PaymentTransactionDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5BD625244A22270072595B /* PaymentTransactionDetails.swift */; };
+		1B5BD630244A22270072595B /* AppDataTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5BD626244A22270072595B /* AppDataTypes.swift */; };
+		1B5BD631244A22270072595B /* AppProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5BD627244A22270072595B /* AppProtocols.swift */; };
+		1B5BD634244A27480072595B /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1B5BD633244A27480072595B /* LICENSE.txt */; };
 		1B789EB823F83919005A2BBB /* Worker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B789EB723F83919005A2BBB /* Worker.swift */; };
 		1B93D935242D433D002FB9A4 /* TextProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B93D934242D433D002FB9A4 /* TextProvider.swift */; };
 		1B99790E223E65CD00322398 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B99790D223E65CD00322398 /* AppDelegate.swift */; };
@@ -32,6 +46,20 @@
 /* Begin PBXFileReference section */
 		1B0A98B222478B4400620189 /* Scheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scheduler.swift; sourceTree = "<group>"; };
 		1B1768E52433CFA0003EE62E /* Permissions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Permissions.swift; sourceTree = "<group>"; };
+		1B5BD617244A1DA80072595B /* ProductIds.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = ProductIds.plist; sourceTree = "<group>"; };
+		1B5BD619244A1FC50072595B /* Subscriptions.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Subscriptions.storyboard; sourceTree = "<group>"; };
+		1B5BD61B244A21940072595B /* SubscriptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionViewController.swift; sourceTree = "<group>"; };
+		1B5BD61E244A22260072595B /* Purchases.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Purchases.swift; sourceTree = "<group>"; };
+		1B5BD61F244A22260072595B /* Products.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Products.swift; sourceTree = "<group>"; };
+		1B5BD620244A22270072595B /* StoreManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreManager.swift; sourceTree = "<group>"; };
+		1B5BD621244A22270072595B /* AppExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppExtensions.swift; sourceTree = "<group>"; };
+		1B5BD622244A22270072595B /* StoreObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreObserver.swift; sourceTree = "<group>"; };
+		1B5BD623244A22270072595B /* BaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
+		1B5BD624244A22270072595B /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		1B5BD625244A22270072595B /* PaymentTransactionDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentTransactionDetails.swift; sourceTree = "<group>"; };
+		1B5BD626244A22270072595B /* AppDataTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDataTypes.swift; sourceTree = "<group>"; };
+		1B5BD627244A22270072595B /* AppProtocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppProtocols.swift; sourceTree = "<group>"; };
+		1B5BD633244A27480072595B /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = LICENSE.txt; path = ../../../../OfferingCompletingAndRestoringInAppPurchases/LICENSE/LICENSE.txt; sourceTree = "<group>"; };
 		1B789EB723F83919005A2BBB /* Worker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Worker.swift; sourceTree = "<group>"; };
 		1B93D934242D433D002FB9A4 /* TextProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextProvider.swift; sourceTree = "<group>"; };
 		1B99790A223E65CD00322398 /* BTMP.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BTMP.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -65,6 +93,41 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1B5BD616244A1D600072595B /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				1B997914223E65CE00322398 /* Assets.xcassets */,
+				1B997919223E65CE00322398 /* Info.plist */,
+				1B5BD617244A1DA80072595B /* ProductIds.plist */,
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		1B5BD61D244A21E70072595B /* IAP */ = {
+			isa = PBXGroup;
+			children = (
+				1B5BD626244A22270072595B /* AppDataTypes.swift */,
+				1B5BD621244A22270072595B /* AppExtensions.swift */,
+				1B5BD627244A22270072595B /* AppProtocols.swift */,
+				1B5BD623244A22270072595B /* BaseViewController.swift */,
+				1B5BD625244A22270072595B /* PaymentTransactionDetails.swift */,
+				1B5BD61F244A22260072595B /* Products.swift */,
+				1B5BD61E244A22260072595B /* Purchases.swift */,
+				1B5BD620244A22270072595B /* StoreManager.swift */,
+				1B5BD622244A22270072595B /* StoreObserver.swift */,
+				1B5BD624244A22270072595B /* Utilities.swift */,
+			);
+			path = IAP;
+			sourceTree = "<group>";
+		};
+		1B5BD632244A26AE0072595B /* License */ = {
+			isa = PBXGroup;
+			children = (
+				1B5BD633244A27480072595B /* LICENSE.txt */,
+			);
+			path = License;
+			sourceTree = "<group>";
+		};
 		1B997901223E65CD00322398 = {
 			isa = PBXGroup;
 			children = (
@@ -84,14 +147,14 @@
 		1B99790C223E65CD00322398 /* BTMP */ = {
 			isa = PBXGroup;
 			children = (
+				1B5BD632244A26AE0072595B /* License */,
+				1B5BD616244A1D600072595B /* Supporting Files */,
 				1BA6EA50243E4A1900A8457D /* Audio */,
 				1BA9167D242CAA8400656F47 /* Storyboard */,
 				1BB809E5241439000046098C /* Model */,
 				1BB809E2241424480046098C /* Controller */,
 				1BFBA56423F350B2007F81F3 /* Button */,
 				1B99790D223E65CD00322398 /* AppDelegate.swift */,
-				1B997914223E65CE00322398 /* Assets.xcassets */,
-				1B997919223E65CE00322398 /* Info.plist */,
 			);
 			path = BTMP;
 			sourceTree = "<group>";
@@ -110,6 +173,7 @@
 				1B997911223E65CD00322398 /* Main.storyboard */,
 				1B997916223E65CE00322398 /* LaunchScreen.storyboard */,
 				1BD64DF9242CE0E500AF893E /* Onboarding.storyboard */,
+				1B5BD619244A1FC50072595B /* Subscriptions.storyboard */,
 			);
 			path = Storyboard;
 			sourceTree = "<group>";
@@ -123,6 +187,7 @@
 				1BA91682242CBE5C00656F47 /* WalkthroughPageViewController.swift */,
 				1BA91680242CB7AB00656F47 /* WalkthroughContentViewController.swift */,
 				1BA91684242CC8E800656F47 /* WalkthroughViewController.swift */,
+				1B5BD61B244A21940072595B /* SubscriptionViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -130,6 +195,7 @@
 		1BB809E5241439000046098C /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				1B5BD61D244A21E70072595B /* IAP */,
 				1B789EB723F83919005A2BBB /* Worker.swift */,
 				1B99791F223E676100322398 /* Recorder.swift */,
 				1B0A98B222478B4400620189 /* Scheduler.swift */,
@@ -214,8 +280,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				1B997918223E65CE00322398 /* LaunchScreen.storyboard in Resources */,
+				1B5BD618244A1DA80072595B /* ProductIds.plist in Resources */,
 				1B997915223E65CE00322398 /* Assets.xcassets in Resources */,
 				1B997913223E65CD00322398 /* Main.storyboard in Resources */,
+				1B5BD634244A27480072595B /* LICENSE.txt in Resources */,
+				1B5BD61A244A1FC50072595B /* Subscriptions.storyboard in Resources */,
 				1BA6EA52243E4A3000A8457D /* 10-seconds-of-silence.mp3 in Resources */,
 				1BD64DFA242CE0E500AF893E /* Onboarding.storyboard in Resources */,
 			);
@@ -231,17 +300,28 @@
 				1B1768E62433CFA0003EE62E /* Permissions.swift in Sources */,
 				1B997920223E676100322398 /* Recorder.swift in Sources */,
 				1B789EB823F83919005A2BBB /* Worker.swift in Sources */,
+				1B5BD628244A22270072595B /* Purchases.swift in Sources */,
+				1B5BD62F244A22270072595B /* PaymentTransactionDetails.swift in Sources */,
+				1B5BD631244A22270072595B /* AppProtocols.swift in Sources */,
 				1BB809E424142CC30046098C /* SettingsViewController.swift in Sources */,
+				1B5BD62C244A22270072595B /* StoreObserver.swift in Sources */,
 				1BA9167C242AA64000656F47 /* OnBoardingView.swift in Sources */,
 				1B93D935242D433D002FB9A4 /* TextProvider.swift in Sources */,
 				1BA91683242CBE5C00656F47 /* WalkthroughPageViewController.swift in Sources */,
 				1B0A98B322478B4400620189 /* Scheduler.swift in Sources */,
+				1B5BD629244A22270072595B /* Products.swift in Sources */,
+				1B5BD62A244A22270072595B /* StoreManager.swift in Sources */,
+				1B5BD62E244A22270072595B /* Utilities.swift in Sources */,
 				1B997910223E65CD00322398 /* ViewController.swift in Sources */,
+				1B5BD62D244A22270072595B /* BaseViewController.swift in Sources */,
 				1BB809E7241439620046098C /* Config.swift in Sources */,
 				1BFBA56323F3509A007F81F3 /* StartToggleButton.swift in Sources */,
 				1BA91685242CC8E800656F47 /* WalkthroughViewController.swift in Sources */,
+				1B5BD62B244A22270072595B /* AppExtensions.swift in Sources */,
 				1B99790E223E65CD00322398 /* AppDelegate.swift in Sources */,
 				1BA91681242CB7AB00656F47 /* WalkthroughContentViewController.swift in Sources */,
+				1B5BD630244A22270072595B /* AppDataTypes.swift in Sources */,
+				1B5BD61C244A21940072595B /* SubscriptionViewController.swift in Sources */,
 				1BA6EA54243E4EE400A8457D /* Silencer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -390,7 +470,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = D3QUYMAYJB;
-				INFOPLIST_FILE = "$(SRCROOT)/BTMP/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/BTMP/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -409,7 +489,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = D3QUYMAYJB;
-				INFOPLIST_FILE = "$(SRCROOT)/BTMP/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/BTMP/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

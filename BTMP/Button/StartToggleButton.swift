@@ -76,16 +76,16 @@ class StartToggleButton: UIButton {
 
     func listeningButton() {
         print("Button: waiting called")
-    
+
         btnState = .waiting
 
-        //let color = UIColor.systemGray
+        // let color = UIColor.systemGray
         let title = "Listening"
-        //let titleColor = UIColor.white
-        //let borderColor = UIColor.black
+        // let titleColor = UIColor.white
+        // let borderColor = UIColor.black
 
         setTitle(title, for: .normal)
-        //setTitleColor(titleColor, for: .normal)
+        // setTitleColor(titleColor, for: .normal)
 //        backgroundColor = color
 //        layer.borderColor = borderColor.cgColor
     }
@@ -97,7 +97,7 @@ class StartToggleButton: UIButton {
         }
         btnState = .start
 
-        //let color = UIColor.black
+        // let color = UIColor.black
         let title = "Start"
 //        let titleColor = UIColor.white
 //        let borderColor = UIColor.white
@@ -117,7 +117,7 @@ class StartToggleButton: UIButton {
 
         btnState = .stop
 
-        //let color = UIColor.white
+        // let color = UIColor.white
         let title = "Stop"
 //        let titleColor = UIColor.black
 //        let borderColor = UIColor.black
@@ -130,10 +130,10 @@ class StartToggleButton: UIButton {
 
     func addTimerText(text: String) {
         print("Button: addTimer called")
-          btnState = .waiting
-                
-        let newText = "\u{2248} \(text)" //currentText ?? "" + "\n" + text
-        
+        btnState = .waiting
+
+        let newText = "\u{2248} \(text)" // currentText ?? "" + "\n" + text
+
         print("time text = \(text)")
         titleLabel?.fadeTransition(1.0)
         setTitle(newText, for: .normal)
@@ -152,10 +152,8 @@ class StartToggleButton: UIButton {
     }
 }
 
-
-
 extension UIView {
-    func fadeTransition(_ duration:CFTimeInterval) {
+    func fadeTransition(_ duration: CFTimeInterval) {
         let animation = CATransition()
         animation.timingFunction = CAMediaTimingFunction(name:
             CAMediaTimingFunctionName.easeInEaseOut)

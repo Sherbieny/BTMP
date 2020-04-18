@@ -36,9 +36,9 @@ class WalkthroughViewController: UIViewController, walkthroughPageViewController
     @IBAction func nextButtonTapped(sender: UIButton) {
         if let index = walkthroughPageViewController?.currentIndex {
             switch index {
-            case 0 ... 2:
+            case 0 ... 3:
                 walkthroughPageViewController?.forwardPage()
-            case 3:
+            case 4:
                 dismiss(animated: true, completion: nil)
                 config.setUserFinisOnboarding()
             default:
@@ -67,7 +67,6 @@ class WalkthroughViewController: UIViewController, walkthroughPageViewController
                 actionButton.isHidden = true
             // Microphone page
             case 1:
-                print("page 2")
                 nextButton.setTitle("Next", for: .normal)
                 nextButton.isEnabled = true
                 actionButton.setTitle("Grant Access", for: .normal)
@@ -77,8 +76,13 @@ class WalkthroughViewController: UIViewController, walkthroughPageViewController
                 nextButton.setTitle("Next", for: .normal)
                 nextButton.isEnabled = true
                 actionButton.isHidden = true
-            // the way it works page
+            // Subscription page
             case 3:
+                nextButton.setTitle("Next", for: .normal)
+                nextButton.isEnabled = true
+                actionButton.isHidden = true
+            // the way it works page
+            case 4:
                 nextButton.setTitle("Get Started", for: .normal)
                 actionButton.isHidden = true
             default:
@@ -92,15 +96,16 @@ class WalkthroughViewController: UIViewController, walkthroughPageViewController
     func didUpdatePageIndex(currentIndex: Int) {
         updateUI()
     }
-    
-    func startAtPage(pageIndex: Int){
+
+    func startAtPage(pageIndex: Int) {
         walkthroughPageViewController?.goToPage(index: pageIndex)
         updateUI()
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-    }    
+    }
+
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation

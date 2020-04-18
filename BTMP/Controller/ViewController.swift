@@ -26,11 +26,26 @@ class ViewController: UIViewController {
     private var timer: Timer?
     var timeLeft: Int = 0
 
-    let delegate = UIApplication.shared.delegate
+    let delegate = UIApplication.shared.delegate    
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        createSettingsButton()
+        initEvents()
+        timeLeft = Int(config.getListeningFrequency())
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        if config.didUserFinishOnboarding() == false {
+            let storyBoard = UIStoryboard(name: "Onboarding", bundle: nil)
+            if let walkthroughViewController = storyBoard.instantiateViewController(withIdentifier: "WalkthroughViewController") as? WalkthroughViewController {
+                present(walkthroughViewController, animated: true, completion: nil)
+            }
+        }
+    }
+
+    func createSettingsButton() {
         // setting button
         if #available(iOS 13, *) {
             settingsButton.setBackgroundImage(UIImage(systemName: "gear"), for: .normal)
@@ -50,18 +65,6 @@ class ViewController: UIViewController {
             let widthConstraint = NSLayoutConstraint(item: settingsButton!, attribute: NSLayoutConstraint.Attribute.width, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 80)
             let heightConstraint = NSLayoutConstraint(item: settingsButton!, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 40)
             view.addConstraints([horizontalConstraint, verticalConstraint, widthConstraint, heightConstraint])
-        }
-
-        initEvents()
-        timeLeft = Int(config.getListeningFrequency())
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        if config.didUserFinishOnboarding() == false {
-            let storyBoard = UIStoryboard(name: "Onboarding", bundle: nil)
-            if let walkthroughViewController = storyBoard.instantiateViewController(withIdentifier: "WalkthroughViewController") as? WalkthroughViewController {
-                present(walkthroughViewController,animated: true,completion: nil)
-            }
         }
     }
 
@@ -97,9 +100,9 @@ class ViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(onDidEnterStop(_:)), name: .didEnterStop, object: nil)
 
         NotificationCenter.default.addObserver(self, selector: #selector(onFailedToStartSession(_:)), name: .failedToStartSession, object: nil)
-        
+
         NotificationCenter.default.addObserver(self, selector: #selector(onIncomingCall(_:)), name: .incomingCall, object: nil)
-        
+
         NotificationCenter.default.addObserver(self, selector: #selector(onCallDisconncted(_:)), name: .callDisconnected, object: nil)
 
         NotificationCenter.default.addObserver(self, selector: #selector(onDidUserDefaultsChange), name: .didUserDefaultsChange, object: nil)
@@ -178,14 +181,17 @@ class ViewController: UIViewController {
             // Interruption began, take appropriate actions
             print("interruption began ....")
             if worker.isRunning {
+                print("stopping running worker")
                 stop()
             }
         } else if type == .ended {
+            print("interuption ended")
             if let optionsValue = userInfo[AVAudioSessionInterruptionOptionKey] as? UInt {
                 let options = AVAudioSession.InterruptionOptions(rawValue: optionsValue)
                 if options.contains(.shouldResume) {
                     print("interruption flagged should resume ....")
                     if !worker.isRunning {
+                        print("starting stopped worker")
                         start() // this is added because otherwise, repeater does not start after timer finish if the app was just initiated
                     }
                 } else {
@@ -195,30 +201,31 @@ class ViewController: UIViewController {
             }
         }
     }
-    
-    @objc func onFailedToStartSession(_ notification: Notification){
+
+    @objc func onFailedToStartSession(_ notification: Notification) {
         print("onFailedToStartSession called")
         if worker.isRunning {
             print("is running - stopping")
             stop()
         }
     }
-    
-    @objc func onIncomingCall(_ notification: Notification){
+
+    @objc func onIncomingCall(_ notification: Notification) {
         print("onIncomingCall called")
         if worker.isRunning {
             print("is running - stopping")
             stop()
         }
     }
-    
-    @objc func onCallDisconncted(_ notification: Notification){
+
+    @objc func onCallDisconncted(_ notification: Notification) {
         print("onCallDisconncted called")
         if !worker.isRunning {
             print("is stopped - starting")
             start()
         }
     }
+
 
     // MARK: Timer lifecycle
 
@@ -271,27 +278,18 @@ class ViewController: UIViewController {
     // MARK: Actions
 
     @IBAction func startDidTouch(_ sender: AnyObject) {
-        if startButtonIsActive == false {
-            print("start pressed")
-            start()
-        } else {
-            print("stop pressed")
-            stop()
-        }
+            if startButtonIsActive == false {
+                print("start pressed")
+                start()
+            } else {
+                print("stop pressed")
+                stop()
+            }
     }
 
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-
-//    @IBAction func stopDidTouch(_ sender: AnyObject) {
-//        stopRecorder()
-//        stopTimer()
-//        self.schedulerFrequency?.finish()
-//        self.schedulerRepeater?.finish()
-//        print("recording finished...")
-//        UIApplication.shared.isIdleTimerDisabled = false
-//    }
 }
 
 extension Notification.Name {
@@ -301,5 +299,5 @@ extension Notification.Name {
     static let didUserDefaultsChange = Notification.Name("didUserDefaultsChange")
     static let failedToStartSession = Notification.Name("failedToStartSession")
     static let incomingCall = Notification.Name("incomingCall")
-    static let callDisconnected = Notification.Name("callDisconnected")    
+    static let callDisconnected = Notification.Name("callDisconnected")
 }
