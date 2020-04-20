@@ -11,8 +11,8 @@ import UIKit
 
 class Worker: NSObject {
     // MARK: Properties
-                
-    public var isRunning:Bool = false
+
+    public var isRunning: Bool = false
     let config: Config = Config()
     let recorder: Recorder = Recorder()
     var listeningFrequency: Scheduler?
@@ -28,9 +28,10 @@ class Worker: NSObject {
     // MARK: Main functions
 
     public func start() {
-        // Check for microphone permission before starting
+        // Check for microphone and music library permissions before starting
         permission.requestMicrophoneAccess()
-        
+        permission.requestMusicLibraryAccess()
+
         recorder.audioLevel = recorder.SILENCE_LEVEL
         keepScreenOpen()
         startSession()
@@ -41,7 +42,7 @@ class Worker: NSObject {
     public func pause() {
         recorder.audioLevel = recorder.SILENCE_LEVEL
         stopRecorder()
-        listeningFrequency?.suspend()        
+        listeningFrequency?.suspend()
         NotificationCenter.default.post(name: .didEnterWaiting, object: self)
         print("recording paused... rerunning soon")
     }
@@ -55,8 +56,8 @@ class Worker: NSObject {
         isRunning = false
         NotificationCenter.default.post(name: .didEnterStop, object: self)
     }
-    
-    public func stop(){
+
+    public func stop() {
         recorder.audioLevel = recorder.SILENCE_LEVEL
         stopRecorder()
         listeningFrequency?.suspend()
@@ -65,15 +66,14 @@ class Worker: NSObject {
         isRunning = false
         NotificationCenter.default.post(name: .didEnterStop, object: self)
     }
-    
-    public func reset(){
+
+    public func reset() {
         recorder.audioLevel = recorder.SILENCE_LEVEL
         stopRecorder()
         listeningFrequency?.suspend()
         repeatingFrequency?.reset()
         NotificationCenter.default.post(name: .didEnterStop, object: self)
     }
-    
 
     // MARK: Screen functions
 
@@ -107,7 +107,9 @@ class Worker: NSObject {
         if recorder.isRecording {
             recorder.stopRecording()
         }
+        // DispatchQueue.main.sync {
         recorder.stopMedia()
+        // }
     }
 
     // MARK: Session functions
