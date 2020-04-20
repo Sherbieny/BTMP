@@ -36,9 +36,9 @@ class WalkthroughViewController: UIViewController, walkthroughPageViewController
     @IBAction func nextButtonTapped(sender: UIButton) {
         if let index = walkthroughPageViewController?.currentIndex {
             switch index {
-            case 0 ... 3:
+            case 0 ... 4:
                 walkthroughPageViewController?.forwardPage()
-            case 4:
+            case 5:
                 dismiss(animated: true, completion: nil)
                 config.setUserFinisOnboarding()
             default:
@@ -51,9 +51,13 @@ class WalkthroughViewController: UIViewController, walkthroughPageViewController
 
     @IBAction func actionButtonTapped(sender: UIButton) {
         if let index = walkthroughPageViewController?.currentIndex {
-            // Request Music Library access
-            if index == 1 {
+            // Request Microphone access
+            if index == 2 {
                 permissions.requestMicrophoneAccess()
+            }
+            // Request Music Library access
+            if index == 3 {
+                permissions.requestMusicLibraryAccess()
             }
         }
     }
@@ -65,24 +69,30 @@ class WalkthroughViewController: UIViewController, walkthroughPageViewController
             // Welcome page
             case 0:
                 actionButton.isHidden = true
-            // Microphone page
+            // the way it works page
             case 1:
+                nextButton.setTitle("Next", for: .normal)
+                nextButton.isEnabled = true
+                actionButton.isHidden = true
+            // Microphone page
+            case 2:
                 nextButton.setTitle("Next", for: .normal)
                 nextButton.isEnabled = true
                 actionButton.setTitle("Grant Access", for: .normal)
                 actionButton.isHidden = permissions.microphonePermissionStatus == .authorized
+            // Music library page
+            case 3:
+                nextButton.setTitle("Next", for: .normal)
+                nextButton.isEnabled = true
+                actionButton.setTitle("Grant Access", for: .normal)
+                actionButton.isHidden = permissions.musicLibraryPermissionStatus == .authorized
             // Screen page
-            case 2:
+            case 4:
                 nextButton.setTitle("Next", for: .normal)
                 nextButton.isEnabled = true
                 actionButton.isHidden = true
             // Subscription page
-            case 3:
-                nextButton.setTitle("Next", for: .normal)
-                nextButton.isEnabled = true
-                actionButton.isHidden = true
-            // the way it works page
-            case 4:
+            case 5:
                 nextButton.setTitle("Get Started", for: .normal)
                 actionButton.isHidden = true
             default:

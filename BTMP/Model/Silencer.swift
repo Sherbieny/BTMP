@@ -8,6 +8,7 @@
 
 import AVFoundation
 import Foundation
+import MediaPlayer
 
 class Silencer {
     // MARK: - Properties
@@ -18,22 +19,52 @@ class Silencer {
     // MARK: - Functions
 
     func playSilence() {
-        if silenceFileUrl != nil {
-            do {
-                audioPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: silenceFileUrl!))
-                if audioPlayer?.prepareToPlay() == true {
-                    print("prepared")
-                    audioPlayer?.play()
-                    print("alllll g-oooood")
-                }
+        
+        let systemMusicPlayer = MPMusicPlayerController.systemMusicPlayer
+        let mediaItems = MPMediaQuery.songs().items
 
-                // audioPlayer?.stop()
-                
-            } catch let error {
-                print("error opening audio player \(error)")
+        if mediaItems != nil {
+            let mediaCollection = MPMediaItemCollection(items: mediaItems!)
+
+            systemMusicPlayer.setQueue(with: mediaCollection)
+            systemMusicPlayer.prepareToPlay()
+            print("playing")
+
+            for _ in 1 ... 15 {
+                systemMusicPlayer.play()
+                systemMusicPlayer.stop()
             }
+
+            systemMusicPlayer.stop()
+
         } else {
-            print("silence file not found")
+            print("failed to get items from library - falling back to audio player")
+            if silenceFileUrl != nil {
+                do {
+                    try AVAudioSession.sharedInstance().setCategory(.soloAmbient, mode: .default)
+                    try AVAudioSession.sharedInstance().setActive(true)
+                    audioPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: silenceFileUrl!))
+
+                    if audioPlayer != nil {
+                        audioPlayer!.numberOfLoops = 100
+                        if audioPlayer!.prepareToPlay() == true {
+                            audioPlayer!.play()
+                            if audioPlayer!.isPlaying {
+                                print("it is playing")
+                            } else {
+                                print("it not playing")
+                            }
+                        }
+                    }else{
+                        print("Error: audio player is nil")
+                    }
+
+                } catch let error {
+                    print("error opening audio player \(error)")
+                }
+            } else {
+                print("silence file not found")
+            }
         }
     }
 }

@@ -17,10 +17,7 @@ class WalkthroughPageViewController: UIPageViewController, UIPageViewControllerD
     // MARK: - Properties
     
     weak var walkthroughDelegate: walkthroughPageViewControllerDelegate?
-        
-    let pageHeadings = ["Thank you for choosing BTMP", "The Microphone", "The Screen", "The Subscriptions", "The way it works"]
     var currentIndex = 0
-    
     let textProvider: TextProvider = TextProvider()
 
     override func viewDidLoad() {
@@ -51,12 +48,12 @@ class WalkthroughPageViewController: UIPageViewController, UIPageViewControllerD
     }
 
     func contentViewController(at index: Int) -> WalkthroughContentViewController? {
-        if index < 0 || index >= pageHeadings.count {
+        if index < 0 || index >= textProvider.getPageCount() {
             return nil
         }
         let storyBoard = UIStoryboard(name: "Onboarding", bundle: nil)
         if let pageViewController = storyBoard.instantiateViewController(withIdentifier: "WalkthroughContentViewController") as? WalkthroughContentViewController {
-            pageViewController.heading = pageHeadings[index]
+            pageViewController.heading = textProvider.getHeading(forPage: index)
             pageViewController.content = textProvider.getText(forPage: index)
             pageViewController.index = index
 
@@ -65,6 +62,8 @@ class WalkthroughPageViewController: UIPageViewController, UIPageViewControllerD
 
         return nil
     }
+    
+    // MARK: Functions
     
     func forwardPage(){
         currentIndex += 1
