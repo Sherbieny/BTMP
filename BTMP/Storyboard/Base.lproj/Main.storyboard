@@ -140,7 +140,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" value="50" minValue="20" maxValue="80" translatesAutoresizingMaskIntoConstraints="NO" id="EVA-ny-K6Y" userLabel="Listening Senstivity">
-                                                    <rect key="frame" x="-2" y="7" width="319" height="31"/>
+                                                    <rect key="frame" x="-3" y="7" width="320" height="31"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 </slider>
                                             </subviews>
@@ -161,7 +161,7 @@
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WDf-vE-BcA">
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                                     <subviews>
-                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hv4-Z2-dZ3">
+                                                        <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hv4-Z2-dZ3">
                                                             <rect key="frame" x="134.5" y="7" width="51" height="30"/>
                                                             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <state key="normal" title="Tutorial">
@@ -431,13 +431,13 @@
                         </connections>
                     </tableView>
                     <connections>
-                        <outlet property="BackButton" destination="UwQ-mI-ibi" id="fFE-sf-Sqt"/>
                         <outlet property="ListeningDuration" destination="Cbp-hx-bld" id="YbG-OM-I1f"/>
                         <outlet property="ListeningFrequency" destination="hPR-5D-vV5" id="mxc-4a-XWb"/>
                         <outlet property="ListeningSenstivity" destination="EVA-ny-K6Y" id="3Ie-zb-OAQ"/>
-                        <outlet property="SubscritionsButton" destination="szS-F0-FVY" id="3t0-AM-S1D"/>
                         <outlet property="TableView" destination="0mW-Kr-iIo" id="hVf-pr-Smz"/>
-                        <outlet property="TutorialButton" destination="hv4-Z2-dZ3" id="BON-7Y-Sfb"/>
+                        <outlet property="backButton" destination="UwQ-mI-ibi" id="fFE-sf-Sqt"/>
+                        <outlet property="subscriptionButton" destination="szS-F0-FVY" id="3t0-AM-S1D"/>
+                        <outlet property="tutorialButton" destination="hv4-Z2-dZ3" id="BON-7Y-Sfb"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Bgh-Z8-8fj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="ipad12_9" orientation="portrait" layout="fullscreen" appearance="light"/>
+    <device id="ipad12_9rounded" orientation="portrait" layout="fullscreen" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -16,16 +16,16 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0WI-vc-pCz">
-                                <rect key="frame" x="0.0" y="0.0" width="1024" height="910.5"/>
+                                <rect key="frame" x="0.0" y="0.0" width="1024" height="897.5"/>
                                 <connections>
                                     <segue destination="tGn-Rf-fPS" kind="embed" id="S5A-DC-xfH"/>
                                 </connections>
                             </containerView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="H4K-Rb-FcR">
-                                <rect key="frame" x="0.0" y="910.5" width="1024" height="455.5"/>
+                                <rect key="frame" x="0.0" y="897.5" width="1024" height="448.5"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="ASZ-fx-6JR">
-                                        <rect key="frame" x="412" y="148" width="200" height="160"/>
+                                        <rect key="frame" x="412" y="144" width="200" height="160"/>
                                         <subviews>
                                             <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="6" translatesAutoresizingMaskIntoConstraints="NO" id="K0F-GB-ZJn">
                                                 <rect key="frame" x="56.5" y="0.0" width="87" height="37"/>

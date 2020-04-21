@@ -14,9 +14,24 @@ class SettingsViewController: UITableViewController, UIPickerViewDelegate, UIPic
     @IBOutlet var ListeningFrequency: UIPickerView!
     @IBOutlet var ListeningDuration: UIPickerView!
     @IBOutlet var ListeningSenstivity: UISlider!
-    @IBOutlet var BackButton: UIButton!
-    @IBOutlet var TutorialButton: UIButton!
-    @IBOutlet var SubscritionsButton: UIButton!
+    @IBOutlet var backButton: UIButton! {
+        didSet{
+            backButton.titleLabel?.adjustsFontForContentSizeCategory = true
+            backButton.titleLabel?.adjustsFontSizeToFitWidth = true
+        }
+    }
+    @IBOutlet var tutorialButton: UIButton! {
+        didSet{
+            tutorialButton.titleLabel?.adjustsFontForContentSizeCategory = true
+            tutorialButton.titleLabel?.adjustsFontSizeToFitWidth = true
+        }
+    }
+    @IBOutlet var subscriptionButton: UIButton! {
+        didSet{
+            subscriptionButton.titleLabel?.adjustsFontForContentSizeCategory = true
+            subscriptionButton.titleLabel?.adjustsFontSizeToFitWidth = true
+        }
+    }
 
     let config: Config = Config()
     var frequencyData: [String] = [String]()
@@ -146,16 +161,20 @@ class SettingsViewController: UITableViewController, UIPickerViewDelegate, UIPic
 
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         print("didSelectRow called")
+        
+        
+        
         if pickerView == ListeningFrequency {
-            /**
-
-             */
-            if StoreObserver.shared.isAuthorizedForUsage {
-                print("user selected frequency = \(frequencyData[row])")
+            if row == 0 {
                 config.setListeningFrequency(value: convertToSeconds(minutes: frequencyData[row]), key: row)
-            } else {
-                alert(with: "Not Subscribed", message: "Please purchase or restore a subscription from settings page in order to increase the frequency, first month is for free as a trial period")
-            }
+            }else{
+                if StoreObserver.shared.isAuthorizedForUsage {
+                    print("user selected frequency = \(frequencyData[row])")
+                    config.setListeningFrequency(value: convertToSeconds(minutes: frequencyData[row]), key: row)
+                } else {
+                    alert(with: "Not Subscribed", message: "Please purchase or restore a subscription from settings page in order to increase the frequency, first month is for free as a trial period")
+                }
+            }            
         } else {
             if let seconds = Int(durationData[row]) {
                 print("user selected duration = \(seconds)")

@@ -23,16 +23,16 @@ class StoreObserver: NSObject {
 	var isAuthorizedForPayments: Bool {
 		return SKPaymentQueue.canMakePayments()
 	}
-    
-    var isAuthorizedForUsage: Bool {
-        return !(purchased.isEmpty && restored.isEmpty)
-    }
-
+        
 	/// Keeps track of all purchases.
 	var purchased = [SKPaymentTransaction]()
 
 	/// Keeps track of all restored purchases.
 	var restored = [SKPaymentTransaction]()
+    
+    var isAuthorizedForUsage: Bool {        
+        return !(purchased.isEmpty && restored.isEmpty)
+    }
 
 	/// Indicates whether there are restorable purchases.
 	fileprivate var hasRestorablePurchases = false
