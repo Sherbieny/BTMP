@@ -1,97 +1,139 @@
 /*
-See LICENSE folder for this sample’s licensing information.
+ See LICENSE folder for this sample’s licensing information.
 
-Abstract:
-A BaseViewController subclass that shows two lists: purchased products and restored ones. When tapping a list item, it calls PaymentTransactionDetails
-to display its purchase information using SKPaymentTransaction.
-*/
+ Abstract:
+ A BaseViewController subclass that shows two lists: purchased products and restored ones. When tapping a list item, it calls PaymentTransactionDetails
+ to display its purchase information using SKPaymentTransaction.
+ */
 
-import UIKit
 import StoreKit
+import UIKit
 
 class Purchases: BaseViewController {
-	// MARK: - Types
+    // MARK: - Properties
 
-	fileprivate struct CellIdentifiers {
-		static let purchase = "purchase"
-	}
+    let vault: Vault = Vault.shared
 
-	fileprivate struct SegueIdentifiers {
-		static let showPaymentTransaction = "showPaymentTransaction"
-	}
+    // MARK: - Types
 
-	// MARK: - UITable​View​Data​Source
+    fileprivate struct CellIdentifiers {
+        static let purchase = "purchase"
+    }
 
-	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		return tableView.dequeueReusableCell(withIdentifier: CellIdentifiers.purchase, for: indexPath)
-	}
+    fileprivate struct SegueIdentifiers {
+        static let showPaymentTransaction = "showPaymentTransaction"
+    }
 
-	// MARK: - UITableViewDelegate
+    // MARK: - UITable​View​Data​Source
 
-	override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-		let section = data[indexPath.section]
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        return tableView.dequeueReusableCell(withIdentifier: CellIdentifiers.purchase, for: indexPath)
+    }
 
-		if let purchases = section.elements  as? [SKPaymentTransaction] {
-			let transaction = purchases[indexPath.row]
-			let title = StoreManager.shared.title(matchingIdentifier: transaction.payment.productIdentifier)
+    // MARK: - UITableViewDelegate
 
-			// Display the product's title associated with the payment's product identifier if it exists or the product identifier, otherwise.
-			cell.textLabel?.text = title ?? transaction.payment.productIdentifier
-		}
-	}
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let section = data[indexPath.section]
+        if let purchases = section.elements as? [SKPaymentTransaction] {
+            let transaction = purchases[indexPath.row]
+            let title = StoreManager.shared.title(matchingIdentifier: transaction.payment.productIdentifier)
 
-	// MARK: - Navigation
+            // Display the product's title associated with the payment's product identifier if it exists or the product identifier, otherwise.
+            cell.textLabel?.text = title ?? transaction.payment.productIdentifier
+        } else if vault.hasPurchasedTransaction() {
+            print("getting it from vault")
+            if let details = vault.getPurchasedProductDetails() {
+                let title = StoreManager.shared.title(matchingIdentifier: details["productIdentifier"] as! String)
 
-	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-		guard let selectedRowIndex = self.tableView.indexPathForSelectedRow else { fatalError("\(Messages.invalidIndexPath)") }
+                cell.textLabel?.text = title ?? details["productIdentifier"] as! String
+            }
+        }
+    }
 
-		guard let transactionDetails = segue.destination as? PaymentTransactionDetails, segue.identifier == SegueIdentifiers.showPaymentTransaction
-			else { fatalError("\(Messages.unknownDestinationViewController)") }
+    // MARK: - Navigation
 
-		guard let purchases = data[selectedRowIndex.section].elements as? [SKPaymentTransaction] else { fatalError("\(Messages.unknownPurchase)") }
-		let paymentTransaction = purchases[selectedRowIndex.row]
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let selectedRowIndex = self.tableView.indexPathForSelectedRow else { fatalError("\(Messages.invalidIndexPath)") }
 
-		#if os (iOS)
-		let paymentTransactionDate = [DateFormatter.short(paymentTransaction.transactionDate!)]
-		#else
-		let paymentTransactionDate = [DateFormatter.long(paymentTransaction.transactionDate!)]
-		#endif
+        guard let transactionDetails = segue.destination as? PaymentTransactionDetails, segue.identifier == SegueIdentifiers.showPaymentTransaction
+        else { fatalError("\(Messages.unknownDestinationViewController)") }
 
-		// Add the product identifier, transaction identifier, and transaction date to purchaseDetails.
-		var purchaseDetails: [Section] = [Section(type: .productIdentifier, elements: [paymentTransaction.payment.productIdentifier]),
-										  Section(type: .transactionIdentifier, elements: [paymentTransaction.transactionIdentifier!]),
-										  Section(type: .transactionDate, elements: paymentTransactionDate)]
+        if let purchases = data[selectedRowIndex.section].elements as? [SKPaymentTransaction] {
+            let paymentTransaction = purchases[selectedRowIndex.row]
 
-		let allDownloads = paymentTransaction.downloads
-		// If this product is hosted, add its first download to purchaseDetails.
-		if !allDownloads.isEmpty {
-			// We are only showing the first download.
-			if let firstDownload = allDownloads.first {
-				let identifier = [DownloadContentLabels.contentIdentifier: firstDownload.contentIdentifier]
-				let version = [DownloadContentLabels.contentVersion: firstDownload.contentVersion]
-				let contentLength = [DownloadContentLabels.contentLength: firstDownload.downloadContentSize]
+            #if os(iOS)
+                let paymentTransactionDate = [DateFormatter.short(paymentTransaction.transactionDate!)]
+            #else
+                let paymentTransactionDate = [DateFormatter.long(paymentTransaction.transactionDate!)]
+            #endif
 
-				// Add the identifier, version, and length of a download to purchaseDetails.
-				purchaseDetails.append(Section(type: .download, elements: [identifier, version, contentLength]))
-			}
-		}
+            // Add the product identifier, transaction identifier, and transaction date to purchaseDetails.
+            var purchaseDetails: [Section] = [Section(type: .productIdentifier, elements: [paymentTransaction.payment.productIdentifier]),
+                                              Section(type: .transactionIdentifier, elements: [paymentTransaction.transactionIdentifier!]),
+                                              Section(type: .transactionDate, elements: paymentTransactionDate)]
 
-		// If the product is a restored one, add its original transaction's transaction identifier and transaction date to purchaseDetails.
-		if let transactionIdentifier = paymentTransaction.original?.transactionIdentifier,
-			let transactionDate = paymentTransaction.original?.transactionDate {
-			let transactionID = [DownloadContentLabels.transactionIdentifier: transactionIdentifier]
+            let allDownloads = paymentTransaction.downloads
+            // If this product is hosted, add its first download to purchaseDetails.
+            if !allDownloads.isEmpty {
+                // We are only showing the first download.
+                if let firstDownload = allDownloads.first {
+                    let identifier = [DownloadContentLabels.contentIdentifier: firstDownload.contentIdentifier]
+                    let version = [DownloadContentLabels.contentVersion: firstDownload.contentVersion]
+                    let contentLength = [DownloadContentLabels.contentLength: firstDownload.downloadContentSize]
 
-			#if os (iOS)
-			let transactionDateValue = [DownloadContentLabels.transactionDate: DateFormatter.short(transactionDate)]
-			#else
-			let transactionDateValue = [DownloadContentLabels.transactionDate: DateFormatter.long(transactionDate)]
-			#endif
+                    // Add the identifier, version, and length of a download to purchaseDetails.
+                    purchaseDetails.append(Section(type: .download, elements: [identifier, version, contentLength]))
+                }
+            }
 
-			purchaseDetails.append(Section(type: .originalTransaction, elements: [transactionID, transactionDateValue]))
-		}
+            // If the product is a restored one, add its original transaction's transaction identifier and transaction date to purchaseDetails.
+            if let transactionIdentifier = paymentTransaction.original?.transactionIdentifier,
+                let transactionDate = paymentTransaction.original?.transactionDate {
+                let transactionID = [DownloadContentLabels.transactionIdentifier: transactionIdentifier]
 
-		transactionDetails.data = purchaseDetails
-		transactionDetails.title = StoreManager.shared.title(matchingPaymentTransaction: paymentTransaction)
-	}
+                #if os(iOS)
+                    let transactionDateValue = [DownloadContentLabels.transactionDate: DateFormatter.short(transactionDate)]
+                #else
+                    let transactionDateValue = [DownloadContentLabels.transactionDate: DateFormatter.long(transactionDate)]
+                #endif
+
+                purchaseDetails.append(Section(type: .originalTransaction, elements: [transactionID, transactionDateValue]))
+            }
+
+            transactionDetails.data = purchaseDetails
+            transactionDetails.title = StoreManager.shared.title(matchingPaymentTransaction: paymentTransaction)
+        } else if vault.hasPurchasedTransaction() {
+            if let purchase = vault.getPurchasedProductDetails() {
+                
+                #if os(iOS)
+                let paymentTransactionDate = [DateFormatter.short(purchase[Vault.PurchaseKeys.transactionDate.rawValue] as! Date)]
+                #else
+                    let paymentTransactionDate = [DateFormatter.short(purchase[Vault.PurchaseKeys.transactionDate.rawValue] as! Date)]
+                #endif
+
+                // Add the product identifier, transaction identifier, and transaction date to purchaseDetails.
+                var purchaseDetails: [Section] = [Section(type: .productIdentifier, elements: [purchase[Vault.PurchaseKeys.productIdentifier.rawValue]!]),
+                                                  Section(type: .transactionIdentifier, elements: [purchase[Vault.PurchaseKeys.transactionIdentifier.rawValue]!]),
+                                                  Section(type: .transactionDate, elements: paymentTransactionDate)]
+                
+                if (purchase.index(forKey: Vault.PurchaseKeys.originalTransactionIdentifier.rawValue) != nil) && (purchase.index(forKey: Vault.PurchaseKeys.originalTransactionDate.rawValue) != nil) {
+                    let transactionID = [DownloadContentLabels.transactionIdentifier: purchase[Vault.PurchaseKeys.originalTransactionIdentifier.rawValue]]
+                    let transactionDate = purchase[Vault.PurchaseKeys.originalTransactionDate.rawValue]
+
+                    #if os(iOS)
+                    let transactionDateValue = [DownloadContentLabels.transactionDate: DateFormatter.short(transactionDate as! Date)]
+                    #else
+                        let transactionDateValue = [DownloadContentLabels.transactionDate: DateFormatter.long(transactionDate as! Date)]
+                    #endif
+
+                    purchaseDetails.append(Section(type: .originalTransaction, elements: [transactionID, transactionDateValue]))
+                }
+                
+                transactionDetails.data = purchaseDetails
+                transactionDetails.title = StoreManager.shared.title(matchingIdentifier: purchase[Vault.PurchaseKeys.productIdentifier.rawValue] as! String)
+            }
+        } else {
+            fatalError("\(Messages.unknownPurchase)")
+        }
+    }
 }
-

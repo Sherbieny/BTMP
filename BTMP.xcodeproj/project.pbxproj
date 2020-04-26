@@ -39,6 +39,7 @@
 		1BA91685242CC8E800656F47 /* WalkthroughViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA91684242CC8E800656F47 /* WalkthroughViewController.swift */; };
 		1BB809E424142CC30046098C /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB809E324142CC30046098C /* SettingsViewController.swift */; };
 		1BB809E7241439620046098C /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB809E6241439620046098C /* Config.swift */; };
+		1BC9B0C2244F691900D1C32F /* Vault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC9B0C1244F691900D1C32F /* Vault.swift */; };
 		1BD64DFA242CE0E500AF893E /* Onboarding.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1BD64DF9242CE0E500AF893E /* Onboarding.storyboard */; };
 		1BFBA56323F3509A007F81F3 /* StartToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFBA56223F3509A007F81F3 /* StartToggleButton.swift */; };
 /* End PBXBuildFile section */
@@ -78,6 +79,7 @@
 		1BA91684242CC8E800656F47 /* WalkthroughViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalkthroughViewController.swift; sourceTree = "<group>"; };
 		1BB809E324142CC30046098C /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		1BB809E6241439620046098C /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		1BC9B0C1244F691900D1C32F /* Vault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vault.swift; sourceTree = "<group>"; };
 		1BD64DF9242CE0E500AF893E /* Onboarding.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Onboarding.storyboard; sourceTree = "<group>"; };
 		1BFBA56223F3509A007F81F3 /* StartToggleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartToggleButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -203,6 +205,7 @@
 				1B93D934242D433D002FB9A4 /* TextProvider.swift */,
 				1B1768E52433CFA0003EE62E /* Permissions.swift */,
 				1BA6EA53243E4EE400A8457D /* Silencer.swift */,
+				1BC9B0C1244F691900D1C32F /* Vault.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -303,6 +306,7 @@
 				1B5BD628244A22270072595B /* Purchases.swift in Sources */,
 				1B5BD62F244A22270072595B /* PaymentTransactionDetails.swift in Sources */,
 				1B5BD631244A22270072595B /* AppProtocols.swift in Sources */,
+				1BC9B0C2244F691900D1C32F /* Vault.swift in Sources */,
 				1BB809E424142CC30046098C /* SettingsViewController.swift in Sources */,
 				1B5BD62C244A22270072595B /* StoreObserver.swift in Sources */,
 				1BA9167C242AA64000656F47 /* OnBoardingView.swift in Sources */,

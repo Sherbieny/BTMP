@@ -17,7 +17,7 @@ class Utilities {
 	// MARK: - Properties
 
 	/// Indicates whether the user has initiated a restore.
-	var restoreWasCalled: Bool
+	var restoreWasCalled: Bool    
 
 	/// - returns: An array that will be used to populate the Purchases view.
 	var dataSourceForPurchasesUI: [Section] {
@@ -32,7 +32,7 @@ class Utilities {
 			dataSource.append(Section(type: .restored, elements: restored))
 		} else if !purchased.isEmpty {
 			dataSource.append(Section(type: .purchased, elements: purchased))
-		}
+        }
 
 		/*
 		Only want to display restored products when the "Restore" button(iOS), "Store > Restore" (macOS), or "Restore all restorable purchases"
