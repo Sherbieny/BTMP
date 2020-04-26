@@ -23,6 +23,8 @@ class SubscriptionViewController: UIViewController {
 
     fileprivate var utility = Utilities()
 
+    fileprivate let vault = Vault.shared
+
     fileprivate lazy var products: Products = {
         let identifier = ViewControllerIdentifiers.products
         guard let controller = storyboard?.instantiateViewController(withIdentifier: identifier) as? Products
@@ -94,10 +96,7 @@ class SubscriptionViewController: UIViewController {
             restoreButton.enable()
 
             let resourceFile = ProductIdentifiers()
-            
-            print("resource file")
-            print(resourceFile)
-            
+
             guard let identifiers = resourceFile.identifiers else {
                 // Warn the user that the resource file could not be found.
                 alert(with: Messages.status, message: resourceFile.wasNotFound)
@@ -108,13 +107,35 @@ class SubscriptionViewController: UIViewController {
                 switchToViewController(segment: .products)
                 // Refresh the UI with identifiers to be queried.
                 products.reload(with: [Section(type: .invalidProductIdentifiers, elements: identifiers)])
-
+                // purchases.reload(with: [Section(type: .productIdentifier, elements: identifiers)])
                 // Fetch product information.
                 StoreManager.shared.startProductRequest(with: identifiers)
             } else {
                 // Warn the user that the resource file does not contain anything.
                 alert(with: Messages.status, message: resourceFile.isEmpty)
             }
+        } else {
+            // Warn the user that they are not allowed to make purchases.
+            alert(with: Messages.status, message: Messages.cannotMakePayments)
+        }
+    }
+
+    /// Retrieves product information from the App Store.
+    fileprivate func fetchPurchaseInformation() {
+        // First, let's check whether the user is allowed to make purchases. Proceed if they are allowed. Display an alert, otherwise.
+        if StoreObserver.shared.isAuthorizedForPayments {
+            restoreButton.enable()
+
+            guard let productId = vault.getPurchasedProductId() else {
+                // Warn the user that the resource file could not be found.
+                alert(with: Messages.status, message: Messages.noPurchasesAvailable)
+                return
+            }
+
+            switchToViewController(segment: .purchases)
+            // Refresh the UI with identifiers to be queried.
+            purchases.reload(with: [Section(type: .purchased, elements: [productId])])                        
+
         } else {
             // Warn the user that they are not allowed to make purchases.
             alert(with: Messages.status, message: Messages.cannotMakePayments)
@@ -141,6 +162,7 @@ class SubscriptionViewController: UIViewController {
 
     /// Called when tapping any segmented control in the UI.
     @IBAction func segmentedControlSelectionDidChange(_ sender: UISegmentedControl) {
+        print("segmentedControlSelectionDidChange called")
         guard let segment = Segment(rawValue: sender.selectedSegmentIndex)
         else { fatalError("\(Messages.unknownSelectedSegmentIndex)\(sender.selectedSegmentIndex)).") }
 
@@ -148,7 +170,7 @@ class SubscriptionViewController: UIViewController {
 
         switch segment {
         case .products: fetchProductInformation()
-        case .purchases: purchases.reload(with: utility.dataSourceForPurchasesUI)
+        case .purchases: fetchPurchaseInformation()
         }
     }
 
