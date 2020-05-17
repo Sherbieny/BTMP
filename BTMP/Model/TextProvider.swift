@@ -40,17 +40,16 @@ public class TextProvider {
 
             strings.append("Please read the following information carefully before using the app. It includes the access permissions needed for the app to work and how the app is used.")
         case 1:
-
-            strings.append("Simply put: it works as if someone is reading you a bedtime story and every now and then they stop and check if you went to sleep, you need to make a sound in order for them to continue.")
+            strings.append("Simply put: it works as if someone is reading you a bedtime story, the app checks on you from time to time to see if you slept or not. It pauses what's playing and wait for you to tell it to resume if you are still awake.")
             strings.append("Note: the following can be viewed again from the settings page.")
             strings.append("Put your phone at the usual place you use when you go to bed.")
-            strings.append("play some media (music, audiobook, podcast, etc...) switch back to this app and press start.")
-            strings.append("keep the app opened and go to bed.")
-            strings.append("after 30 seconds the media will stop (the time can be changed later from settings)")
-            strings.append("now make a sound (a clap, a shout, a cough...)")
-            strings.append("if the sound is loud enough the media will resume.")
-            strings.append("if not, open the settings page, adjust the Listening Sensitivity setting and try again.")
-            strings.append("note that the higher the \"Listening Sensitivity\" the louder you need to be when making a sound.")
+            strings.append("Play some media (music, audiobook, podcast, etc...) then switch back to this app and press start.")
+            strings.append("Keep the app open and go to bed.")
+            strings.append("In 30 seconds the media will stop (the time can be changed later from settings)")
+            strings.append("Now make a sound (eg: a clap, a shout, a cough...)")
+            strings.append("If the sound is loud enough the media will resume.")
+            strings.append("If not, open the settings page, adjust the Listening Sensitivity setting and try again.")
+            strings.append("Note that the lower the \"Listening Sensitivity\" the louder you need to be when making a sound.")
 
             for (index, line) in strings.enumerated() {
                 if index > 1 {

@@ -42,7 +42,7 @@ class WalkthroughContentViewController: UIViewController {
         contentLabel.attributedText = content
     }
 
-    override func viewDidLayoutSubviews() {
-        self.scrollView.contentSize = CGSize(width: self.contentLabel.frame.width, height: self.contentLabel.frame.height + 300)
-    }
+//    override func viewDidLayoutSubviews() {
+//        self.scrollView.contentSize = CGSize(width: self.contentLabel.frame.width, height: self.contentLabel.frame.height + 300)
+//    }
 }

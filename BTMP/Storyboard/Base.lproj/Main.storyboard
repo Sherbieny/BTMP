@@ -84,66 +84,173 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <sections>
-                            <tableViewSection headerTitle="Listening Frequency (in minutes)" footerTitle="determine how often to listen in" id="m4k-jQ-jjd">
+                            <tableViewSection headerTitle="Listening Frequency (in minutes)" id="m4k-jQ-jjd">
                                 <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="Yzk-hg-fTu">
-                                        <rect key="frame" x="0.0" y="55.5" width="320" height="43.5"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="pickerview" rowHeight="100.5" id="Yzk-hg-fTu">
+                                        <rect key="frame" x="0.0" y="55.5" width="320" height="100.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Yzk-hg-fTu" id="pfO-hP-hz0">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="1" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Yzk-hg-fTu" id="pfO-hP-hz0">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="100.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hPR-5D-vV5" userLabel="Listening Frequency">
-                                                    <rect key="frame" x="0.0" y="-86" width="320" height="216"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="276" height="100.5"/>
                                                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="650" id="b2P-08-tuw"/>
+                                                    </constraints>
+                                                    <variation key="default">
+                                                        <mask key="constraints">
+                                                            <exclude reference="b2P-08-tuw"/>
+                                                        </mask>
+                                                    </variation>
+                                                    <variation key="heightClass=regular-widthClass=regular">
+                                                        <mask key="constraints">
+                                                            <include reference="b2P-08-tuw"/>
+                                                        </mask>
+                                                    </variation>
                                                 </pickerView>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoLight" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g7s-cI-S4n">
+                                                    <rect key="frame" x="287" y="38.5" width="25" height="24"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" secondItem="g7s-cI-S4n" secondAttribute="height" multiplier="25:24" id="jUd-PK-Fkp"/>
+                                                    </constraints>
+                                                    <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <connections>
+                                                        <action selector="frequencyInfoButtonClicked:" destination="agc-Xe-FQS" eventType="touchUpInside" id="SW8-gb-Veu"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="hPR-5D-vV5" firstAttribute="centerX" secondItem="pfO-hP-hz0" secondAttribute="centerX" id="Avs-6o-aSu"/>
-                                                <constraint firstItem="hPR-5D-vV5" firstAttribute="centerY" secondItem="pfO-hP-hz0" secondAttribute="centerY" id="EGx-x6-Y2t"/>
+                                                <constraint firstItem="hPR-5D-vV5" firstAttribute="centerY" secondItem="pfO-hP-hz0" secondAttribute="centerY" id="1FE-ak-SzQ"/>
+                                                <constraint firstItem="hPR-5D-vV5" firstAttribute="centerX" secondItem="pfO-hP-hz0" secondAttribute="centerX" constant="-22" id="Avs-6o-aSu"/>
+                                                <constraint firstItem="hPR-5D-vV5" firstAttribute="top" secondItem="pfO-hP-hz0" secondAttribute="top" id="aBl-U0-OlY"/>
+                                                <constraint firstItem="g7s-cI-S4n" firstAttribute="centerY" secondItem="pfO-hP-hz0" secondAttribute="centerY" id="cOe-hj-rfn"/>
+                                                <constraint firstItem="hPR-5D-vV5" firstAttribute="leading" secondItem="pfO-hP-hz0" secondAttribute="leading" id="oB0-2L-H6L"/>
+                                                <constraint firstAttribute="trailing" secondItem="g7s-cI-S4n" secondAttribute="trailing" constant="8" id="obE-BL-o0O"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection headerTitle="Listening Duration (in seconds)" footerTitle="determine how long to listen in each time" id="aPS-T3-aNc">
+                            <tableViewSection headerTitle="Listening Duration (in seconds)" id="aPS-T3-aNc">
                                 <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="sCr-Et-uOJ">
-                                        <rect key="frame" x="0.0" y="174.5" width="320" height="43.5"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="pickerview" rowHeight="100.5" id="sCr-Et-uOJ">
+                                        <rect key="frame" x="0.0" y="212" width="320" height="100.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="sCr-Et-uOJ" id="nA7-8K-Qps">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="1" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="sCr-Et-uOJ" id="nA7-8K-Qps">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="100.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Cbp-hx-bld" userLabel="Listening Duration">
-                                                    <rect key="frame" x="0.0" y="-86" width="320" height="216"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="276" height="100.5"/>
                                                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="650" id="pYm-Kz-Lc0"/>
+                                                    </constraints>
+                                                    <variation key="default">
+                                                        <mask key="constraints">
+                                                            <exclude reference="pYm-Kz-Lc0"/>
+                                                        </mask>
+                                                    </variation>
+                                                    <variation key="heightClass=regular-widthClass=regular">
+                                                        <mask key="constraints">
+                                                            <include reference="pYm-Kz-Lc0"/>
+                                                        </mask>
+                                                    </variation>
                                                 </pickerView>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoLight" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fQw-gn-HbQ">
+                                                    <rect key="frame" x="287" y="38.5" width="25" height="24"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" secondItem="fQw-gn-HbQ" secondAttribute="height" multiplier="25:24" id="AkJ-QP-hCo"/>
+                                                    </constraints>
+                                                    <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <connections>
+                                                        <action selector="durationInfoButtonClicked:" destination="agc-Xe-FQS" eventType="touchUpInside" id="VVF-MX-FUr"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="Cbp-hx-bld" firstAttribute="centerY" secondItem="nA7-8K-Qps" secondAttribute="centerY" id="Anv-gO-WJ6"/>
-                                                <constraint firstItem="Cbp-hx-bld" firstAttribute="centerX" secondItem="nA7-8K-Qps" secondAttribute="centerX" id="PiG-fZ-QEb"/>
+                                                <constraint firstItem="Cbp-hx-bld" firstAttribute="leading" secondItem="nA7-8K-Qps" secondAttribute="leading" id="O9n-zS-0ic"/>
+                                                <constraint firstItem="Cbp-hx-bld" firstAttribute="centerX" secondItem="nA7-8K-Qps" secondAttribute="centerX" constant="-22" id="PiG-fZ-QEb"/>
+                                                <constraint firstAttribute="trailing" secondItem="fQw-gn-HbQ" secondAttribute="trailing" constant="8" id="Xsz-gY-BDn"/>
+                                                <constraint firstItem="Cbp-hx-bld" firstAttribute="leading" secondItem="nA7-8K-Qps" secondAttribute="leading" id="k0g-hi-Ivj"/>
+                                                <constraint firstItem="fQw-gn-HbQ" firstAttribute="centerY" secondItem="nA7-8K-Qps" secondAttribute="centerY" id="mD7-Nt-udg"/>
+                                                <constraint firstItem="Cbp-hx-bld" firstAttribute="top" secondItem="nA7-8K-Qps" secondAttribute="top" id="rZE-EK-KBH"/>
                                             </constraints>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="k0g-hi-Ivj"/>
+                                                </mask>
+                                            </variation>
+                                            <variation key="heightClass=regular-widthClass=regular">
+                                                <mask key="constraints">
+                                                    <include reference="k0g-hi-Ivj"/>
+                                                </mask>
+                                            </variation>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection headerTitle="Listening Senstivity (in decibel)" footerTitle="determine how loud you should be to stop listening (double tap to reset)" id="LUk-mO-uJq">
+                            <tableViewSection headerTitle="Listening Senstivity (in decibel)" id="LUk-mO-uJq">
                                 <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="CWg-aQ-eja">
-                                        <rect key="frame" x="0.0" y="293.5" width="320" height="43.5"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="pickerview" id="CWg-aQ-eja">
+                                        <rect key="frame" x="0.0" y="368.5" width="320" height="43.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="CWg-aQ-eja" id="BG1-nt-LaK">
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="1" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="CWg-aQ-eja" id="BG1-nt-LaK">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" value="50" minValue="20" maxValue="80" translatesAutoresizingMaskIntoConstraints="NO" id="EVA-ny-K6Y" userLabel="Listening Senstivity">
-                                                    <rect key="frame" x="-3" y="7" width="320" height="31"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" value="50" minValue="20" maxValue="80" translatesAutoresizingMaskIntoConstraints="NO" id="EVA-ny-K6Y" userLabel="Listening Senstivity">
+                                                    <rect key="frame" x="-2" y="0.0" width="283" height="45"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="650" id="5QV-Zr-8h7"/>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="650" id="BBt-2r-lhd"/>
+                                                    </constraints>
+                                                    <variation key="default">
+                                                        <mask key="constraints">
+                                                            <exclude reference="5QV-Zr-8h7"/>
+                                                            <exclude reference="BBt-2r-lhd"/>
+                                                        </mask>
+                                                    </variation>
+                                                    <variation key="heightClass=regular-widthClass=regular">
+                                                        <mask key="constraints">
+                                                            <exclude reference="5QV-Zr-8h7"/>
+                                                            <include reference="BBt-2r-lhd"/>
+                                                        </mask>
+                                                    </variation>
                                                 </slider>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoLight" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5ab-d6-bPN">
+                                                    <rect key="frame" x="287" y="10" width="25" height="24"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" secondItem="5ab-d6-bPN" secondAttribute="height" multiplier="25:24" id="6TM-QO-LkY"/>
+                                                    </constraints>
+                                                    <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <connections>
+                                                        <action selector="senstivityInfoButtonClicked:" destination="agc-Xe-FQS" eventType="touchUpInside" id="7KC-Ve-0F7"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
+                                            <constraints>
+                                                <constraint firstItem="EVA-ny-K6Y" firstAttribute="top" secondItem="BG1-nt-LaK" secondAttribute="top" id="0LM-oX-1Eb"/>
+                                                <constraint firstItem="5ab-d6-bPN" firstAttribute="centerY" secondItem="BG1-nt-LaK" secondAttribute="centerY" id="EzU-Jg-sPH"/>
+                                                <constraint firstItem="EVA-ny-K6Y" firstAttribute="leading" secondItem="BG1-nt-LaK" secondAttribute="leading" id="LZk-Vb-aHH"/>
+                                                <constraint firstAttribute="trailing" secondItem="5ab-d6-bPN" secondAttribute="trailing" constant="8" id="Ty8-qI-Bei"/>
+                                                <constraint firstItem="5ab-d6-bPN" firstAttribute="leading" secondItem="EVA-ny-K6Y" secondAttribute="trailing" constant="8" id="b5D-20-jp4"/>
+                                                <constraint firstItem="EVA-ny-K6Y" firstAttribute="leading" secondItem="BG1-nt-LaK" secondAttribute="leading" id="cNw-et-2Ok"/>
+                                                <constraint firstItem="EVA-ny-K6Y" firstAttribute="centerY" secondItem="BG1-nt-LaK" secondAttribute="centerY" id="yrT-Ig-dud"/>
+                                            </constraints>
+                                            <variation key="heightClass=regular-widthClass=regular">
+                                                <mask key="subviews">
+                                                    <include reference="5ab-d6-bPN"/>
+                                                </mask>
+                                                <mask key="constraints">
+                                                    <include reference="Ty8-qI-Bei"/>
+                                                </mask>
+                                            </variation>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </tableViewCell>
@@ -152,7 +259,7 @@
                             <tableViewSection id="SOt-1P-doL" userLabel="Buttons Section">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="E2n-Kg-w7M">
-                                        <rect key="frame" x="0.0" y="401" width="320" height="43.5"/>
+                                        <rect key="frame" x="0.0" y="448" width="320" height="43.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="E2n-Kg-w7M" id="h3D-ov-R8a">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
@@ -249,7 +356,7 @@
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="mTR-AT-HcY">
-                                        <rect key="frame" x="0.0" y="444.5" width="320" height="43.5"/>
+                                        <rect key="frame" x="0.0" y="491.5" width="320" height="43.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="mTR-AT-HcY" id="qWM-Kf-AAp">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
@@ -258,7 +365,7 @@
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="q0x-fe-ZEj">
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                                     <subviews>
-                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="szS-F0-FVY" userLabel="Subscription">
+                                                        <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="szS-F0-FVY" userLabel="Subscription">
                                                             <rect key="frame" x="113" y="7" width="94" height="30"/>
                                                             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <state key="normal" title="Subscriptions">
@@ -346,7 +453,7 @@
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="Civ-4H-Crl">
-                                        <rect key="frame" x="0.0" y="488" width="320" height="43.5"/>
+                                        <rect key="frame" x="0.0" y="535" width="320" height="43.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Civ-4H-Crl" id="TJG-3Z-BBX">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
@@ -368,8 +475,10 @@
                                                     </subviews>
                                                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
+                                                        <constraint firstItem="UwQ-mI-ibi" firstAttribute="centerY" secondItem="JqJ-dq-71e" secondAttribute="centerY" id="AH4-dL-QV4"/>
                                                         <constraint firstItem="UwQ-mI-ibi" firstAttribute="centerY" secondItem="JqJ-dq-71e" secondAttribute="centerY" id="HUD-YO-m05"/>
                                                         <constraint firstItem="UwQ-mI-ibi" firstAttribute="centerX" secondItem="JqJ-dq-71e" secondAttribute="centerX" id="IGr-Yk-isc"/>
+                                                        <constraint firstItem="UwQ-mI-ibi" firstAttribute="centerX" secondItem="JqJ-dq-71e" secondAttribute="centerX" id="OCc-GY-cX0"/>
                                                     </constraints>
                                                     <variation key="default">
                                                         <mask key="constraints">
@@ -386,17 +495,18 @@
                                                 </view>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstAttribute="bottom" secondItem="JqJ-dq-71e" secondAttribute="bottom" id="6pb-bb-FEB"/>
+                                                <constraint firstItem="JqJ-dq-71e" firstAttribute="centerX" secondItem="TJG-3Z-BBX" secondAttribute="centerX" id="Bfh-aa-yUp"/>
                                                 <constraint firstAttribute="bottom" secondItem="JqJ-dq-71e" secondAttribute="bottom" id="LX3-gN-Nfr"/>
+                                                <constraint firstItem="JqJ-dq-71e" firstAttribute="centerY" secondItem="TJG-3Z-BBX" secondAttribute="centerY" id="McR-6P-fr0"/>
                                                 <constraint firstItem="JqJ-dq-71e" firstAttribute="centerX" secondItem="TJG-3Z-BBX" secondAttribute="centerX" id="OHu-Zg-6kb"/>
+                                                <constraint firstItem="JqJ-dq-71e" firstAttribute="leading" secondItem="TJG-3Z-BBX" secondAttribute="leading" id="XTW-fl-lwO"/>
                                                 <constraint firstItem="JqJ-dq-71e" firstAttribute="top" secondItem="TJG-3Z-BBX" secondAttribute="top" id="c31-el-5oH"/>
                                                 <constraint firstItem="JqJ-dq-71e" firstAttribute="centerY" secondItem="TJG-3Z-BBX" secondAttribute="centerY" id="dRz-fO-Sus"/>
                                                 <constraint firstItem="JqJ-dq-71e" firstAttribute="leading" secondItem="TJG-3Z-BBX" secondAttribute="leading" id="ooA-HO-lsZ"/>
                                                 <constraint firstAttribute="trailing" secondItem="JqJ-dq-71e" secondAttribute="trailing" id="wbO-ZU-ElD"/>
                                             </constraints>
                                             <variation key="default">
-                                                <mask key="subviews">
-                                                    <exclude reference="JqJ-dq-71e"/>
-                                                </mask>
                                                 <mask key="constraints">
                                                     <exclude reference="LX3-gN-Nfr"/>
                                                     <exclude reference="OHu-Zg-6kb"/>
@@ -436,13 +546,16 @@
                         <outlet property="ListeningSenstivity" destination="EVA-ny-K6Y" id="3Ie-zb-OAQ"/>
                         <outlet property="TableView" destination="0mW-Kr-iIo" id="hVf-pr-Smz"/>
                         <outlet property="backButton" destination="UwQ-mI-ibi" id="fFE-sf-Sqt"/>
+                        <outlet property="durationInfoButton" destination="fQw-gn-HbQ" id="NC9-zr-d4w"/>
+                        <outlet property="frequencyInfoButton" destination="g7s-cI-S4n" id="3Ze-sx-tdR"/>
+                        <outlet property="senstivityInfoButton" destination="5ab-d6-bPN" id="ems-NP-nfQ"/>
                         <outlet property="subscriptionButton" destination="szS-F0-FVY" id="3t0-AM-S1D"/>
-                        <outlet property="tutorialButton" destination="hv4-Z2-dZ3" id="BON-7Y-Sfb"/>
+                        <outlet property="tutorialButton" destination="hv4-Z2-dZ3" id="M5H-hB-QvZ"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Bgh-Z8-8fj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="933.75" y="79.225352112676063"/>
+            <point key="canvasLocation" x="932.81249999999989" y="78.623718887262072"/>
         </scene>
     </scenes>
 </document>

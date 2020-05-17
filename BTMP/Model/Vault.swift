@@ -201,22 +201,24 @@ open class Vault {
      Check whether the user has a valid subscription
      */
     public func isAutherizedForUse() -> Bool {
-        var isAutherized: Bool = false
-
-        if let expiryDate: String = load(withKey: Keys.expires_date_ms.rawValue) {
-            guard let date = parseDateFromString(from: expiryDate) else {
-                print("Failed to parse date from string")
-                return false
-            }
-            if date > Date() {
-                isAutherized = true
-            }
-
-        } else {
-            print("no receipt expiry date found")
-        }
-
-        return isAutherized
+//        var isAutherized: Bool = false
+//
+//        if let expiryDate: String = load(withKey: Keys.expires_date_ms.rawValue) {
+//            guard let date = parseDateFromString(from: expiryDate) else {
+//                print("Failed to parse date from string")
+//                return false
+//            }
+//            if date > Date() {
+//                isAutherized = true
+//            }
+//
+//        } else {
+//            print("no receipt expiry date found")
+//        }
+//
+//        return isAutherized
+        //For testing phase, always return true
+        return true;
     }
 
     /**

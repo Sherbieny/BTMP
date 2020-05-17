@@ -34,7 +34,7 @@ public class Config {
     let defaultDuration: Int = 20 // in seconds
     let defaultDurationKey: Int = 1 //
 
-    let minimumSoundLevel: Float = 10.0
+    let minimumSoundLevel: Float = 20.0
     let defaultSoundLevel: Float = 50.0
 
     // let storeManager
@@ -55,6 +55,12 @@ public class Config {
     func getListeningFrequencyKey() -> Int {
         return defaults.exists(key: keys.frequencyKey.rawValue) ? defaults.integer(forKey: keys.frequencyKey.rawValue) : defaultFrequencyKey
     }
+    
+    func getMinimumListeningFrequencyKey() -> Int {
+        defaults.set(defaultFrequency, forKey: keys.frequency.rawValue)
+        defaults.set(defaultFrequencyKey, forKey: keys.frequencyKey.rawValue)
+        return defaultFrequencyKey
+    }
 
     func setListeningFrequency(value: Double, key: Int) {
         defaults.set((value > minimumFrequency) ? value : minimumFrequency, forKey: keys.frequency.rawValue)
@@ -72,6 +78,11 @@ public class Config {
         return defaults.exists(key: keys.durationKey.rawValue) ? defaults.integer(forKey: keys.durationKey.rawValue) : defaultDurationKey
     }
 
+    func getDefaultListeningDurationKey() -> Int {
+        defaults.set(defaultDuration, forKey: keys.durationKey.rawValue)
+        return defaultDurationKey
+    }
+
     func setListeningDuration(value: Int, key: Int) {
         defaults.set((value > minimumDuration) ? value : minimumDuration, forKey: keys.duration.rawValue)
         defaults.set(key, forKey: keys.durationKey.rawValue)
@@ -86,6 +97,7 @@ public class Config {
     }
 
     func setSoundLevel(value: Float) {
+        print("setting value = \(value)")
         defaults.set((value > minimumSoundLevel) ? value : minimumSoundLevel, forKey: keys.soundLevel.rawValue)
         // NotificationCenter.default.post(name: .didUserDefaultsChange, object: self)
     }

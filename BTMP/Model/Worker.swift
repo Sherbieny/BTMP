@@ -129,9 +129,11 @@ class Worker: NSObject {
                 print("startTime = \(DispatchTime.now()) end time = \(endTime)")
 
                 print("audio level  == \(self.recorder.audioLevel)")
+                //let x = endTime.rawValue - DispatchTime.now().rawValue
+                //print("time lefft = \(x)")
                 // if silence for the amount of time, user slept, exit
                 if DispatchTime.now() >= endTime {
-                    print("silence......")
+                    print("silence went to sleep....")
                     self.end()
                     print("user went to sleeeeep")
                     return
