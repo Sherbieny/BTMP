@@ -45,6 +45,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1B02E5DE2477309300AD57A2 /* Onboarding.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = Onboarding.mp4; sourceTree = "<group>"; };
 		1B0A98B222478B4400620189 /* Scheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scheduler.swift; sourceTree = "<group>"; };
 		1B1768E52433CFA0003EE62E /* Permissions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Permissions.swift; sourceTree = "<group>"; };
 		1B5BD617244A1DA80072595B /* ProductIds.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = ProductIds.plist; sourceTree = "<group>"; };
@@ -164,6 +165,7 @@
 		1BA6EA50243E4A1900A8457D /* Audio */ = {
 			isa = PBXGroup;
 			children = (
+				1B02E5DE2477309300AD57A2 /* Onboarding.mp4 */,
 				1BA6EA51243E4A3000A8457D /* 10-seconds-of-silence.mp3 */,
 			);
 			path = Audio;
@@ -473,7 +475,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = D3QUYMAYJB;
 				INFOPLIST_FILE = "$(SRCROOT)/BTMP/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.3;
@@ -493,7 +495,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = D3QUYMAYJB;
 				INFOPLIST_FILE = "$(SRCROOT)/BTMP/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.3;
