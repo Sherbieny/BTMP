@@ -7,8 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1B02E5DF24774C8100AD57A2 /* Onboarding.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 1B02E5DE2477309300AD57A2 /* Onboarding.mp4 */; };
 		1B0A98B322478B4400620189 /* Scheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0A98B222478B4400620189 /* Scheduler.swift */; };
 		1B1768E62433CFA0003EE62E /* Permissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B1768E52433CFA0003EE62E /* Permissions.swift */; };
+		1B43760F248926B00097DB61 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B43760E248926B00097DB61 /* StoreKit.framework */; };
 		1B5BD618244A1DA80072595B /* ProductIds.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1B5BD617244A1DA80072595B /* ProductIds.plist */; };
 		1B5BD61A244A1FC50072595B /* Subscriptions.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1B5BD619244A1FC50072595B /* Subscriptions.storyboard */; };
 		1B5BD61C244A21940072595B /* SubscriptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5BD61B244A21940072595B /* SubscriptionViewController.swift */; };
@@ -48,6 +50,7 @@
 		1B02E5DE2477309300AD57A2 /* Onboarding.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = Onboarding.mp4; sourceTree = "<group>"; };
 		1B0A98B222478B4400620189 /* Scheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scheduler.swift; sourceTree = "<group>"; };
 		1B1768E52433CFA0003EE62E /* Permissions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Permissions.swift; sourceTree = "<group>"; };
+		1B43760E248926B00097DB61 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		1B5BD617244A1DA80072595B /* ProductIds.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = ProductIds.plist; sourceTree = "<group>"; };
 		1B5BD619244A1FC50072595B /* Subscriptions.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Subscriptions.storyboard; sourceTree = "<group>"; };
 		1B5BD61B244A21940072595B /* SubscriptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionViewController.swift; sourceTree = "<group>"; };
@@ -90,12 +93,21 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1B43760F248926B00097DB61 /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1B43760D248926B00097DB61 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1B43760E248926B00097DB61 /* StoreKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		1B5BD616244A1D600072595B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -136,6 +148,7 @@
 			children = (
 				1B99790C223E65CD00322398 /* BTMP */,
 				1B99790B223E65CD00322398 /* Products */,
+				1B43760D248926B00097DB61 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -189,8 +202,8 @@
 				1BB809E324142CC30046098C /* SettingsViewController.swift */,
 				1BA9167B242AA64000656F47 /* OnBoardingView.swift */,
 				1BA91682242CBE5C00656F47 /* WalkthroughPageViewController.swift */,
-				1BA91680242CB7AB00656F47 /* WalkthroughContentViewController.swift */,
 				1BA91684242CC8E800656F47 /* WalkthroughViewController.swift */,
+				1BA91680242CB7AB00656F47 /* WalkthroughContentViewController.swift */,
 				1B5BD61B244A21940072595B /* SubscriptionViewController.swift */,
 			);
 			path = Controller;
@@ -284,6 +297,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1B02E5DF24774C8100AD57A2 /* Onboarding.mp4 in Resources */,
 				1B997918223E65CE00322398 /* LaunchScreen.storyboard in Resources */,
 				1B5BD618244A1DA80072595B /* ProductIds.plist in Resources */,
 				1B997915223E65CE00322398 /* Assets.xcassets in Resources */,
@@ -474,8 +488,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = D3QUYMAYJB;
 				INFOPLIST_FILE = "$(SRCROOT)/BTMP/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.3;
@@ -483,8 +498,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sherbieny.btmp;
 				PRODUCT_NAME = BTMP;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -494,8 +511,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = D3QUYMAYJB;
 				INFOPLIST_FILE = "$(SRCROOT)/BTMP/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.3;
@@ -503,8 +521,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sherbieny.btmp;
 				PRODUCT_NAME = BTMP;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

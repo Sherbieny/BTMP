@@ -160,7 +160,7 @@ class SettingsViewController: UITableViewController, UIPickerViewDelegate, UIPic
             alertError(with: "Invalid selection", message: "The Listenting duration must be less than the frequency chosen above, please either increase the frequency or decrease the duration")
             isValid = false
         case 2:
-            alertSubscription(with: "Not Subscribed", message: "Please purchase or restore a subscription from settings page in order to increase the frequency, first month is for free as a trial period")
+            alertSubscription(with: "Not Subscribed", message: "Please purchase a subscription from settings page in order to increase the frequency, the subscription unlocks the frequency for 31 days")
             isValid = false
         default:
             isValid = true
@@ -199,7 +199,9 @@ class SettingsViewController: UITableViewController, UIPickerViewDelegate, UIPic
         let alertController = UIAlertController(title: title, message: message, preferredStyle: alertStyle)
         let okAction = UIAlertAction(title: NSLocalizedString(Messages.okButton, comment: Messages.emptyString),
                                      style: .default, handler: { _ in
-                                         self.ListeningDuration.selectRow(self.config.getDefaultListeningDurationKey(), inComponent: 0, animated: true)
+                                         self.ListeningDuration.selectRow(self.config.defaultDurationKey, inComponent: 0, animated: true)
+                                        self.config.setListeningDuration(value: self.config.defaultDuration, key: self.config.defaultDurationKey)
+                                        self.config.setListeningFrequency(value: self.config.defaultFrequency, key: self.config.defaultFrequencyKey)
         })
         alertController.addAction(okAction)
         present(alertController, animated: true, completion: nil)

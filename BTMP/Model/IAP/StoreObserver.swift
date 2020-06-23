@@ -43,7 +43,7 @@ class StoreObserver: NSObject {
 
     private override init() {
         super.init()
-        vault.validateReceipt()       
+        vault.validateReceipt()
     }
 
     // MARK: - Submit Payment Request

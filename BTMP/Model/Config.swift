@@ -71,6 +71,14 @@ public class Config {
     // MARK: Duration
 
     func getListeningDuration() -> Int {
+        //Check for valid frequency and duration first in case it is not saved properly
+        let savedDuration = defaults.exists(key: keys.duration.rawValue) ? defaults.integer(forKey: keys.duration.rawValue) : defaultDuration
+        let savedFrequency = Int(getListeningFrequency())
+        if savedDuration > savedFrequency {
+            //exchange it and return 20 instead
+            setListeningDuration(value: defaultDuration, key: defaultDurationKey)
+            return defaultDuration
+        }
         return defaults.exists(key: keys.duration.rawValue) ? defaults.integer(forKey: keys.duration.rawValue) : defaultDuration
     }
 

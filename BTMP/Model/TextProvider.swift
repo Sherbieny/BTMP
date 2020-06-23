@@ -85,16 +85,15 @@ public class TextProvider {
             paragraphStyle.alignment = .justified
 
             strings.append("You need to keep the app opened while it is working, locking your phone, pressing the home button or switching to another app will stop the application.")
-            strings.append("This is due to a limitation made by apple preventing apps from accessing the microphone while in the background for security reasons.")
+            strings.append("This is to prevent apps from accessing the microphone while in the background or when the phone is locked for security reasons.")
             strings.append("As long as this app is opened, the phone will not automatically lock after some time.")
             strings.append("But don't worry, once you go to sleep and no sound is detected, the app will stop and the phone will lock automatically.")
         case 5:
             paragraphStyle.alignment = .justified
 
-            strings.append("The app has multiple subscription offers to be able to enjoy it fully.")
-            strings.append("With any kind of subscription you choose, you will get the first MONTH for FREE as a trial period.")
-            strings.append("if you like the app the subscription will autorenew normally after the trial period.")
-            strings.append("you can cancel the subscrition from your normal iTunes settings at anytime.")
+            strings.append("The app offers a non-renewing (31 days) subscription to be able to enjoy it fully.")
+            strings.append("Try out the app without subscribing to be able to see how it works")
+            strings.append("You can cancel the subscrition from your normal iTunes settings at anytime.")
 
         default:
             strings.append("")

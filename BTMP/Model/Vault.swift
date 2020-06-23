@@ -39,7 +39,7 @@ open class Vault {
         case promotional_offer_id
         case subscription_group_identifier
     }
-    
+
     public enum PurchaseKeys: String {
         case transactionDate
         case productIdentifier
@@ -134,12 +134,12 @@ open class Vault {
             print(receipt)
             let productID = receipt.index(forKey: Keys.product_id.rawValue) != nil ? receipt["product_id"] : nil
 
-            if productID != nil && receipt.index(forKey: Keys.expires_date_ms.rawValue) != nil {
-                guard let expiryDate = parseDateFromReceipt(from: receipt, key: Keys.expires_date_ms.rawValue) else {
-                    print("failed to parse expiry date from receipt")
+            if productID != nil && receipt.index(forKey: Keys.purchase_date_ms.rawValue) != nil {
+                guard let purchaseDate = parseDateFromReceipt(from: receipt, key: Keys.purchase_date_ms.rawValue) else {
+                    print("failed to parse purchase date from receipt")
                     return
                 }
-                if expiryDate > Date() {
+                if isPurchaseDateValid(purchaseDate: purchaseDate) {
                     // save date into vault for each product if it is not expired
                     Keys.allCases.forEach { key in
                         if receipt.index(forKey: key.rawValue) != nil {
@@ -173,7 +173,7 @@ open class Vault {
     // MARK: - Helper Functions
 
     /**
-     Get expiry date string from receipt and return Date object
+     Get purchse date string from receipt and return Date object
      */
     private func parseDateFromReceipt(from receiptInfo: Dictionary<String, Any>, key: String) -> Date? {
         guard
@@ -195,34 +195,48 @@ open class Vault {
         return Date(timeIntervalSince1970: requestDateMs / 1000)
     }
 
+    /**
+     get current date plus one month
+     */
+    private func isPurchaseDateValid(purchaseDate: Date) -> Bool {
+        var isValid = false
+        let currentDate = Date()
+        if let difference = Calendar.current.dateComponents([.day], from: purchaseDate, to: currentDate).day {
+            print("difference = \(difference) days")
+            isValid = difference <= 31
+        }
+
+        return isValid
+    }
+
     // MARK: - Public Functions
 
     /**
      Check whether the user has a valid subscription
      */
     public func isAutherizedForUse() -> Bool {
-//        var isAutherized: Bool = false
-//
-//        if let expiryDate: String = load(withKey: Keys.expires_date_ms.rawValue) {
-//            guard let date = parseDateFromString(from: expiryDate) else {
-//                print("Failed to parse date from string")
-//                return false
-//            }
-//            if date > Date() {
-//                isAutherized = true
-//            }
-//
-//        } else {
-//            print("no receipt expiry date found")
-//        }
-//
-//        return isAutherized
-        //For testing phase, always return true
-        return true;
+        var isAutherized: Bool = false
+
+        if let purchaseDate: String = load(withKey: Keys.purchase_date_ms.rawValue) {
+            guard let date = parseDateFromString(from: purchaseDate) else {
+                print("Failed to parse date from string")
+                return false
+            }
+            if isPurchaseDateValid(purchaseDate: date) {
+                isAutherized = true
+            }
+
+        } else {
+            print("no receipt purchase date found")
+        }
+
+        return isAutherized
+        // For testing phase, always return true
+        // return true;
     }
 
     /**
-     get the latest receipt from app store and validate its expiry date
+     get the latest receipt from app store and validate its purchase date
      */
     public func validateReceipt() {
         print("validateReceipt called")
@@ -253,6 +267,10 @@ open class Vault {
                 }.resume()
                 // Read receiptData
             } catch { print("Couldn't read receipt data with error: " + error.localizedDescription) }
+        }else{
+            print("sameer 3anem")
+            print(Bundle.main.appStoreReceiptURL?.path)
+            print(FileManager.default.fileExists(atPath: Bundle.main.appStoreReceiptURL!.path))
         }
     }
 
@@ -264,11 +282,11 @@ open class Vault {
             return nil
         }
         // Create dummy transaction and payment
-        
-        var data = [String:Any]()
-                
+
+        var data = [String: Any]()
+
         data[PurchaseKeys.productIdentifier.rawValue] = productId
-                
+
         guard let transactionId = load(withKey: Keys.transaction_id.rawValue) else {
             return nil
         }
@@ -280,23 +298,21 @@ open class Vault {
         guard let date = parseDateFromString(from: dateString) else {
             return nil
         }
-        
+
         data["transactionDate"] = date
-        
+
         // Add original purchase data if applicable
         if let originalTransactionId = load(withKey: Keys.original_transaction_id.rawValue) {
-            
             if let originalTransactionDate = load(withKey: Keys.original_purchase_date_ms.rawValue), let originalDate = parseDateFromString(from: originalTransactionDate) {
-                
                 data[PurchaseKeys.originalTransactionDate.rawValue] = originalDate
             }
-            
+
             data[PurchaseKeys.originalTransactionIdentifier.rawValue] = originalTransactionId
         }
 
         return data
     }
-    
+
     public func getPurchasedProductId() -> String? {
         return load(withKey: Keys.product_id.rawValue)
     }
