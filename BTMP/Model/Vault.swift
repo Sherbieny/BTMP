@@ -57,6 +57,8 @@ open class Vault {
     #else
         private let verificationUrl = "https://buy.itunes.apple.com/verifyReceipt"
     #endif
+    
+    private let testURL = "https://btmp-server.herokuapp.com/api/receipt"
 
     // MARK: - Init
 
@@ -123,6 +125,7 @@ open class Vault {
     }
 
     private func parseReceipt(_ json: Dictionary<String, Any>) {
+        print(json)
         guard let receipts_array = json["latest_receipt_info"] as? [Dictionary<String, String>] else {
             print("failed to parse receipt")
             return
@@ -246,19 +249,27 @@ open class Vault {
                 print("begin")
                 let receiptData = try Data(contentsOf: appStoreReceiptURL, options: .alwaysMapped)
                 let receiptString = receiptData.base64EncodedString(options: [])
-                let requestData = ["receipt-data": receiptString, "password": "48ce8a9c398e489291db9c4c77108853", "exclude-old-transactions": true] as [String: Any]
-                var request = URLRequest(url: URL(string: verificationUrl)!)
+                let requestData = ["receipt-data": receiptString, "exclude-old-transactions": true] as [String: Any]
+                var request = URLRequest(url: URL(string: testURL)!)
                 request.httpMethod = "POST"
                 request.setValue("Application/json", forHTTPHeaderField: "Content-Type")
                 let httpBody = try? JSONSerialization.data(withJSONObject: requestData, options: [])
                 request.httpBody = httpBody
+                
+                print(request)
 
                 URLSession.shared.dataTask(with: request) { data, _, error in
                     DispatchQueue.main.async {
                         if data != nil {
+                            print("data received from localhost")
+                            print(data ?? "zobry")
                             if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) {
-                                self.parseReceipt(json as! Dictionary<String, Any>)
+                                print("json done")
+                               
+                                //self.parseReceipt(json as! Dictionary<String, Any>)
                                 return
+                            }else{
+                                print("json failed")
                             }
                         } else {
                             print("error validating receipt: \(error?.localizedDescription ?? "")")
