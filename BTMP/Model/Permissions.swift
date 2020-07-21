@@ -7,6 +7,7 @@
 //
 
 import AVFoundation
+import CloudKit
 import Foundation
 import MediaPlayer
 
@@ -15,6 +16,7 @@ class Permissions {
 
     let microphonePermissionStatus = AVCaptureDevice.authorizationStatus(for: .audio)
     let musicLibraryPermissionStatus = MPMediaLibrary.authorizationStatus()
+    let vault: Vault = Vault.shared
 
     // MARK: - Functions
 
@@ -28,5 +30,23 @@ class Permissions {
         if musicLibraryPermissionStatus != .authorized {
             MPMediaLibrary.requestAuthorization { _ in }
         }
+    }
+
+    func requestiCloudAccess() {
+        print("request icloud")
+        CKContainer.default().requestApplicationPermission(.userDiscoverability) { status, _ in
+            if status == .denied {
+                print("denied")
+                self.vault.saveDeniedAccess()
+            }
+            if status == .granted {
+                print("granted")
+                self.vault.saveGrantAccess()
+            }
+        }
+    }
+    
+    func isCloudGranted() -> Bool {
+        return !vault.isCloudDenied()
     }
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
@@ -55,18 +55,44 @@
                                     <segue destination="agc-Xe-FQS" kind="show" id="aXl-ID-UYe"/>
                                 </connections>
                             </button>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b73-lq-zgU" userLabel="RemainingDaysButton">
+                                <rect key="frame" x="145" y="58" width="30" height="30"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                        <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                        <real key="value" value="2"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="showRemainingDaysInfo:" destination="BYZ-38-t0r" eventType="touchUpInside" id="FiY-Wh-BK5"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <color key="tintColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                         <constraints>
                             <constraint firstItem="n01-Yy-HgL" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="207" id="6FN-3y-bXf"/>
+                            <constraint firstItem="b73-lq-zgU" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="A3W-uG-7qR"/>
+                            <constraint firstItem="b73-lq-zgU" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="58" id="LZF-5T-4U4"/>
                             <constraint firstItem="yM1-Vs-rR4" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="YBp-Sz-e2X"/>
                             <constraint firstItem="n01-Yy-HgL" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="fR3-6d-Zgm"/>
                             <constraint firstItem="yM1-Vs-rR4" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="tT7-qx-SEo"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <variation key="heightClass=regular-widthClass=compact">
+                            <mask key="constraints">
+                                <include reference="LZF-5T-4U4"/>
+                            </mask>
+                        </variation>
                     </view>
                     <connections>
+                        <outlet property="remainingDaysButton" destination="b73-lq-zgU" id="zYj-1s-RWN"/>
                         <outlet property="settingsButton" destination="n01-Yy-HgL" id="f2R-eZ-Vxt"/>
                         <outlet property="startButton" destination="yM1-Vs-rR4" id="Yz1-cZ-T3n"/>
                     </connections>
@@ -124,11 +150,24 @@
                                             <constraints>
                                                 <constraint firstItem="hPR-5D-vV5" firstAttribute="centerY" secondItem="pfO-hP-hz0" secondAttribute="centerY" id="1FE-ak-SzQ"/>
                                                 <constraint firstItem="hPR-5D-vV5" firstAttribute="centerX" secondItem="pfO-hP-hz0" secondAttribute="centerX" constant="-22" id="Avs-6o-aSu"/>
+                                                <constraint firstItem="g7s-cI-S4n" firstAttribute="trailing" secondItem="pfO-hP-hz0" secondAttribute="trailingMargin" constant="8" id="PxC-PA-Aix"/>
                                                 <constraint firstItem="hPR-5D-vV5" firstAttribute="top" secondItem="pfO-hP-hz0" secondAttribute="top" id="aBl-U0-OlY"/>
                                                 <constraint firstItem="g7s-cI-S4n" firstAttribute="centerY" secondItem="pfO-hP-hz0" secondAttribute="centerY" id="cOe-hj-rfn"/>
                                                 <constraint firstItem="hPR-5D-vV5" firstAttribute="leading" secondItem="pfO-hP-hz0" secondAttribute="leading" id="oB0-2L-H6L"/>
-                                                <constraint firstAttribute="trailing" secondItem="g7s-cI-S4n" secondAttribute="trailing" constant="8" id="obE-BL-o0O"/>
+                                                <constraint firstAttribute="trailing" secondItem="g7s-cI-S4n" secondAttribute="trailing" constant="8" id="obE-BL-o0O">
+                                                    <variation key="heightClass=regular-widthClass=regular" constant="8"/>
+                                                </constraint>
                                             </constraints>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="PxC-PA-Aix"/>
+                                                </mask>
+                                            </variation>
+                                            <variation key="heightClass=regular-widthClass=regular">
+                                                <mask key="constraints">
+                                                    <include reference="PxC-PA-Aix"/>
+                                                </mask>
+                                            </variation>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </tableViewCell>
@@ -160,8 +199,8 @@
                                                         </mask>
                                                     </variation>
                                                 </pickerView>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoLight" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fQw-gn-HbQ">
-                                                    <rect key="frame" x="287" y="38.5" width="25" height="24"/>
+                                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoLight" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fQw-gn-HbQ">
+                                                    <rect key="frame" x="678" y="38" width="25" height="24"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" secondItem="fQw-gn-HbQ" secondAttribute="height" multiplier="25:24" id="AkJ-QP-hCo"/>
                                                     </constraints>
@@ -175,6 +214,7 @@
                                                 <constraint firstItem="Cbp-hx-bld" firstAttribute="centerY" secondItem="nA7-8K-Qps" secondAttribute="centerY" id="Anv-gO-WJ6"/>
                                                 <constraint firstItem="Cbp-hx-bld" firstAttribute="leading" secondItem="nA7-8K-Qps" secondAttribute="leading" id="O9n-zS-0ic"/>
                                                 <constraint firstItem="Cbp-hx-bld" firstAttribute="centerX" secondItem="nA7-8K-Qps" secondAttribute="centerX" constant="-22" id="PiG-fZ-QEb"/>
+                                                <constraint firstAttribute="trailing" secondItem="fQw-gn-HbQ" secondAttribute="trailing" constant="8" id="W8D-Ud-1o5"/>
                                                 <constraint firstAttribute="trailing" secondItem="fQw-gn-HbQ" secondAttribute="trailing" constant="8" id="Xsz-gY-BDn"/>
                                                 <constraint firstItem="Cbp-hx-bld" firstAttribute="leading" secondItem="nA7-8K-Qps" secondAttribute="leading" id="k0g-hi-Ivj"/>
                                                 <constraint firstItem="fQw-gn-HbQ" firstAttribute="centerY" secondItem="nA7-8K-Qps" secondAttribute="centerY" id="mD7-Nt-udg"/>
@@ -183,11 +223,13 @@
                                             <variation key="default">
                                                 <mask key="constraints">
                                                     <exclude reference="k0g-hi-Ivj"/>
+                                                    <exclude reference="W8D-Ud-1o5"/>
                                                 </mask>
                                             </variation>
                                             <variation key="heightClass=regular-widthClass=regular">
                                                 <mask key="constraints">
                                                     <include reference="k0g-hi-Ivj"/>
+                                                    <include reference="W8D-Ud-1o5"/>
                                                 </mask>
                                             </variation>
                                         </tableViewCellContentView>

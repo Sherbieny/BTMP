@@ -36,9 +36,9 @@ class WalkthroughViewController: UIViewController, walkthroughPageViewController
     @IBAction func nextButtonTapped(sender: UIButton) {
         if let index = walkthroughPageViewController?.currentIndex {
             switch index {
-            case 0 ... 4:
+            case 0 ... 5:
                 walkthroughPageViewController?.forwardPage()
-            case 5:
+            case 6:
                 dismiss(animated: true, completion: nil)
                 config.setUserFinisOnboarding()
             default:
@@ -58,6 +58,10 @@ class WalkthroughViewController: UIViewController, walkthroughPageViewController
             // Request Music Library access
             if index == 3 {
                 permissions.requestMusicLibraryAccess()
+            }
+            // Request iCloud access
+            if index == 4 {
+                permissions.requestiCloudAccess()
             }
         }
     }
@@ -86,13 +90,19 @@ class WalkthroughViewController: UIViewController, walkthroughPageViewController
                 nextButton.isEnabled = true
                 actionButton.setTitle("Grant Access", for: .normal)
                 actionButton.isHidden = permissions.musicLibraryPermissionStatus == .authorized
-            // Screen page
+            // iCloud page
             case 4:
+                nextButton.setTitle("Next", for: .normal)
+                nextButton.isEnabled = true
+                actionButton.setTitle("Grant Access", for: .normal)
+                actionButton.isHidden = permissions.isCloudGranted()
+            // Screen page
+            case 5:
                 nextButton.setTitle("Next", for: .normal)
                 nextButton.isEnabled = true
                 actionButton.isHidden = true
             // Subscription page
-            case 5:
+            case 6:
                 nextButton.setTitle("Get Started", for: .normal)
                 actionButton.isHidden = true
             default:

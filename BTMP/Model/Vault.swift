@@ -7,6 +7,7 @@
 //  Copyright (c) 2017 dagostini <dejan.agostini@gmail.com>
 //
 
+import CloudKit
 import Foundation
 import StoreKit
 import UIKit
@@ -15,54 +16,43 @@ open class Vault {
     // MARK: - Properties
 
     private enum Keys: String, CaseIterable {
-        case is_in_intro_offer_period
-        case expires_date
-        case original_transaction_id
-        case original_purchase_date_pst
-        case is_trial_period
-        case quantity
-        case purchase_date_pst
-        case expires_date_pst
-        case web_order_line_item_id
-        case product_id
-        case original_purchase_date_ms
-        case purchase_date
-        case transaction_id
-        case purchase_date_ms
-        case original_purchase_date
-        case expires_date_ms
-        case cancellation_date
-        case cancellation_date_ms
-        case cancellation_date_pst
-        case cancellation_reason
-        case is_upgraded
-        case promotional_offer_id
-        case subscription_group_identifier
+        case is_active
+        case expiry_date
+        case remaining_days
     }
 
-    public enum PurchaseKeys: String {
-        case transactionDate
-        case productIdentifier
-        case transactionIdentifier
-        case originalTransactionIdentifier
-        case originalTransactionDate
-    }
+    private let iCloudKey = "icloud_denied"
 
     public static let shared = Vault()
 
     private let deviceId = UIDevice.current.identifierForVendor
 
+    private static var userId: String?
+
+    private let config: Config = Config()
+
     #if DEBUG
-        private let verificationUrl = "https://sandbox.itunes.apple.com/verifyReceipt"
+        private let debugFlag = true
     #else
-        private let verificationUrl = "https://buy.itunes.apple.com/verifyReceipt"
+        private let debugFlag = false
     #endif
-    
-    private let testURL = "https://btmp-server.herokuapp.com/api/receipt"
+
+    private let serverUrl = "https://btmp-server.herokuapp.com/api/receipt"
+    private let timeUrl = "https://btmp-server.herokuapp.com/api/time"
+    private let expiryDateUrl = "https://btmp-server.herokuapp.com/api/expirydate"
+    private let errorUrl = "https://btmp-server.herokuapp.com/api/error"
+
+    public var isAutherized: Bool = false
 
     // MARK: - Init
 
-    private init() {}
+    private init() {
+        isAutherizedForUse { isAuth in
+            print("is autherized called in init")
+            self.isAutherized = isAuth
+            print("is autherized done in init")
+        }
+    }
 
 //    open subscript(key: String) -> String? {
 //        get {
@@ -74,7 +64,7 @@ open class Vault {
 //        }
 //    }
 
-    // MARK: - Private Functions
+    // MARK: - Keychain Functions
 
     private func load(withKey key: String) -> String? {
         let query = keychainQuery(withKey: key)
@@ -125,211 +115,524 @@ open class Vault {
     }
 
     private func parseReceipt(_ json: Dictionary<String, Any>) {
+        print("checking receipts")
         print(json)
-        guard let receipts_array = json["latest_receipt_info"] as? [Dictionary<String, String>] else {
-            print("failed to parse receipt")
-            return
+        Keys.allCases.forEach { key in
+            if json.index(forKey: key.rawValue) != nil {
+                let value = "\(json[key.rawValue]!)"
+                save(value, forKey: key.rawValue)
+                print("saved value \(value) for key \(key.rawValue)")
+            } else {
+                print("Notice: key \(key.rawValue) not found in response")
+            }
         }
 
-        print("receipts count = \(receipts_array.count)")
-        for receipt in receipts_array {
-            print("checking receipts")
-            print(receipt)
-            let productID = receipt.index(forKey: Keys.product_id.rawValue) != nil ? receipt["product_id"] : nil
+        // update isValid values
+        isAutherizedForUse { isAuth in
+            print("is autherized called in init")
+            self.isAutherized = isAuth
+            print("is autherized done in init")
+        }
+    }
 
-            if productID != nil && receipt.index(forKey: Keys.purchase_date_ms.rawValue) != nil {
-                guard let purchaseDate = parseDateFromReceipt(from: receipt, key: Keys.purchase_date_ms.rawValue) else {
-                    print("failed to parse purchase date from receipt")
-                    return
-                }
-                if isPurchaseDateValid(purchaseDate: purchaseDate) {
-                    // save date into vault for each product if it is not expired
-                    Keys.allCases.forEach { key in
-                        if receipt.index(forKey: key.rawValue) != nil {
-                            let value = receipt[key.rawValue]!
-                            save(value, forKey: key.rawValue)
-                            print("saved value \(value) for key \(key.rawValue)")
-                        } else {
-                            print("Notice: key \(key.rawValue) not found in receipt")
-                        }
-                    }
-                } else {
-                    print("subscription for product \(String(describing: productID)) expired")
-                    // clear saved receipt
-                    Keys.allCases.forEach { key in
-                        save(nil, forKey: key.rawValue)
-                        print("deleted for key \(key.rawValue)")
-                    }
-                }
+    private func updateExpiryDate(_ date: String) {
+        save(date, forKey: Keys.expiry_date.rawValue)
+    }
 
-            } else {
-                print("Error: corrupted receipt found")
-                // clear saved receipt
-                Keys.allCases.forEach { key in
-                    save(nil, forKey: key.rawValue)
-                    print("deleted for key \(key.rawValue)")
-                }
-            }
+    /**
+     invalidate purchase
+     */
+    private func invalidatePurchase() {
+        print("removing purchase from device")
+        Keys.allCases.forEach { key in
+            save(nil, forKey: key.rawValue)
         }
     }
 
     // MARK: - Helper Functions
 
     /**
-     Get purchse date string from receipt and return Date object
+     make custom error
      */
-    private func parseDateFromReceipt(from receiptInfo: Dictionary<String, Any>, key: String) -> Date? {
-        guard
-            let requestDateString = receiptInfo[key] as? String,
-            let requestDateMs = Double(requestDateString) else {
-            return nil
-        }
-        return Date(timeIntervalSince1970: requestDateMs / 1000)
+    private func getError(msg message: String) -> NSError {
+        return NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: message])
+    }
+
+    /**
+     Make HTTP request
+     */
+    private func httpRequest(with request: URLRequest, completion: @escaping (_ response: Dictionary<String, Any>?) -> Void) {
+        URLSession.shared.dataTask(with: request) { data, _, error in
+            DispatchQueue.main.async {
+                if data != nil {
+                    print("data received from server")
+                    if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? Dictionary<String, Any> {
+                        print("Http request success - returning Dictionary")
+                        completion(json)
+                        return
+
+                    } else {
+                        print("Failed to parse json response")
+                        completion(nil)
+                        return
+                    }
+                } else {
+                    print("error making HTTP request: \(error?.localizedDescription ?? "")")
+                    completion(nil)
+                    return
+                }
+            }
+        }.resume()
     }
 
     /**
      parse date string and return Date object
      */
     private func parseDateFromString(from requestDateString: String) -> Date? {
-        guard
-            let requestDateMs = Double(requestDateString) else {
+        let dateFormatter = ISO8601DateFormatter()
+        guard let date = dateFormatter.date(from: requestDateString) else {
             return nil
         }
-        return Date(timeIntervalSince1970: requestDateMs / 1000)
+
+        return date
     }
+
+    /**
+     get server date and time
+     */
+    private func getTime(completion: @escaping (_ time: Date?) -> Void) {
+        print("getting time")
+        var request = URLRequest(url: URL(string: timeUrl)!)
+        request.httpMethod = "GET"
+        request.setValue("Application/json", forHTTPHeaderField: "Content-Type")
+
+        httpRequest(with: request) { response in
+            if let data = response {
+                if data.index(forKey: "time") != nil {
+                    if let timeString: String = data["time"] as? String {
+                        print("get time successfull - returnin time")
+                        completion(self.parseDateFromString(from: timeString))
+                        return
+                    } else {
+                        print("getTime responded with corrupted data")
+                        completion(nil)
+                        return
+                    }
+
+                } else {
+                    print("getTime responded with no time data")
+                    completion(nil)
+                    return
+                }
+            } else {
+                print("Failed to get time - bad response")
+                completion(nil)
+            }
+        }
+    }
+
+    /**
+     Get logged in iCloud user id (record name)
+     */
+    private func getUserId(completion: @escaping (_ userId: String?) -> Void) {
+        print("getUserId called")
+
+        // check if user denied access
+        if isCloudDenied() {
+            completion(nil)
+            return
+        }
+
+        if Vault.userId == nil {
+            print("getting user ID fresh")
+            CKContainer.default().requestApplicationPermission(.userDiscoverability) { status, error in
+                if error == nil {
+                    if status == .granted {
+                        CKContainer.default().fetchUserRecordID { recordId, _ in
+                            if recordId?.recordName != nil {
+                                print("user id found - assigning to static")
+                                Vault.self.userId = recordId?.recordName
+                                completion(recordId?.recordName)
+                                return
+                            } else {
+                                print("username not found")
+                                completion(nil)
+                                return
+                            }
+                        }
+                    } else if status == .denied {
+                        self.saveDeniedAccess()
+                        completion(nil)
+                        return
+                    } else {
+                        print("issue getting permission")
+                        completion(nil)
+                        return
+                    }
+                } else {
+                    print("error requesting record name permission")
+                    print(error?.localizedDescription ?? "unkniewn error")
+                    completion(nil)
+                    return
+                }
+            }
+        } else {
+            print("user id already loaded")
+            completion(Vault.userId)
+            return
+        }
+    }
+
+    private func getExpiryDateFromDevice() -> Date? {
+        if let expiryDate: String = load(withKey: Keys.expiry_date.rawValue) {
+            guard let date = parseDateFromString(from: expiryDate) else {
+                print("Failed to parse date from string")
+                return nil
+            }
+            print("expiry date from device")
+            return date
+        } else {
+            print("no receipt purchase date found")
+            return nil
+        }
+    }
+
+    /**
+     Get expiry date from device or server if possible
+     */
+    private func getExpiryDate(completion: @escaping (_ expiryDate: Date?) -> Void) {
+        // first check if user has an icloud id and you have access
+        getUserId { userId in
+            if let userId = userId {
+                print("user id retrieved - getting expiry date from server if it exists")
+                var request = URLRequest(url: URL(string: self.expiryDateUrl)!)
+                request.httpMethod = "POST"
+                request.setValue("Application/json", forHTTPHeaderField: "Content-Type")
+                let requestData = ["id": userId]
+                let httpBody = try? JSONSerialization.data(withJSONObject: requestData, options: [])
+                request.httpBody = httpBody
+                self.httpRequest(with: request) { response in
+                    if let data = response {
+                        if data.index(forKey: "expiry_date") != nil {
+                            if let dateString = data["expiry_date"] as? String {
+                                print("expiry date from server \(dateString)")
+                                // save new date into device
+                                self.updateExpiryDate(dateString)
+                                if let date = self.parseDateFromString(from: dateString) {
+                                    completion(date)
+                                    return
+                                } else {
+                                    print("Failed to parse date from string")
+                                    completion(self.getExpiryDateFromDevice())
+                                    return
+                                }
+                            } else {
+                                print("Failed to get date string from response")
+                                completion(self.getExpiryDateFromDevice())
+                                return
+                            }
+                        } else {
+                            print("response has no expiry_date in it")
+                            completion(self.getExpiryDateFromDevice())
+                            return
+                        }
+                    } else {
+                        print("getExpiryDate responded with bad data")
+                        completion(self.getExpiryDateFromDevice())
+                        return
+                    }
+                }
+            } else {
+                print("No user ID found - checking device")
+                completion(self.getExpiryDateFromDevice())
+                return
+            }
+        }
+    }
+
+    // MARK: - Receipt Functions
 
     /**
      get current date plus one month
      */
-    private func isPurchaseDateValid(purchaseDate: Date) -> Bool {
-        var isValid = false
-        let currentDate = Date()
-        if let difference = Calendar.current.dateComponents([.day], from: purchaseDate, to: currentDate).day {
-            print("difference = \(difference) days")
-            isValid = difference <= 31
+    private func isPurchaseDateValid(expiryDate: Date, completion: @escaping (_ isValid: Bool) -> Void) {
+        getTime { currentDate in
+            if let currentDate = currentDate {
+                print("time retrieved from server")
+                if let remainingDays = Calendar.current.dateComponents([.day], from: currentDate, to: expiryDate).day {
+                    print("difference = \(remainingDays) days")
+                    self.save("\(remainingDays)", forKey: Keys.remaining_days.rawValue)
+                    if remainingDays <= 0 {
+                        self.save("0", forKey: Keys.is_active.rawValue)
+                        completion(false)
+                    } else {
+                        self.save("1", forKey: Keys.is_active.rawValue)
+                        completion(true)
+                    }
+                    return
+                } else {
+                    self.invalidatePurchase()
+                    completion(false)
+                    return
+                }
+            } else {
+                print("time retrieved from device")
+                let currentDate = Date()
+                if let remainingDays = Calendar.current.dateComponents([.day], from: currentDate, to: expiryDate).day {
+                    print("difference = \(remainingDays) days")
+                    self.save("\(remainingDays)", forKey: Keys.remaining_days.rawValue)
+                    if remainingDays <= 0 {
+                        self.save("0", forKey: Keys.is_active.rawValue)
+                        completion(false)
+                    } else {
+                        self.save("1", forKey: Keys.is_active.rawValue)
+                        completion(true)
+                    }
+                    return
+                } else {
+                    self.invalidatePurchase()
+                    completion(false)
+                    return
+                }
+            }
+        }
+    }
+
+    /**
+     Get user latest purchase receipt if it exists
+     */
+    private func getReceipt() -> String? {
+        
+        // bad case filters
+        if Bundle.main.appStoreReceiptURL == nil {
+            print("app store receipt URL path is nil")
+            return nil
+        }
+        if FileManager.default.fileExists(atPath: Bundle.main.appStoreReceiptURL!.path) == false {
+            print("app store receipt URL path not found on device")
+            return nil
+        }
+        let appStoreReceiptURL = Bundle.main.appStoreReceiptURL
+        do {
+            let receiptData = try Data(contentsOf: appStoreReceiptURL!, options: .alwaysMapped)
+            let receiptString = receiptData.base64EncodedString(options: [])
+            return receiptString
+        } catch {
+            print("failed to get data from receipt \(error.localizedDescription)")
+            return nil
+        }
+    }
+
+    /**
+     Send to server a notification that the app store receipt url was not found
+     */
+    private func reportStoreReceiptError(successfull: Bool) {
+        getUserId { userId in
+            if let userId = userId {
+                var request = URLRequest(url: URL(string: self.errorUrl)!)
+                request.httpMethod = "POST"
+                request.setValue("Application/json", forHTTPHeaderField: "Content-Type")
+                var requestData = ["id": userId, "url": "appStoreReceiptURL is null"]
+                if Bundle.main.appStoreReceiptURL != nil {
+                    requestData = ["id": userId, "url": Bundle.main.appStoreReceiptURL!.path]
+                }
+
+                let httpBody = try? JSONSerialization.data(withJSONObject: requestData, options: [])
+                request.httpBody = httpBody
+                self.httpRequest(with: request) { response in
+                    if response != nil {
+                        print("Email sent to admin notifying receipt url failure")
+                    }
+                }
+            } else {
+                var request = URLRequest(url: URL(string: self.errorUrl)!)
+                request.httpMethod = "POST"
+                request.setValue("Application/json", forHTTPHeaderField: "Content-Type")
+                let requestData = ["id": "none"]
+                let httpBody = try? JSONSerialization.data(withJSONObject: requestData, options: [])
+                request.httpBody = httpBody
+                self.httpRequest(with: request) { response in
+                    if response != nil {
+                        print("Email sent to admin notifying receipt url failure")
+                    }
+                }
+            }
         }
 
-        return isValid
+        // Save purchase localy on device
+        if successfull {
+            saveLocalReceipt()
+        }
+    }
+
+    /**
+     Save successfull purchase if validation failed for any reason
+     */
+    private func saveLocalReceipt() {
+        var dayComponent = DateComponents()
+        dayComponent.day = 31
+        let formatter: DateFormatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
+        let calendar = Calendar.current
+        guard let expiryDate = calendar.date(byAdding: dayComponent, to: Date()) else {
+            print("Failed to create expiry date")
+            return
+        }
+        let remainingDays = "31"
+        let isActive = "1"
+
+        save(formatter.string(from: expiryDate), forKey: Keys.expiry_date.rawValue)
+        save(isActive, forKey: Keys.is_active.rawValue)
+        save(remainingDays, forKey: Keys.remaining_days.rawValue)
     }
 
     // MARK: - Public Functions
 
     /**
-     Check whether the user has a valid subscription
+     If user denied iCloud account access, do no ask again
      */
-    public func isAutherizedForUse() -> Bool {
-        var isAutherized: Bool = false
+    public func saveDeniedAccess() {
+        save("1", forKey: iCloudKey)
+    }
 
-        if let purchaseDate: String = load(withKey: Keys.purchase_date_ms.rawValue) {
-            guard let date = parseDateFromString(from: purchaseDate) else {
-                print("Failed to parse date from string")
-                return false
-            }
-            if isPurchaseDateValid(purchaseDate: date) {
-                isAutherized = true
-            }
+    /**
+     If user changed his mind, remove iCloud access lock
+     */
+    public func saveGrantAccess() {
+        save(nil, forKey: iCloudKey)
+    }
 
-        } else {
-            print("no receipt purchase date found")
+    /**
+     Check if user denied iCloud access
+     */
+    public func isCloudDenied() -> Bool {
+        return load(withKey: iCloudKey) != nil
+    }
+
+    /**
+     Check if it should show the subscription notification
+     */
+    public func showRemainingDays() -> Bool {
+        guard let remainingDays: String = load(withKey: Keys.remaining_days.rawValue) else {
+            print("remaining days not found")
+            return false
+        }
+        if let remainingInt = Int(remainingDays) {
+            print("remaining days into int")
+            print(remainingInt)
+            return (remainingInt < 11)
         }
 
-        return isAutherized
-        // For testing phase, always return true
-        // return true;
+        return false
+    }
+
+    /**
+     Get remaining days on subscription
+     */
+    public func getRemainingDays() -> String? {
+        print("getting remaining days")
+        guard let remainingDays: String = load(withKey: Keys.remaining_days.rawValue) else {
+            print("remaining days not found")
+            return nil
+        }
+        return remainingDays
+    }
+
+    /**
+     Check whether the user has a valid subscription
+     */
+    public func isAutherizedForUse(completion: @escaping (_ isAutherized: Bool) -> Void) {
+        // Check first if user finished onboarding, to prevent asking for permission before the iCloud page
+        if !config.didUserFinishOnboarding() {
+            completion(false)
+            return
+        }
+
+        // Check on device first to reduce processing time when app start and update device variables in background
+        // so next time it would be invalid if subscription was over
+        if let isActive: String = load(withKey: Keys.is_active.rawValue) {
+            print("local is active string \(isActive == "1")")
+            completion(isActive == "1")
+        } else {
+            // if no value is found - retry receipt validation
+            validateReceipt(successfull: false) { success in
+                if success {
+                    if let isActive: String = self.load(withKey: Keys.is_active.rawValue) {
+                        print("server is active string \(isActive == "1")")
+                        completion(isActive == "1")
+                    }
+                }
+            }
+        }
+
+        print("continuing to expiry date")
+        getExpiryDate { date in
+            if let date = date {
+                self.isPurchaseDateValid(expiryDate: date) { isValid in
+                    print("expiry date found - returning is valid")
+                    completion(isValid)
+                }
+            } else {
+                print("expiry date return no date")
+                self.invalidatePurchase()
+                completion(false)
+            }
+        }
     }
 
     /**
      get the latest receipt from app store and validate its purchase date
      */
-    public func validateReceipt() {
+    public func validateReceipt(successfull: Bool, completion: @escaping (_ success: Bool) -> Void) {
         print("validateReceipt called")
-        if let appStoreReceiptURL = Bundle.main.appStoreReceiptURL,
-            FileManager.default.fileExists(atPath: appStoreReceiptURL.path) {
-            do {
-                print("begin")
-                let receiptData = try Data(contentsOf: appStoreReceiptURL, options: .alwaysMapped)
-                let receiptString = receiptData.base64EncodedString(options: [])
-                let requestData = ["receipt-data": receiptString, "exclude-old-transactions": true] as [String: Any]
-                var request = URLRequest(url: URL(string: testURL)!)
-                request.httpMethod = "POST"
-                request.setValue("Application/json", forHTTPHeaderField: "Content-Type")
-                let httpBody = try? JSONSerialization.data(withJSONObject: requestData, options: [])
-                request.httpBody = httpBody
-                
-                print(request)
 
-                URLSession.shared.dataTask(with: request) { data, _, error in
-                    DispatchQueue.main.async {
-                        if data != nil {
-                            print("data received from localhost")
-                            print(data ?? "zobry")
-                            if let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) {
-                                print("json done")
-                               
-                                //self.parseReceipt(json as! Dictionary<String, Any>)
-                                return
-                            }else{
-                                print("json failed")
-                            }
-                        } else {
-                            print("error validating receipt: \(error?.localizedDescription ?? "")")
-                        }
-                    }
-                }.resume()
-                // Read receiptData
-            } catch { print("Couldn't read receipt data with error: " + error.localizedDescription) }
-        }else{
-            print("sameer 3anem")
-            print(Bundle.main.appStoreReceiptURL?.path)
-            print(FileManager.default.fileExists(atPath: Bundle.main.appStoreReceiptURL!.path))
-        }
-    }
+        print("app store url found and exists on device - processing receipt data")
 
-    /**
-     Get latest purchased Transaction
-     */
-    public func getPurchasedProductDetails() -> [String: Any]? {
-        guard let productId = load(withKey: Keys.product_id.rawValue) else {
-            return nil
-        }
-        // Create dummy transaction and payment
+        getUserId { userId in
+            print("user id called and returned")
+            var requestData = [String: Any]()
 
-        var data = [String: Any]()
+            // If receipt is found - check for user and proceed normally
+            if let receiptString = self.getReceipt() {
+                if userId != nil {
+                    print("user id found and receipt found")
+                    requestData = ["receipt-data": receiptString, "debug": self.debugFlag, "client_id": userId!, "exclude-old-transactions": true]
 
-        data[PurchaseKeys.productIdentifier.rawValue] = productId
+                } else {
+                    requestData = ["receipt-data": receiptString, "debug": self.debugFlag, "exclude-old-transactions": true]
+                }
+            } else {
+                if userId != nil {
+                    print("user id found and no receipt exists")
+                    requestData = ["receipt-data": "", "debug": self.debugFlag, "client_id": userId!, "exclude-old-transactions": true]
 
-        guard let transactionId = load(withKey: Keys.transaction_id.rawValue) else {
-            return nil
-        }
-        data[PurchaseKeys.transactionIdentifier.rawValue] = transactionId
-        guard let dateString = load(withKey: Keys.purchase_date_ms.rawValue) else {
-            return nil
-        }
-
-        guard let date = parseDateFromString(from: dateString) else {
-            return nil
-        }
-
-        data["transactionDate"] = date
-
-        // Add original purchase data if applicable
-        if let originalTransactionId = load(withKey: Keys.original_transaction_id.rawValue) {
-            if let originalTransactionDate = load(withKey: Keys.original_purchase_date_ms.rawValue), let originalDate = parseDateFromString(from: originalTransactionDate) {
-                data[PurchaseKeys.originalTransactionDate.rawValue] = originalDate
+                } else {
+                    // if no user found and no receipt exists, exit
+                    self.reportStoreReceiptError(successfull: successfull)
+                    completion(false)
+                    return
+                }
             }
 
-            data[PurchaseKeys.originalTransactionIdentifier.rawValue] = originalTransactionId
+            var request = URLRequest(url: URL(string: self.serverUrl)!)
+            request.httpMethod = "POST"
+            request.setValue("Application/json", forHTTPHeaderField: "Content-Type")
+            let httpBody = try? JSONSerialization.data(withJSONObject: requestData, options: [])
+            request.httpBody = httpBody
+
+            self.httpRequest(with: request) { response in
+                if let data = response {
+                    self.parseReceipt(data)
+                    completion(true)
+                    return
+                } else {
+                    print("Failed to parse receipt from json")
+                    self.reportStoreReceiptError(successfull: successfull)
+                    completion(false)
+                    return
+                }
+            }
         }
-
-        return data
-    }
-
-    public func getPurchasedProductId() -> String? {
-        return load(withKey: Keys.product_id.rawValue)
-    }
-
-    public func hasPurchasedTransaction() -> Bool {
-        return load(withKey: Keys.product_id.rawValue) != nil
     }
 }
 

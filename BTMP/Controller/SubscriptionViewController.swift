@@ -23,7 +23,7 @@ class SubscriptionViewController: UIViewController {
 
     fileprivate var utility = Utilities()
 
-    //fileprivate let vault = Vault.shared
+    // fileprivate let vault = Vault.shared
 
     fileprivate lazy var products: Products = {
         let identifier = ViewControllerIdentifiers.products
@@ -119,28 +119,6 @@ class SubscriptionViewController: UIViewController {
             alert(with: Messages.status, message: Messages.cannotMakePayments)
         }
     }
-
-    /// Retrieves product information from the App Store.
-//    fileprivate func fetchPurchaseInformation() {
-//        // First, let's check whether the user is allowed to make purchases. Proceed if they are allowed. Display an alert, otherwise.
-//        if StoreObserver.shared.isAuthorizedForPayments {
-//            restoreButton.enable()
-//
-//            guard let productId = vault.getPurchasedProductId() else {
-//                // Warn the user that the resource file could not be found.
-//                alert(with: Messages.status, message: Messages.noPurchasesAvailable)
-//                return
-//            }
-//
-//            switchToViewController(segment: .purchases)
-//            // Refresh the UI with identifiers to be queried.
-//            purchases.reload(with: [Section(type: .purchased, elements: [productId])])                        
-//
-//        } else {
-//            // Warn the user that they are not allowed to make purchases.
-//            alert(with: Messages.status, message: Messages.cannotMakePayments)
-//        }
-//    }
 
     // MARK: - Display Alert
 

@@ -17,6 +17,8 @@ class ViewController: UIViewController {
 
     @IBOutlet var settingsButton: UIButton!
 
+    @IBOutlet var remainingDaysButton: UIButton!
+
     // MARK: Properties
 
     let worker: Worker = Worker()
@@ -26,7 +28,8 @@ class ViewController: UIViewController {
     private var timer: Timer?
     var timeLeft: Int = 0
 
-    let delegate = UIApplication.shared.delegate    
+    let delegate = UIApplication.shared.delegate
+    let vault = Vault.shared
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,6 +46,18 @@ class ViewController: UIViewController {
                 present(walkthroughViewController, animated: true, completion: nil)
             }
         }
+
+        if vault.showRemainingDays() {
+            remainingDaysButton.layer.cornerRadius = remainingDaysButton.frame.width / 2
+            remainingDaysButton.layer.masksToBounds = true
+            remainingDaysButton.setTitle(vault.getRemainingDays(), for: .normal)
+            remainingDaysButton.layer.borderColor = UIColor.white.cgColor
+            remainingDaysButton.layer.borderWidth = 1.0
+            remainingDaysButton.titleLabel?.lineBreakMode = .byWordWrapping
+            remainingDaysButton.titleLabel?.numberOfLines = 2
+            remainingDaysButton.show()
+        }
+        
     }
 
     func createSettingsButton() {
@@ -112,6 +127,20 @@ class ViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(onWillEnterForeground(_:)), name: UIApplication.willEnterForegroundNotification, object: nil)
 
         NotificationCenter.default.addObserver(self, selector: #selector(handleInterruption), name: AVAudioSession.interruptionNotification, object: nil)
+    }
+
+    // MARK: Alert functions
+
+    /// Creates and displays an alert.
+    func alertInfo(with title: String, message: String) {
+        let alertStyle = UIDevice.current.userInterfaceIdiom == .pad ? UIAlertController.Style.alert : UIAlertController.Style.actionSheet
+
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: alertStyle)
+        let cancelAction = UIAlertAction(title: NSLocalizedString(Messages.okButton, comment: Messages.emptyString),
+                                         style: .default, handler: nil)
+
+        alertController.addAction(cancelAction)
+        present(alertController, animated: true, completion: nil)
     }
 
     // MARK: Event listeners
@@ -226,7 +255,6 @@ class ViewController: UIViewController {
         }
     }
 
-
     // MARK: Timer lifecycle
 
     private func initTimer() {
@@ -278,13 +306,17 @@ class ViewController: UIViewController {
     // MARK: Actions
 
     @IBAction func startDidTouch(_ sender: AnyObject) {
-            if startButtonIsActive == false {
-                print("start pressed")
-                start()
-            } else {
-                print("stop pressed")
-                stop()
-            }
+        if startButtonIsActive == false {
+            print("start pressed")
+            start()
+        } else {
+            print("stop pressed")
+            stop()
+        }
+    }
+
+    @IBAction func showRemainingDaysInfo(_ sender: Any) {
+        alertInfo(with: "Subscription", message: Messages.remainingDaysInfo)
     }
 
     deinit {

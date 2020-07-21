@@ -26,6 +26,7 @@
 		1B5BD631244A22270072595B /* AppProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5BD627244A22270072595B /* AppProtocols.swift */; };
 		1B5BD634244A27480072595B /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1B5BD633244A27480072595B /* LICENSE.txt */; };
 		1B789EB823F83919005A2BBB /* Worker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B789EB723F83919005A2BBB /* Worker.swift */; };
+		1B89BBEA24BBBE5600E3F6D0 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B89BBE924BBBE5600E3F6D0 /* CloudKit.framework */; };
 		1B93D935242D433D002FB9A4 /* TextProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B93D934242D433D002FB9A4 /* TextProvider.swift */; };
 		1B99790E223E65CD00322398 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B99790D223E65CD00322398 /* AppDelegate.swift */; };
 		1B997910223E65CD00322398 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B99790F223E65CD00322398 /* ViewController.swift */; };
@@ -66,6 +67,8 @@
 		1B5BD627244A22270072595B /* AppProtocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppProtocols.swift; sourceTree = "<group>"; };
 		1B5BD633244A27480072595B /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = LICENSE.txt; path = ../../../../OfferingCompletingAndRestoringInAppPurchases/LICENSE/LICENSE.txt; sourceTree = "<group>"; };
 		1B789EB723F83919005A2BBB /* Worker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Worker.swift; sourceTree = "<group>"; };
+		1B89BBE824BBBE4100E3F6D0 /* BTMP.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BTMP.entitlements; sourceTree = "<group>"; };
+		1B89BBE924BBBE5600E3F6D0 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		1B93D934242D433D002FB9A4 /* TextProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextProvider.swift; sourceTree = "<group>"; };
 		1B99790A223E65CD00322398 /* BTMP.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BTMP.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B99790D223E65CD00322398 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -94,6 +97,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1B43760F248926B00097DB61 /* StoreKit.framework in Frameworks */,
+				1B89BBEA24BBBE5600E3F6D0 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -103,6 +107,7 @@
 		1B43760D248926B00097DB61 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1B89BBE924BBBE5600E3F6D0 /* CloudKit.framework */,
 				1B43760E248926B00097DB61 /* StoreKit.framework */,
 			);
 			name = Frameworks;
@@ -163,6 +168,7 @@
 		1B99790C223E65CD00322398 /* BTMP */ = {
 			isa = PBXGroup;
 			children = (
+				1B89BBE824BBBE4100E3F6D0 /* BTMP.entitlements */,
 				1B5BD632244A26AE0072595B /* License */,
 				1B5BD616244A1D600072595B /* Supporting Files */,
 				1BA6EA50243E4A1900A8457D /* Audio */,
@@ -488,6 +494,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = BTMP/BTMP.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
@@ -511,6 +518,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = BTMP/BTMP.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;

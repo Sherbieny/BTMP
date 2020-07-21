@@ -118,5 +118,9 @@ public class Config {
 
     func setUserFinisOnboarding() {
         defaults.set(true, forKey: keys.onboarding.rawValue)
+        //trigger is autherized again
+        Vault.shared.isAutherizedForUse{isAuth in
+            Vault.shared.isAutherized = isAuth
+        }
     }
 }
