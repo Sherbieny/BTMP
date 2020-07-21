@@ -39,8 +39,11 @@ class WalkthroughViewController: UIViewController, walkthroughPageViewController
             case 0 ... 5:
                 walkthroughPageViewController?.forwardPage()
             case 6:
-                dismiss(animated: true, completion: nil)
-                config.setUserFinisOnboarding()
+                dismiss(animated: true){
+                    if !self.config.didUserFinishOnboarding(){
+                        self.config.setUserFinisOnboarding()
+                    }
+                }
             default:
                 break
             }
@@ -124,6 +127,12 @@ class WalkthroughViewController: UIViewController, walkthroughPageViewController
 
     override func viewDidLoad() {
         super.viewDidLoad()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        if !config.didUserFinishOnboarding(){
+            config.setUserFinisOnboarding()
+        }
     }
 
     // MARK: - Navigation

@@ -497,7 +497,7 @@
 				CODE_SIGN_ENTITLEMENTS = BTMP/BTMP.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = D3QUYMAYJB;
 				INFOPLIST_FILE = "$(SRCROOT)/BTMP/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.3;
@@ -505,7 +505,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sherbieny.btmp;
 				PRODUCT_NAME = BTMP;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -521,7 +521,7 @@
 				CODE_SIGN_ENTITLEMENTS = BTMP/BTMP.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = D3QUYMAYJB;
 				INFOPLIST_FILE = "$(SRCROOT)/BTMP/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.3;
@@ -529,7 +529,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sherbieny.btmp;
 				PRODUCT_NAME = BTMP;
 				PROVISIONING_PROFILE_SPECIFIER = "";
