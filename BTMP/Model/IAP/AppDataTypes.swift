@@ -81,6 +81,7 @@ struct Messages {
     static let frequencyInfo = "This setting determines how often the app will pause what is being played to check if you slept or not. For example: setting it to 10 will make the app check every 10 minutes"
     static let durationInfo = "This setting determines how long will the app wait while it listens for a sound from you. For example: setting it to 20 will make the app listen for a sound from you for 20 seconds"
     static let senstivityInfo = "This setting determines how senstive the microphone should be. The lower you make it, the louder you will have to be when making a sound (double tap to reset to default)"
+    static let remainingDaysInfo = "This number shows how many days are left on your current subscription"
 }
 
 // MARK: - Resource File

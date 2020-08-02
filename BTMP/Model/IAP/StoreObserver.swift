@@ -12,8 +12,6 @@ class StoreObserver: NSObject {
     // MARK: - Types
 
     static let shared = StoreObserver()
-    
-    
 
     // MARK: - Properties
 
@@ -31,7 +29,8 @@ class StoreObserver: NSObject {
     var restored = [SKPaymentTransaction]()
 
     var isAuthorizedForUsage: Bool {
-        return vault.isAutherizedForUse()
+        print("checking if it is autherized")
+        return vault.isAutherized
     }
 
     /// Indicates whether there are restorable purchases.
@@ -43,7 +42,10 @@ class StoreObserver: NSObject {
 
     private override init() {
         super.init()
-        vault.validateReceipt()
+        vault.validateReceipt(successfull: false){ status in
+            print("validation done with status = \(status)")
+        }
+      
     }
 
     // MARK: - Submit Payment Request
@@ -61,7 +63,7 @@ class StoreObserver: NSObject {
         if !restored.isEmpty {
             restored.removeAll()
         }
-        SKPaymentQueue.default().restoreCompletedTransactions()        
+        SKPaymentQueue.default().restoreCompletedTransactions()
     }
 
     // MARK: - Handle Payment Transactions
@@ -70,13 +72,17 @@ class StoreObserver: NSObject {
     fileprivate func handlePurchased(_ transaction: SKPaymentTransaction) {
         purchased.append(transaction)
         print("\(Messages.deliverContent) \(transaction.payment.productIdentifier).")
-        
-        // Finish the successful transaction.
-        SKPaymentQueue.default().finishTransaction(transaction)
-        
-        // save to vault
-        vault.validateReceipt()
 
+        // save to vault
+        vault.validateReceipt(successfull: true) { success in
+            if success {
+                print("purchase validation success")
+            } else {
+                print("purchase validation failure")
+            }
+            // Finish the successful transaction.
+            SKPaymentQueue.default().finishTransaction(transaction)
+        }
     }
 
     /// Handles failed purchase transactions.
@@ -94,28 +100,39 @@ class StoreObserver: NSObject {
                 self.delegate?.storeObserverDidReceiveMessage(message)
             }
         }
-        // Finish the failed transaction.
-        SKPaymentQueue.default().finishTransaction(transaction)
         // save to vault
-        vault.validateReceipt()
+        vault.validateReceipt(successfull: false) { success in
+            if success {
+                print("purchase failed validation success")
+            } else {
+                print("purchase failed validation failed")
+            }
+            // Finish the successful transaction.
+            SKPaymentQueue.default().finishTransaction(transaction)
+        }
     }
 
     /// Handles restored purchase transactions.
     fileprivate func handleRestored(_ transaction: SKPaymentTransaction) {
         hasRestorablePurchases = true
         restored.append(transaction)
-        
+
         print("\(Messages.restoreContent) \(transaction.payment.productIdentifier).")
 
         DispatchQueue.main.async {
             self.delegate?.storeObserverRestoreDidSucceed()
         }
-        
-        // Finishes the restored transaction.
-        SKPaymentQueue.default().finishTransaction(transaction)
-        
+
         // save to vault
-        vault.validateReceipt()
+        vault.validateReceipt(successfull: false) { success in
+            if success {
+                print("purchase restored validation success")
+            } else {
+                print("purchase restored validation failed")
+            }
+            // Finish the successful transaction.
+            SKPaymentQueue.default().finishTransaction(transaction)
+        }
     }
 }
 

@@ -13,7 +13,7 @@ public class TextProvider {
     // MARK: - Properties
 
     let bullet = "•  "
-    let pageHeadings = ["Thank you for choosing BTMP", "The way it works", "The Microphone", "The Music Library", "The Screen", "The Subscriptions"]
+    let pageHeadings = ["Thank you for choosing BTMP", "The way it works", "The Microphone", "The Music Library", "The iCloud Account", "The Screen", "The Subscriptions"]
 
     // MARK: - Functions
 
@@ -84,16 +84,21 @@ public class TextProvider {
         case 4:
             paragraphStyle.alignment = .justified
 
+            strings.append("If you want, you can grant access to let the app use your iCloud account ID to keep your subscription synced on all your devices where you use the same iCloud account.")
+            strings.append("if the Grant Access button is visible below, please press it.")
+        case 5:
+            paragraphStyle.alignment = .justified
+
             strings.append("You need to keep the app opened while it is working, locking your phone, pressing the home button or switching to another app will stop the application.")
             strings.append("This is to prevent apps from accessing the microphone while in the background or when the phone is locked for security reasons.")
             strings.append("As long as this app is opened, the phone will not automatically lock after some time.")
             strings.append("But don't worry, once you go to sleep and no sound is detected, the app will stop and the phone will lock automatically.")
-        case 5:
+        case 6:
             paragraphStyle.alignment = .justified
 
-            strings.append("The app offers a non-renewing (31 days) subscription to be able to enjoy it fully.")
-            strings.append("Try out the app without subscribing to be able to see how it works")
-            strings.append("You can cancel the subscrition from your normal iTunes settings at anytime.")
+            strings.append("The app offers a non-renewing (31 days) subscription to be able to enjoy it fully accross all your devices if you chose to use iCloud to sync the subscription.")
+            strings.append("Try out the app without subscribing to be able to see how it works")            
+            strings.append("If subscribed, a notification will appear on the main screen 10 days before the subscription ends, reminding you to renew.")
 
         default:
             strings.append("")
