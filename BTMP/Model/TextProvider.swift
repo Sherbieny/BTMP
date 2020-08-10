@@ -95,7 +95,7 @@ public class TextProvider {
             strings.append("But don't worry, once you go to sleep and no sound is detected, the app will stop and the phone will lock automatically.")
         case 6:
             paragraphStyle.alignment = .justified
-
+            strings.append("The app offers a 10 days trial period from the day of installation.")            
             strings.append("The app offers a non-renewing (31 days) subscription to be able to enjoy it fully accross all your devices if you chose to use iCloud to sync the subscription.")
             strings.append("Try out the app without subscribing to be able to see how it works")            
             strings.append("If subscribed, a notification will appear on the main screen 10 days before the subscription ends, reminding you to renew.")
