@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1B02E5DF24774C8100AD57A2 /* Onboarding.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 1B02E5DE2477309300AD57A2 /* Onboarding.mp4 */; };
 		1B0A98B322478B4400620189 /* Scheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0A98B222478B4400620189 /* Scheduler.swift */; };
+		1B0FD57924D74B8800B879B8 /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1B0FD57824D74B8800B879B8 /* LICENSE.txt */; };
 		1B1768E62433CFA0003EE62E /* Permissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B1768E52433CFA0003EE62E /* Permissions.swift */; };
 		1B43760F248926B00097DB61 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B43760E248926B00097DB61 /* StoreKit.framework */; };
 		1B5BD618244A1DA80072595B /* ProductIds.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1B5BD617244A1DA80072595B /* ProductIds.plist */; };
@@ -24,7 +25,6 @@
 		1B5BD62F244A22270072595B /* PaymentTransactionDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5BD625244A22270072595B /* PaymentTransactionDetails.swift */; };
 		1B5BD630244A22270072595B /* AppDataTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5BD626244A22270072595B /* AppDataTypes.swift */; };
 		1B5BD631244A22270072595B /* AppProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5BD627244A22270072595B /* AppProtocols.swift */; };
-		1B5BD634244A27480072595B /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1B5BD633244A27480072595B /* LICENSE.txt */; };
 		1B789EB823F83919005A2BBB /* Worker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B789EB723F83919005A2BBB /* Worker.swift */; };
 		1B89BBEA24BBBE5600E3F6D0 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B89BBE924BBBE5600E3F6D0 /* CloudKit.framework */; };
 		1B93D935242D433D002FB9A4 /* TextProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B93D934242D433D002FB9A4 /* TextProvider.swift */; };
@@ -50,6 +50,7 @@
 /* Begin PBXFileReference section */
 		1B02E5DE2477309300AD57A2 /* Onboarding.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = Onboarding.mp4; sourceTree = "<group>"; };
 		1B0A98B222478B4400620189 /* Scheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scheduler.swift; sourceTree = "<group>"; };
+		1B0FD57824D74B8800B879B8 /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
 		1B1768E52433CFA0003EE62E /* Permissions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Permissions.swift; sourceTree = "<group>"; };
 		1B43760E248926B00097DB61 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		1B5BD617244A1DA80072595B /* ProductIds.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = ProductIds.plist; sourceTree = "<group>"; };
@@ -65,7 +66,6 @@
 		1B5BD625244A22270072595B /* PaymentTransactionDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentTransactionDetails.swift; sourceTree = "<group>"; };
 		1B5BD626244A22270072595B /* AppDataTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDataTypes.swift; sourceTree = "<group>"; };
 		1B5BD627244A22270072595B /* AppProtocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppProtocols.swift; sourceTree = "<group>"; };
-		1B5BD633244A27480072595B /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = LICENSE.txt; path = ../../../../OfferingCompletingAndRestoringInAppPurchases/LICENSE/LICENSE.txt; sourceTree = "<group>"; };
 		1B789EB723F83919005A2BBB /* Worker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Worker.swift; sourceTree = "<group>"; };
 		1B89BBE824BBBE4100E3F6D0 /* BTMP.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BTMP.entitlements; sourceTree = "<group>"; };
 		1B89BBE924BBBE5600E3F6D0 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
@@ -143,7 +143,7 @@
 		1B5BD632244A26AE0072595B /* License */ = {
 			isa = PBXGroup;
 			children = (
-				1B5BD633244A27480072595B /* LICENSE.txt */,
+				1B0FD57824D74B8800B879B8 /* LICENSE.txt */,
 			);
 			path = License;
 			sourceTree = "<group>";
@@ -266,7 +266,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1010;
-				LastUpgradeCheck = 1010;
+				LastUpgradeCheck = 1220;
 				ORGANIZATIONNAME = Sherboapps;
 				TargetAttributes = {
 					1B997909223E65CD00322398 = {
@@ -306,9 +306,9 @@
 				1B02E5DF24774C8100AD57A2 /* Onboarding.mp4 in Resources */,
 				1B997918223E65CE00322398 /* LaunchScreen.storyboard in Resources */,
 				1B5BD618244A1DA80072595B /* ProductIds.plist in Resources */,
+				1B0FD57924D74B8800B879B8 /* LICENSE.txt in Resources */,
 				1B997915223E65CE00322398 /* Assets.xcassets in Resources */,
 				1B997913223E65CD00322398 /* Main.storyboard in Resources */,
-				1B5BD634244A27480072595B /* LICENSE.txt in Resources */,
 				1B5BD61A244A1FC50072595B /* Subscriptions.storyboard in Resources */,
 				1BA6EA52243E4A3000A8457D /* 10-seconds-of-silence.mp3 in Resources */,
 				1BD64DFA242CE0E500AF893E /* Onboarding.storyboard in Resources */,
@@ -400,6 +400,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -461,6 +462,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -505,7 +507,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sherbieny.btmp;
 				PRODUCT_NAME = BTMP;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -529,7 +531,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sherbieny.btmp;
 				PRODUCT_NAME = BTMP;
 				PROVISIONING_PROFILE_SPECIFIER = "";

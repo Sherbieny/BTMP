@@ -22,12 +22,15 @@ open class Vault {
     }
 
     private let iCloudKey = "icloud_denied"
+    private let isTrialKey = "is_in_trial"
+    private let trialDate = "trial_date"
 
     public static let shared = Vault()
 
     private let deviceId = UIDevice.current.identifierForVendor
 
     private static var userId: String?
+    private static var currentDateTime: Date?
 
     private let config: Config = Config()
 
@@ -116,7 +119,7 @@ open class Vault {
 
     private func parseReceipt(_ json: Dictionary<String, Any>) {
         print("checking receipts")
-        print(json)
+        //print(json)
         Keys.allCases.forEach { key in
             if json.index(forKey: key.rawValue) != nil {
                 let value = "\(json[key.rawValue]!)"
@@ -129,9 +132,9 @@ open class Vault {
 
         // update isValid values
         isAutherizedForUse { isAuth in
-            print("is autherized called in init")
+            print("is autherized called in parseReceipt function")
             self.isAutherized = isAuth
-            print("is autherized done in init")
+            print("is autherized done in parseReceipt function")
         }
     }
 
@@ -148,6 +151,89 @@ open class Vault {
             save(nil, forKey: key.rawValue)
         }
     }
+    
+    /**
+     Check if user is in initial trial period
+     */
+    private func isInTrialPeriod() -> Bool {
+        print("is in trial period called")
+        guard let isTrial = load(withKey: isTrialKey) else {
+        print("is trial value not found")
+            createTrialPeriod()
+            return true
+        }
+        
+        if isTrial == "1" {
+            print("is tial == 1")
+            updateTrialPeriod()
+        }
+        print("returning is trial .. \(isTrial)")
+        return (isTrial == "1")
+    }
+    
+    /**
+     Create new Trial key value with true for new users
+     */
+    private func createTrialPeriod(){
+        getTime { currentDate in
+            if let currentDate = currentDate {
+                let dateString = self.parseStringFromDate(from: currentDate)
+                self.save(dateString, forKey: self.trialDate)
+            }else{
+                let dateString = self.parseStringFromDate(from: Date())
+                self.save(dateString, forKey: self.trialDate)
+            }
+            self.save("1", forKey: self.isTrialKey)
+        }
+    }
+    
+    /**
+     update is trial key according to date in background
+     */
+    private func updateTrialPeriod() {
+        print("updating trial period")
+        if let trialDateString: String = load(withKey: trialDate) {
+            print(trialDateString)
+            if let trialDate = parseDateFromString(from: trialDateString) {
+                getTime { currentDate in
+                    if let currentDate = currentDate {
+                        if let trialDays = self.getDaysDifference(from: trialDate, to: currentDate){
+                            print("trial days = \(trialDays)")
+                            if trialDays > 10 {
+                                self.save("0", forKey: self.isTrialKey)
+                                return
+                            }
+                        }else {
+                            print("failed to get difference of days for trial")
+                            self.save("0", forKey: self.isTrialKey)
+                            return
+                        }
+                    }else{
+                        print("failed to get curent date from server - trial stuff")
+                        if let trialDays = self.getDaysDifference(from: trialDate, to: Date()) {
+                            print("trial days = \(trialDays)")
+                            if trialDays  > 10 {
+                                self.save("0", forKey: self.isTrialKey)
+                                return
+                            }
+                        }else {
+                            print("faield to get trial days")
+                            self.save("0", forKey: self.isTrialKey)
+                            return
+                        }
+                    }
+                }
+            }else{
+                print("failed to parse date from string")
+                save("0", forKey: isTrialKey)
+            }
+        }else{
+            print("failed to load trial date from keychain")
+            save("0", forKey: isTrialKey)
+        }
+    }
+    
+    
 
     // MARK: - Helper Functions
 
@@ -189,12 +275,30 @@ open class Vault {
      parse date string and return Date object
      */
     private func parseDateFromString(from requestDateString: String) -> Date? {
-        let dateFormatter = ISO8601DateFormatter()
-        guard let date = dateFormatter.date(from: requestDateString) else {
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        guard let date = formatter.date(from: requestDateString) else {
+            print("failed to parse date from string")
             return nil
         }
 
         return date
+    }
+    
+    /**
+     parse date string from Date object in ISO8601DateFormatter format
+     */
+    private func parseStringFromDate(from date: Date) -> String {
+       let formatter = ISO8601DateFormatter()
+       formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+       return formatter.string(from: date)
+    }
+    
+    /**
+     get days difference between dates
+     */
+    private func getDaysDifference(from startDate: Date, to endDate: Date) -> Int? {
+        return Calendar.current.dateComponents([.day], from: startDate, to: endDate).day
     }
 
     /**
@@ -202,6 +306,14 @@ open class Vault {
      */
     private func getTime(completion: @escaping (_ time: Date?) -> Void) {
         print("getting time")
+        
+        //get it from static var is possible to ease the request load
+        if let date = Vault.currentDateTime {
+            print("getting time from static var")
+            completion(date)
+            return
+        }
+        
         var request = URLRequest(url: URL(string: timeUrl)!)
         request.httpMethod = "GET"
         request.setValue("Application/json", forHTTPHeaderField: "Content-Type")
@@ -211,6 +323,7 @@ open class Vault {
                 if data.index(forKey: "time") != nil {
                     if let timeString: String = data["time"] as? String {
                         print("get time successfull - returnin time")
+                        Vault.currentDateTime = self.parseDateFromString(from: timeString)
                         completion(self.parseDateFromString(from: timeString))
                         return
                     } else {
@@ -251,7 +364,7 @@ open class Vault {
                         CKContainer.default().fetchUserRecordID { recordId, _ in
                             if recordId?.recordName != nil {
                                 print("user id found - assigning to static")
-                                Vault.self.userId = recordId?.recordName
+                                Vault.userId = recordId?.recordName
                                 completion(recordId?.recordName)
                                 return
                             } else {
@@ -359,7 +472,7 @@ open class Vault {
         getTime { currentDate in
             if let currentDate = currentDate {
                 print("time retrieved from server")
-                if let remainingDays = Calendar.current.dateComponents([.day], from: currentDate, to: expiryDate).day {
+                if let remainingDays = self.getDaysDifference(from: currentDate, to: expiryDate) {
                     print("difference = \(remainingDays) days")
                     self.save("\(remainingDays)", forKey: Keys.remaining_days.rawValue)
                     if remainingDays <= 0 {
@@ -378,7 +491,7 @@ open class Vault {
             } else {
                 print("time retrieved from device")
                 let currentDate = Date()
-                if let remainingDays = Calendar.current.dateComponents([.day], from: currentDate, to: expiryDate).day {
+                if let remainingDays = self.getDaysDifference(from: currentDate, to: expiryDate) {
                     print("difference = \(remainingDays) days")
                     self.save("\(remainingDays)", forKey: Keys.remaining_days.rawValue)
                     if remainingDays <= 0 {
@@ -471,8 +584,6 @@ open class Vault {
     private func saveLocalReceipt() {
         var dayComponent = DateComponents()
         dayComponent.day = 31
-        let formatter: DateFormatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
         let calendar = Calendar.current
         guard let expiryDate = calendar.date(byAdding: dayComponent, to: Date()) else {
             print("Failed to create expiry date")
@@ -480,8 +591,9 @@ open class Vault {
         }
         let remainingDays = "31"
         let isActive = "1"
+        let expiryDateString = parseStringFromDate(from: expiryDate)
 
-        save(formatter.string(from: expiryDate), forKey: Keys.expiry_date.rawValue)
+        save(expiryDateString, forKey: Keys.expiry_date.rawValue)
         save(isActive, forKey: Keys.is_active.rawValue)
         save(remainingDays, forKey: Keys.remaining_days.rawValue)
     }
@@ -520,7 +632,7 @@ open class Vault {
         if let remainingInt = Int(remainingDays) {
             print("remaining days into int")
             print(remainingInt)
-            return (remainingInt < 11)
+            return (remainingInt < 11 && remainingInt > -1)
         }
 
         return false
@@ -547,7 +659,13 @@ open class Vault {
             completion(false)
             return
         }
-
+        
+        //Trial period logic checked here
+        if isInTrialPeriod() {
+            completion(true)
+            return
+        }
+        
         // Check on device first to reduce processing time when app start and update device variables in background
         // so next time it would be invalid if subscription was over
         if let isActive: String = load(withKey: Keys.is_active.rawValue) {
@@ -633,14 +751,5 @@ open class Vault {
                 }
             }
         }
-    }
-}
-
-extension Date {
-    init?(millisecondsSince1970: String) {
-        guard let millisecondsNumber = Double(millisecondsSince1970) else {
-            return nil
-        }
-        self = Date(timeIntervalSince1970: millisecondsNumber / 1000)
     }
 }

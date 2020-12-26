@@ -42,9 +42,9 @@ class StoreObserver: NSObject {
 
     private override init() {
         super.init()
-        vault.validateReceipt(successfull: false){ status in
-            print("validation done with status = \(status)")
-        }
+//        vault.validateReceipt(successfull: false){ status in
+//            print("validation done with status = \(status)")
+//        }
       
     }
 

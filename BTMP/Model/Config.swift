@@ -29,6 +29,8 @@ public class Config {
     let minimumFrequency: Double = 30 // in seconds
     let defaultFrequency: Double = 30 // in seconds
     let defaultFrequencyKey: Int = 0 //
+    let trialFrequency: Double = 300 // in seconds
+    let trialFrequencyKey: Int = 5 //
 
     let minimumDuration: Int = 10 // in seconds
     let defaultDuration: Int = 20 // in seconds
@@ -46,14 +48,20 @@ public class Config {
     func getListeningFrequency() -> Double {
         // Check for subscription validity first
         if StoreObserver.shared.isAuthorizedForUsage {
-            return defaults.exists(key: keys.frequency.rawValue) ? defaults.double(forKey: keys.frequency.rawValue) : defaultFrequency
+            return defaults.exists(key: keys.frequency.rawValue) ? defaults.double(forKey: keys.frequency.rawValue) : trialFrequency
         } else {
             return defaultFrequency
         }
     }
 
     func getListeningFrequencyKey() -> Int {
-        return defaults.exists(key: keys.frequencyKey.rawValue) ? defaults.integer(forKey: keys.frequencyKey.rawValue) : defaultFrequencyKey
+//        return defaults.exists(key: keys.frequencyKey.rawValue) ? defaults.integer(forKey: keys.frequencyKey.rawValue) : defaultFrequencyKey
+        // Check for subscription validity first
+        if StoreObserver.shared.isAuthorizedForUsage {
+            return defaults.exists(key: keys.frequencyKey.rawValue) ? defaults.integer(forKey: keys.frequencyKey.rawValue) : trialFrequencyKey
+        } else {
+            return defaultFrequencyKey
+        }
     }
     
     func getMinimumListeningFrequencyKey() -> Int {
