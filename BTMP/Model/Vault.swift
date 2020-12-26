@@ -632,7 +632,7 @@ open class Vault {
         if let remainingInt = Int(remainingDays) {
             print("remaining days into int")
             print(remainingInt)
-            return (remainingInt < 11)
+            return (remainingInt < 11 && remainingInt > -1)
         }
 
         return false
